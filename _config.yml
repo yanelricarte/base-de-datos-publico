@@ -1,0 +1,16 @@
+title: Base de Datos 2026
+description: Material para estudiantes — Base de Datos, 7.º año TECIP
+theme: jekyll-theme-cayman
+show_downloads: false
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+plugins:
+  - jekyll-relative-links
+  - jekyll-readme-index
+relative_links:
+  enabled: true
+  collections: true
+include:
+  - README.md

@@ -1,0 +1,30 @@
+# Sistemas operativos
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Office locks y temporales
+~$*
+.~lock.*
+*.tmp
+*.bak
+
+# Defensa en profundidad — nunca a un repo público
+notas-privadas/
+notas-alumnos/
+datos-alumnos/
+borradores/
+apuntes-docente/
+evaluaciones-resueltas/
+claude-memory/
+ia-memorias/
+.claude/
+*.private.*
+*.privado.*
+*.csv
+*.xlsx
