@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 1 · Los archivos tradicionales y el gestor de bases de datos</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/clase.css">
+<style>
+.encuadre{margin:1.4rem 0 0; display:flex; flex-direction:column; gap:0.7rem}
+.encuadre > div{display:grid; grid-template-columns:9.5rem 1fr; gap:0.9rem; align-items:start;
+  padding:0.7rem 0; border-top:1px solid var(--borde)}
+.encuadre > div:first-child{border-top:0; padding-top:0}
+.encuadre .et{font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--acento); padding-top:0.15rem}
+.encuadre p{margin:0}
+@media (max-width:620px){ .encuadre > div{grid-template-columns:1fr; gap:0.15rem} }
+
+/* la ficha usa el ancho disponible en pantallas grandes */
+@media (min-width:1100px){
+  .encuadre{display:block; columns:2; column-gap:2.6rem}
+  .encuadre > div{break-inside:avoid; grid-template-columns:8rem 1fr;
+    border-top:1px solid var(--borde); padding-top:0.75rem; margin:0 0 0.75rem}
+  .encuadre > div:first-child{border-top:0; padding-top:0}
+  .encuadre p{max-width:none}
+}
+</style>
+<style>
+.selector-esc{display:flex; gap:0.5rem; margin:1rem 0 1.4rem; flex-wrap:wrap}
+.sel-esc{font:inherit; font-size:0.88rem; font-weight:600; cursor:pointer; padding:0.55rem 1rem;
+  border:1.5px solid var(--borde); border-radius:9px; background:var(--fondo); color:var(--texto); text-align:left}
+.sel-esc:hover{border-color:var(--acento)}
+.sel-esc[aria-pressed="true"]{background:var(--acento); border-color:var(--acento); color:#fff}
+.panel-esc{display:none}
+body.esc-t3 .panel-esc.t3{display:block}
+body.esc-t5 .panel-esc.t5{display:block}
+@media print{ .selector-esc{display:none} }
+</style>
+<style>
+.quiz .feedback{display:none; margin-top:0.7rem; padding-top:0.7rem; border-top:1px solid var(--borde);
+  font-size:0.92rem; color:var(--texto-suave)}
+.quiz.respondida .feedback{display:block}
+ol.secuencia{margin:1rem 0 0.4rem}
+ol.secuencia li{margin-bottom:0.45rem}
+</style>
+<style>
+figure.esquema{margin:1.3rem 0; padding:0}
+figure.esquema svg{width:100%; height:auto; display:block; background:var(--superficie);
+  border:1px solid var(--borde); border-radius:var(--radio)}
+figure.esquema figcaption{display:flex; gap:1rem; align-items:baseline; justify-content:space-between;
+  margin-top:0.55rem; font-size:0.88rem; color:var(--texto-suave)}
+figure.esquema .ampliar{flex:0 0 auto; font:inherit; font-size:0.8rem; font-weight:600; cursor:pointer;
+  padding:0.35rem 0.7rem; border:1px solid var(--borde-fuerte); border-radius:7px;
+  background:var(--superficie); color:var(--texto-suave)}
+figure.esquema .ampliar:hover{border-color:var(--acento); color:var(--acento)}
+body.esquema-abierto{overflow:hidden}
+figure.esquema.ampliado{position:fixed; inset:0; z-index:80; margin:0; padding:2vh 2vw;
+  background:var(--fondo); display:grid; grid-template-rows:1fr auto; align-content:center}
+figure.esquema.ampliado svg{max-height:88vh; width:100%; height:auto}
+@media print{ figure.esquema .ampliar{display:none} }
+</style>
+</head>
+<body class="esc-t3">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></symbol>
+    <symbol id="i-alerta" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-ojo" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3h12v6"/><rect x="6" y="14" width="12" height="8"/></symbol>
+    <symbol id="i-flecha" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-tabla" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/></symbol>
+    <symbol id="i-lapiz" viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol>
+  </defs>
+</svg>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<main id="contenido">
+
+<header class="encabezado">
+  <span class="rotulo"><svg class="ico"><use href="#i-db"/></svg> Base de Datos · Clase 1</span>
+  <h1>Los archivos tradicionales y el gestor de bases de datos</h1>
+  <p class="entrada">
+    Las dos consignas de la Olimpíada piden guardar información: un listado de productos que
+    «debe surgir de base de datos», un registro de préstamos de equipamiento, un sistema de
+    reservas que impida reservar dos veces el mismo horario. Esta clase se ocupa de eso.
+  </p>
+  <div class="encuadre">
+    <div><span class="et">Unidad</span><p>1. Fundamentos de la gestión de datos.</p></div>
+    <div><span class="et">Contenidos</span><p>Conceptos generales en la gestión de datos. Sistema gestor de bases de datos. Comparación con los archivos tradicionales. Dentro de esa comparación se desarrollan la redundancia, la inconsistencia y las anomalías de actualización, inserción y borrado.</p></div>
+    <div><span class="et">Capacidades</span><p>Diferenciar los archivos tradicionales de un gestor de bases de datos. Identificar los componentes y las funciones del gestor. Analizar el funcionamiento de una organización para reconocer los datos que necesita guardar.</p></div>
+    <div><span class="et">Trabajo de la clase</span><p>La planilla que cada escuela tiene en su consigna de la Olimpíada, hasta encontrar los cinco problemas con el número de fila donde se ven. Después, la misma mirada sobre el listado de productos del sitio, que es uno de los entregables.</p></div>
+    <div><span class="et">Producción</span><p>Las cuatro listas del propio proyecto identificadas, la ficha del equipo completa y la base creada en el gestor.</p></div>
+  </div>
+</header>
+
+<nav class="indice">
+  <h2>Contenido</h2>
+  <ol>
+    <li><a href="#s1">El espacio curricular y el proyecto de la materia</a></li>
+    <li><a href="#s2">El dato, el registro y la hoja plana</a></li>
+    <li><a href="#s3">Los cinco problemas en la planilla de tu consigna</a></li>
+    <li><a href="#s7">El gestor de bases de datos</a></li>
+    <li><a href="#s8">XAMPP, phpMyAdmin y la creación de la base</a></li>
+    <li><a href="#s9">Síntesis</a></li>
+    <li><a href="#s10">Registro para la carpeta</a></li>
+    <li><a href="#s10b">Errores frecuentes</a></li>
+    <li><a href="#s10c">Glosario</a></li>
+    <li><a href="#s10d">Próximos pasos</a></li>
+    <li><a href="#s11">Bibliografía</a></li>
+  </ol>
+</nav>
+
+<!-- ================= 1 ================= -->
+<section id="s1">
+<h2><span class="n">01</span> El espacio curricular y el proyecto de la materia</h2>
+<p>El encuadre de la materia, el proyecto anual y las tres entregas. Conviene leerlo una vez; el contenido de la clase empieza en el apartado 02.</p>
+
+<p>El <strong>dominio</strong> del proyecto se define hoy, en la ficha del equipo que cierra la actividad. Dos caminos son los más directos. Uno es el sistema que el equipo ya desarrolla en otro espacio. El otro es <strong>el sitio que pide la consigna de la Olimpíada</strong>: las listas que se identifican hoy son la versión mínima que la Olimpíada se lleva en septiembre, y ese mismo modelo es el que crece en las tres entregas de la materia, con un solo dominio en lugar de dos en paralelo.</p>
+<details>
+  <summary>El encuadre completo: objeto de la materia, proyecto y entregas</summary>
+
+<p>Base de Datos es un espacio del séptimo año de la tecnicatura, dentro de la Formación Científico Tecnológica. Su objeto es el modo en que la información se organiza para poder guardarse, protegerse y consultarse: qué datos existen en una organización, cómo se vinculan entre sí, cómo se implementan en un programa que los administra y cómo se les pregunta algo.</p>
+
+<p>La materia se aprueba con un <strong>proyecto que crece por entregas</strong>. Cada equipo elige un dominio: un sistema en desarrollo, una organización del entorno o un proceso que conoce desde adentro. Sobre ese dominio se diseña el modelo, se implementa la base en el gestor, se cargan datos, se escriben las consultas y se defiende el resultado en diciembre. Lo que se explica en una clase se aplica ese mismo día sobre el proyecto propio.</p>
+
+
+<h3>Las tres entregas</h3>
+
+<div class="tabla-wrap">
+<table>
+  <thead><tr><th scope="col">Entrega</th><th scope="col">Qué se presenta</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>E1</strong><br>Modelo completo</td>
+      <td>El diagrama de qué cosas existen en el dominio y cómo se relacionan; el pasaje de ese diagrama a tablas ordenadas de modo que ningún dato quede repetido; el diccionario de datos, y un informe que justifica cada decisión tomada</td>
+    </tr>
+    <tr>
+      <td><strong>E2</strong><br>Base implementada</td>
+      <td>Los scripts que crean la base y la cargan con datos representativos, y el conjunto de consultas que responden preguntas reales sobre esos datos</td>
+    </tr>
+    <tr>
+      <td><strong>E3</strong><br>Integridad y seguridad</td>
+      <td>Las reglas que impiden guardar datos incoherentes, una vista, un disparador, usuarios con permisos diferenciados y una copia de seguridad efectivamente restaurada</td>
+    </tr>
+    <tr>
+      <td><strong>Defensa final</strong></td>
+      <td>La presentación oral del proyecto, con la documentación integrada y la respuesta fundamentada a las preguntas del panel</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Además de las entregas del equipo, cada estudiante sostiene un <strong>portfolio individual</strong>: las consultas que va resolviendo, comentadas con lo que hace cada una; los borradores de modelado, incluidos los que quedaron descartados, y las decisiones que fue cambiando. El portfolio es una evidencia de proceso, y pesa en la calificación tanto como los entregables del equipo.</p>
+</details>
+</section>
+
+<!-- ================= 2 ================= -->
+<section id="s2">
+<h2><span class="n">02</span> El dato, el registro y la hoja plana</h2>
+
+<p>Antes de mirar el caso conviene fijar tres palabras que se usan durante toda la materia. Un <strong>dato</strong> es un valor suelto: una fecha, un nombre, un número. Un <strong>registro</strong> es un conjunto de datos que describen a la misma cosa o al mismo hecho: los valores que describen un préstamo determinado, o un producto determinado. Y una <strong>hoja plana</strong> es la forma más simple de guardar registros: una fila por registro, una columna por dato, todo en la misma superficie.</p>
+
+<p>La hoja plana tiene una virtud que explica por qué se usa tanto: se entiende sin explicación. Cualquiera puede abrir una planilla de cálculo, escribir encabezados y empezar a cargar filas. Durante las primeras semanas el sistema funciona, y funciona porque el volumen es chico y porque hay una sola persona cargando datos, que recuerda cómo escribió cada cosa.</p>
+
+<p>El problema aparece cuando la hoja crece y cuando la carga se reparte. Y no aparece como un error puntual que se pueda corregir: aparece como un conjunto de fallas estructurales, todas derivadas de la misma decisión inicial. Esa decisión es haber puesto en una única fila datos que pertenecen a cosas distintas.</p>
+
+
+<h3>Chequeo de las tres palabras</h3>
+<div class="quiz" data-correcta="a">
+  <p class="pregunta">Una celda con el valor <code>12/03/2026</code> es</p>
+  <label><input type="radio" name="qa"> un dato</label>
+  <label><input type="radio" name="qa"> un registro</label>
+  <label><input type="radio" name="qa"> una hoja plana</label>
+  <div class="feedback" role="status">Un dato: un valor suelto. El registro es la fila completa, con todos los datos que describen el mismo hecho, y la hoja plana es la superficie donde se apilan las filas.</div>
+</div>
+
+</section>
+
+<!-- ================= 3 ================= -->
+<section id="s3">
+<h2><span class="n">03</span> Los cinco problemas en la planilla de tu consigna</h2>
+<p>El análisis es el mismo para las dos escuelas y cambia el caso sobre el que se hace. Elegí tu consigna: el desarrollo completo está en cada pestaña, con su planilla, sus cinco problemas, la consulta que la hoja vuelve costosa y la separación en tablas.</p>
+<div class="selector-esc">
+  <button type="button" class="sel-esc" data-esc="t3" aria-pressed="true">E.E.S.T. N.º 3 · el sitio de la empresa</button>
+  <button type="button" class="sel-esc" data-esc="t5" aria-pressed="false">E.E.S.T. N.º 5 · los préstamos de equipamiento</button>
+</div>
+<div class="panel-esc t3">
+
+<h3>El caso: el listado de productos del sitio</h3>
+<p>El entregable 6 pide un sitio con «listado de productos a la venta (Rubro, descripción, marca, precio)» y aclara que «estos productos deben surgir de base de datos». La vista de administrador, además, tiene que permitir «carga de artículos, rubros y marcas». Esta es la hoja con la que un equipo empezó a armar ese listado.</p>
+
+<div class="resaltador">
+  <span>Resaltar</span>
+  <button type="button" data-p="redundancia" aria-pressed="false">Redundancia</button>
+  <button type="button" data-p="inconsistencia" aria-pressed="false">Inconsistencia</button>
+  <button type="button" data-p="actualizacion" aria-pressed="false">Actualización</button>
+  <button type="button" data-p="insercion" aria-pressed="false">Inserción</button>
+  <button type="button" data-p="borrado" aria-pressed="false">Borrado</button>
+  <button type="button" data-p="consulta" aria-pressed="false">La consulta</button>
+</div>
+<div class="hoja-cab"><svg class="ico"><use href="#i-tabla"/></svg> PRODUCTOS.xlsx · una sola hoja</div>
+<div class="hoja-wrap">
+<table class="hoja" data-hoja>
+  <thead><tr><th class="f" scope="col">#</th><th scope="col">producto</th><th scope="col">rubro</th><th scope="col">marca</th><th scope="col" class="num">precio</th><th scope="col">proveedor</th></tr></thead>
+  <tbody>
+    <tr data-f="1"><td class="f">1</td><td data-c="producto">Lavandina 1 L</td><td data-c="rubro">Limpieza de pisos</td><td data-c="marca">Brillex</td><td class="num" data-c="precio">900</td><td data-c="proveedor">Distribuidora Sur</td></tr>
+    <tr data-f="2"><td class="f">2</td><td data-c="producto">Detergente 750 ml</td><td data-c="rubro">Cocina</td><td data-c="marca">Brillex</td><td class="num" data-c="precio">1200</td><td data-c="proveedor">Distribuidora Sur</td></tr>
+    <tr data-f="3"><td class="f">3</td><td data-c="producto">Jabón en polvo 800 g</td><td data-c="rubro">Ropa</td><td data-c="marca">Espuma</td><td class="num" data-c="precio">2100</td><td data-c="proveedor">Mayorista Norte</td></tr>
+    <tr data-f="4"><td class="f">4</td><td data-c="producto">Lavandina 5 L</td><td data-c="rubro">Limpieza de pisos</td><td data-c="marca">Brillex</td><td class="num" data-c="precio">3200</td><td data-c="proveedor">Distribuidora Sur</td></tr>
+    <tr data-f="5"><td class="f">5</td><td data-c="producto">Desodorante de piso</td><td data-c="rubro">Limpieza de pisos</td><td data-c="marca">Brillex</td><td class="num" data-c="precio">1500</td><td data-c="proveedor">Distribuidora Sur</td></tr>
+    <tr data-f="6"><td class="f">6</td><td data-c="producto">Esponja doble faz</td><td data-c="rubro">Cocina</td><td data-c="marca">Espuma</td><td class="num" data-c="precio">450</td><td data-c="proveedor">Mayorista Norte</td></tr>
+    <tr data-f="7"><td class="f">7</td><td data-c="producto">lavandina 1 l</td><td data-c="rubro">Limpieza pisos</td><td data-c="marca">brillex</td><td class="num" data-c="precio">950</td><td data-c="proveedor">Distribuidora Sur</td></tr>
+    <tr data-f="8"><td class="f">8</td><td data-c="producto">Trapo de piso</td><td data-c="rubro">Limpieza de pisos</td><td data-c="marca">Genérica</td><td class="num" data-c="precio">700</td><td data-c="proveedor">Mayorista Norte</td></tr>
+    <tr data-f="9"><td class="f">9</td><td data-c="producto">Limpiavidrios 500 ml</td><td data-c="rubro">Vidrios</td><td data-c="marca">Brillex</td><td class="num" data-c="precio">1100</td><td data-c="proveedor">Distribuidora Sur</td></tr>
+    <tr data-f="10"><td class="f">10</td><td data-c="producto">Cera para pisos 1 L</td><td data-c="rubro">Limpieza de pisos</td><td data-c="marca">Brillex</td><td class="num" data-c="precio">2600</td><td data-c="proveedor">Distribuidora Sur</td></tr>
+    <tr class="fantasma" hidden><td class="f">—</td><td colspan="5">Marca <strong>Nova</strong> · la empresa la incorporó y todavía no cargó ningún producto: no hay fila donde anotarla</td></tr>
+    <tr class="fantasma" hidden><td class="f">—</td><td colspan="5">Rubro <strong>Baño</strong> · misma situación</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="pie-resaltado" data-pie></p>
+
+<p class="nota">Dos datos de la empresa que la hoja no contiene: incorporó la marca <strong>Nova</strong> y el rubro <strong>Baño</strong>, y todavía no cargó ningún producto de ninguno de los dos.</p>
+
+<p>Hay tres cosas distintas conviviendo en cada fila: un producto, un rubro y una marca. Y una cuarta, el proveedor. La fila describe al producto, y de paso arrastra el nombre del rubro, el de la marca y el del proveedor cada vez.</p>
+
+<h3>Redundancia, inconsistencia y las tres anomalías</h3>
+<p>Antes del caso conviene separar dos clases de problema, porque no son lo mismo. La <strong>redundancia</strong> y la <strong>inconsistencia</strong> son problemas del estado de los datos: se ven mirando la hoja quieta. Las tres <strong>anomalías</strong> son problemas que aparecen al operar sobre ella.</p>
+<ol class="pasos secuencia">
+  <li><strong>Redundancia.</strong> El mismo dato en varias filas. Es el punto de partida: todavía no rompió nada.</li>
+  <li><strong>Inconsistencia.</strong> Dos de esas copias dejan de coincidir. Ya hay un dato que contradice a otro.</li>
+  <li><strong>Al modificar.</strong> Cambiar el dato exige tocar todas las copias, y tocar una menos deja la contradicción instalada.</li>
+  <li><strong>Al insertar.</strong> Algo que existe no se puede registrar, porque falta el hecho que lo trae.</li>
+  <li><strong>Al borrar.</strong> Eliminar un hecho arrastra información que nadie quiso borrar.</li>
+</ol>
+<p class="nota">Los dos primeros se ven mirando la hoja. Los tres últimos aparecen recién cuando alguien la usa, y en ese orden: modificar, insertar, borrar.</p>
+<p>En el diseño de bases de datos se llama anomalía a un efecto no deseado que la estructura produce cuando se inserta, se modifica o se borra información. La palabra importa por lo que descarta: no es un error de quien carga los datos ni una falta de cuidado, es una consecuencia de cómo están organizados. Con la misma hoja y otra persona cargando, el problema vuelve a aparecer. Hay tres, una por cada operación: al modificar, al insertar y al borrar.</p>
+
+<div class="problema">
+  <span class="titulo">Redundancia</span>
+  <p><strong>Redundancia</strong> es el mismo dato almacenado más de una vez en la misma estructura. En esta hoja el rubro «Limpieza de pisos» está escrito en las filas 1, 4, 5, 8 y 10; la marca «Brillex» en las filas 1, 2, 4, 5, 9 y 10; y «Distribuidora Sur» en esas mismas filas.</p>
+  <p>El punto conceptual es <strong>de quién es cada dato</strong>. Que la lavandina pertenezca a limpieza de pisos es un dato del producto. Que ese rubro se llame «Limpieza de pisos» es un dato del rubro, y está escrito cinco veces porque la hoja no tiene ningún otro lugar donde ponerlo. Lo mismo con el proveedor: pertenece a la marca, no al producto.</p>
+  <p>En este listado vemos que el dato repetido no es el producto, que aparece una vez cada uno, sino <strong>todo lo que rodea al producto</strong>: su rubro, su marca y su proveedor. Por sí sola la redundancia no rompe nada, y es la que <strong>habilita los cuatro problemas que siguen</strong>: todos se derivan de haber aceptado copias del mismo dato.</p>
+</div>
+
+<div class="problema">
+  <span class="titulo">Inconsistencia</span>
+  <p><strong>Inconsistencia</strong> es tener dos copias del mismo dato que no coinciden, con lo cual <strong>la estructura afirma dos cosas a la vez</strong>. Acá está en la fila 7, que escribe <code>lavandina 1 l</code>, <code>Limpieza pisos</code> y <code>brillex</code> donde la fila 1 escribe <code>Lavandina 1 L</code>, <code>Limpieza de pisos</code> y <code>Brillex</code>.</p>
+  <p>Ocurre porque un dato que se escribe diez veces se escribe a mano diez veces. Para quien lee es el mismo rubro; para la hoja son dos, porque el único vínculo entre filas es que <strong>el texto coincida carácter por carácter</strong>.</p>
+  <p>En este ejemplo vemos que el error de tipeo de una sola fila alcanza para inventar un rubro y una marca que no existen. El costo se paga en el sitio: la consigna pide una vista de usuario con el listado de productos por rubro, y con dos escrituras del mismo rubro <strong>el listado muestra dos rubros</strong>, uno de ellos con un solo producto.</p>
+</div>
+
+<div class="problema">
+  <span class="titulo">Anomalía de actualización</span>
+  <p>Es la <strong>imposibilidad de modificar un dato en un solo movimiento</strong>, porque está copiado en varios lugares. Se ve preguntándole a la hoja algo simple: ¿cuánto cuesta la lavandina de 1 L? Responde 900 según la fila 1 y 950 según la fila 7.</p>
+  <p>Hay dos explicaciones posibles y los datos no permiten elegir entre ellas: pudo haber un aumento cargado en una sola de las dos filas, o una de las dos está mal desde el principio. Eso es lo que hace grave a esta anomalía: <strong>no se sabe cuál es el dato correcto</strong>. Con la marca pasa lo mismo, y en escala: si Brillex cambia su nombre comercial hay que editar seis filas, y editar cinco deja dos marcas donde había una.</p>
+  <p>Sobre esta hoja el efecto es directo: el sitio tiene que mostrar <strong>un</strong> precio y la hoja ofrece dos, sin ninguna manera de saber cuál rige. Un catálogo con dos precios para el mismo producto deja de servir para vender.</p>
+</div>
+
+<div class="problema">
+  <span class="titulo">Anomalía de inserción</span>
+  <p>Es la <strong>imposibilidad de registrar algo que existe</strong>, porque la estructura solo admite datos acompañados de un hecho que todavía no ocurrió. Acá la marca Nova y el rubro Baño existen en la empresa y no aparecen en ninguna fila.</p>
+  <p>La razón está en la <strong>unidad de registro</strong>: en esta hoja cada fila es un producto, así que una marca entra recién cuando tiene un producto cargado. Para anotar Nova habría que inventarle un producto que no existe.</p>
+  <p>En este ejemplo vemos por qué la consigna pide lo que pide. El enunciado exige una vista de administrador con «carga de artículos, rubros y marcas»: son <strong>tres cargas separadas</strong>, y para que un rubro o una marca puedan existir sin productos hacen falta <strong>tres listas separadas</strong>. El propio enunciado del trabajo está describiendo el modelo.</p>
+</div>
+
+<div class="problema">
+  <span class="titulo">Anomalía de borrado</span>
+  <p>Es la <strong>pérdida de un dato como efecto colateral de borrar otro</strong>. Supongamos una tarea razonable: dar de baja los productos discontinuados, y entre ellos el limpiavidrios de la fila 9. Con esa fila desaparece el rubro «Vidrios», que no figuraba en ninguna otra.</p>
+  <p>Es la <strong>contracara de la anomalía anterior</strong>: si un rubro existe solamente dentro de las filas de sus productos, se va con ellas. En este listado alcanza con dar de baja un producto para que el sitio pierda una categoría entera, y nadie quiso eliminarla.</p>
+</div>
+<h3>El costo de consultar una hoja plana</h3>
+<p>Además de los cinco problemas hay un sexto asunto, que no produce datos incorrectos: vuelve caro averiguar lo que la hoja sí contiene. La consulta es la que el sitio necesita en cada visita: <strong>mostrar los productos del rubro Limpieza de pisos, ordenados por precio</strong>.</p>
+<p>El procedimiento sobre la hoja tiene tres pasos. Recorrer las diez filas. Quedarse con las que dicen exactamente <code>Limpieza de pisos</code>, que son la 1, la 4, la 5, la 8 y la 10. Ordenarlas por precio. La fila 7 queda afuera, porque dice <code>Limpieza pisos</code>, y el producto no aparece en el listado aunque exista.</p>
+<p>Ese procedimiento funciona con diez filas. Con cuatrocientos productos se vuelve un trabajo de varios minutos, con posibilidad de error en cada paso, y hay que repetirlo entero cada vez que alguien entra al sitio y elige un rubro. La operación no escala, y no escala porque quien conoce el criterio de búsqueda es la persona y no el registro.</p>
+<p>La alternativa consiste en poder <em>escribir la pregunta</em> y que el sistema la ejecute. Algo del orden de «traeme los productos cuyo rubro sea limpieza de pisos, ordenados por precio», expresado de una forma que un programa entienda. Eso es lo que hace SQL, y es el contenido de la Unidad 5. Por ahora basta con registrar la carencia: mientras los datos vivan en una hoja plana, cada pregunta se paga en tiempo de lectura humana.</p>
+
+<h3>La separación en tablas</h3>
+<p>Si el diagnóstico es que hay cuatro cosas compartiendo una fila, la salida es darle a cada una su propia tabla. Para reconocer cuáles son, dos criterios.</p>
+<p>El primero es gramatical: las cosas del dominio suelen ser los sustantivos con los que se lo describe. «La empresa vende productos, agrupados por rubro, de distintas marcas, que compra a proveedores»: ahí están nombrados los cuatro.</p>
+<p>El segundo es la prueba de pertenencia. De cada dato hay que preguntar de quién es. El precio es del producto. El nombre del rubro es del rubro. El teléfono del proveedor es del proveedor. Cuando un dato pertenece a algo que no es la fila, ese algo necesita su propia tabla.</p>
+
+<div class="par">
+  <div class="mini">
+    <div class="rot">Rubros · 5 filas</div>
+    <div class="tabla-wrap"><table>
+      <thead><tr><th scope="col">rubro</th></tr></thead>
+      <tbody><tr><td>Limpieza de pisos</td></tr><tr><td>Cocina</td></tr><tr><td>Ropa</td></tr><tr><td>Vidrios</td></tr><tr><td>Baño</td></tr></tbody>
+    </table></div>
+  </div>
+  <div class="mini">
+    <div class="rot">Marcas · 4 filas</div>
+    <div class="tabla-wrap"><table>
+      <thead><tr><th scope="col">marca</th><th scope="col">proveedor</th></tr></thead>
+      <tbody><tr><td>Brillex</td><td>Distribuidora Sur</td></tr><tr><td>Espuma</td><td>Mayorista Norte</td></tr><tr><td>Genérica</td><td>Mayorista Norte</td></tr><tr><td>Nova</td><td>—</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+<div class="mini">
+  <div class="rot">Productos · 9 filas</div>
+  <div class="tabla-wrap"><table>
+    <thead><tr><th scope="col">producto</th><th scope="col" class="num">precio</th><th scope="col">rubro</th><th scope="col">marca</th></tr></thead>
+    <tbody>
+      <tr><td>Lavandina 1 L</td><td class="num">900</td><td>Limpieza de pisos</td><td>Brillex</td></tr>
+      <tr><td>Detergente 750 ml</td><td class="num">1200</td><td>Cocina</td><td>Brillex</td></tr>
+      <tr><td>…</td><td class="num">…</td><td>…</td><td>…</td></tr>
+    </tbody>
+  </table></div>
+</div>
+<p>La tabla de rubros tiene cinco filas y no cuatro, porque ahora entra Baño sin necesidad de inventarle un producto. La de marcas tiene cuatro e incluye Nova. Y la de productos bajó de diez filas a nueve, porque la fila 7 era la fila 1 escrita de otra manera. Escribir las tablas obligó a decidir cuál es el precio de la lavandina, que era justamente la pregunta que la hoja no podía responder.</p>
+
+<h3>Los problemas que la separación resuelve y los que deja abiertos</h3>
+<div class="balance">
+  <div class="sigue"><svg class="ico"><use href="#i-x"/></svg><span class="qué">Redundancia</span><span>A medias. El nombre del rubro ya no se repite en cada producto, pero la tabla de productos sigue nombrándolo con su texto</span></div>
+  <div class="sigue"><svg class="ico"><use href="#i-x"/></svg><span class="qué">Inconsistencia</span><span>Sigue. Nada impide escribir <code>Limpieza pisos</code> en la columna de rubro de un producto nuevo</span></div>
+  <div class="resuelto"><svg class="ico"><use href="#i-ok"/></svg><span class="qué">Actualización</span><span>Resuelta. El precio y el nombre de la marca viven en una sola fila y se cambian una sola vez</span></div>
+  <div class="resuelto"><svg class="ico"><use href="#i-ok"/></svg><span class="qué">Inserción</span><span>Resuelta. Baño y Nova existen sin tener productos, que es lo que la consigna pide para la vista de administrador</span></div>
+  <div class="resuelto"><svg class="ico"><use href="#i-ok"/></svg><span class="qué">Borrado</span><span>Resuelta. Dar de baja un producto no toca la lista de rubros</span></div>
+</div>
+<p>Tres de cinco, y las dos que quedan tienen la misma causa: <strong>la tabla de productos nombra al rubro copiando su texto</strong>. Mientras el vínculo entre dos tablas sea una palabra que se vuelve a escribir, se puede escribir distinto. Cómo se escribe ese vínculo es el contenido de la clase que viene.</p>
+</div>
+<div class="panel-esc t5">
+<h3>El caso de la consigna 5: los préstamos del taller</h3>
+<div class="destacado">
+  <p>Una de las diez situaciones de la Olimpíada pide exactamente esto: «Una escuela necesita registrar los préstamos de notebooks, proyectores, tablets, cámaras y herramientas informáticas. Actualmente los préstamos se registran manualmente». La planilla de abajo es ese registro manual. Lo que la consigna pide después (el modelo entidad-relación, las tablas, las claves, las cinco consultas) es el recorrido de las próximas clases.</p>
+</div>
+
+<p>El taller de la escuela presta equipamiento a los estudiantes. El registro se lleva en una planilla de cálculo, en una sola hoja, donde cada fila anota quién se llevó qué y cuándo. Estos son los datos sobre los que se trabaja en esta pestaña:</p>
+
+<div class="resaltador" role="group" aria-label="Resaltar problemas en la planilla">
+  <span class="etiqueta">Resaltar</span>
+  <button type="button" data-p="redundancia" aria-pressed="false">Redundancia</button>
+  <button type="button" data-p="inconsistencia" aria-pressed="false">Inconsistencia</button>
+  <button type="button" data-p="actualizacion" aria-pressed="false">Actualización</button>
+  <button type="button" data-p="insercion" aria-pressed="false">Inserción</button>
+  <button type="button" data-p="borrado" aria-pressed="false">Borrado</button>
+  <button type="button" data-p="consulta" aria-pressed="false">La consulta</button>
+</div>
+
+<div class="hoja-cab"><svg class="ico"><use href="#i-tabla"/></svg> PRESTAMOS.xlsx · una sola hoja</div>
+<div class="hoja-wrap">
+<table class="hoja" data-hoja>
+  <thead>
+    <tr><th class="f" scope="col">#</th><th scope="col">fecha</th><th scope="col">alumno</th><th scope="col">curso</th><th scope="col">equipo</th><th scope="col">devuelto</th></tr>
+  </thead>
+  <tbody>
+    <tr data-f="1"><td class="f">1</td><td data-c="fecha">12/03</td><td data-c="alumno">A. Perez</td><td data-c="curso">7°12</td><td data-c="equipo">Notebook 3</td><td data-c="dev">sí</td></tr>
+    <tr data-f="2"><td class="f">2</td><td data-c="fecha">12/03</td><td data-c="alumno">L. Gomez</td><td data-c="curso">7°11</td><td data-c="equipo">Notebook 1</td><td data-c="dev">sí</td></tr>
+    <tr data-f="3"><td class="f">3</td><td data-c="fecha">14/03</td><td data-c="alumno">A. Perez</td><td data-c="curso">7°12</td><td data-c="equipo">Proyector 1</td><td data-c="dev">sí</td></tr>
+    <tr data-f="4"><td class="f">4</td><td data-c="fecha">14/03</td><td data-c="alumno">M. Quiroga</td><td data-c="curso">7°12</td><td data-c="equipo">Notebook 3</td><td data-c="dev">sí</td></tr>
+    <tr data-f="5"><td class="f">5</td><td data-c="fecha">19/03</td><td data-c="alumno">L. Gomez</td><td data-c="curso">7°11</td><td data-c="equipo">Tablet 2</td><td data-c="dev">sí</td></tr>
+    <tr data-f="6"><td class="f">6</td><td data-c="fecha">20/03</td><td data-c="alumno">Perez, A.</td><td data-c="curso">7°12</td><td data-c="equipo">Notebook 3</td><td data-c="dev">sí</td></tr>
+    <tr data-f="7"><td class="f">7</td><td data-c="fecha">26/03</td><td data-c="alumno">M. Quiroga</td><td data-c="curso">7°12</td><td data-c="equipo">Proyector 1</td><td data-c="dev">sí</td></tr>
+    <tr data-f="8"><td class="f">8</td><td data-c="fecha">02/04</td><td data-c="alumno">A. Perez</td><td data-c="curso">7°13</td><td data-c="equipo">Notebook 1</td><td data-c="dev">sí</td></tr>
+    <tr data-f="9"><td class="f">9</td><td data-c="fecha">09/04</td><td data-c="alumno">S. Vega</td><td data-c="curso">7°11</td><td data-c="equipo">Tablet 2</td><td data-c="dev">sí</td></tr>
+    <tr data-f="10"><td class="f">10</td><td data-c="fecha">09/04</td><td data-c="alumno">A. Perez</td><td data-c="curso">7°13</td><td data-c="equipo">Notebook 3</td><td data-c="dev">sí</td></tr>
+    <tr data-f="11"><td class="f">11</td><td data-c="fecha">16/04</td><td data-c="alumno">L. Gomez</td><td data-c="curso">7°11</td><td data-c="equipo">Proyector 1</td><td data-c="dev"><strong>NO</strong></td></tr>
+    <tr data-f="12"><td class="f">12</td><td data-c="fecha">23/04</td><td data-c="alumno">M. Quiroga</td><td data-c="curso">7°12</td><td data-c="equipo">Notebook 1</td><td data-c="dev">sí</td></tr>
+    <tr data-f="13"><td class="f">13</td><td data-c="fecha">23/04</td><td data-c="alumno">S. Vega</td><td data-c="curso">7°11</td><td data-c="equipo">Notebook 3</td><td data-c="dev">sí</td></tr>
+    <tr data-f="14"><td class="f">14</td><td data-c="fecha">07/05</td><td data-c="alumno">A. Perez</td><td data-c="curso">7°13</td><td data-c="equipo">Tablet 2</td><td data-c="dev">sí</td></tr>
+    <tr data-f="15"><td class="f">15</td><td data-c="fecha">14/05</td><td data-c="alumno">Gomez L.</td><td data-c="curso">7°11</td><td data-c="equipo">Notebook 1</td><td data-c="dev">sí</td></tr>
+    <tr data-f="16"><td class="f">16</td><td data-c="fecha">21/05</td><td data-c="alumno">S. Vega</td><td data-c="curso">7°11</td><td data-c="equipo">Proyector 1</td><td data-c="dev">sí</td></tr>
+    <tr data-f="17"><td class="f">17</td><td data-c="fecha">28/05</td><td data-c="alumno">M. Quiroga</td><td data-c="curso">7°12</td><td data-c="equipo">Notebook 3</td><td data-c="dev"><strong>NO</strong></td></tr>
+    <tr data-f="18"><td class="f">18</td><td data-c="fecha">04/06</td><td data-c="alumno">A. Perez</td><td data-c="curso">7°13</td><td data-c="equipo">Notebook 1</td><td data-c="dev">sí</td></tr>
+    <tr class="fantasma" hidden><td class="f">—</td><td colspan="5">Tablet 1 · está en el taller y nunca se prestó: no hay ninguna fila donde anotarla</td></tr>
+    <tr class="fantasma" hidden><td class="f">—</td><td colspan="5">Cámara Nikon · misma situación</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="pie-resaltado" data-pie></p>
+
+<p>Un dato más, que la planilla no contiene y que hace falta para el análisis: el taller también tiene una <strong>Tablet 1</strong> y una <strong>cámara Nikon</strong>, que nunca se prestaron.</p>
+
+<p>Con dieciocho filas la planilla todavía se puede leer entera de un vistazo. Con cuatrocientas, no. Y lo importante es que los cinco problemas ya están presentes en estas dieciocho: no son un efecto del volumen, son un efecto de la estructura, y el volumen solo los vuelve imposibles de compensar a mano.</p>
+<h3>Redundancia, inconsistencia y las tres anomalías</h3>
+<p>Antes del caso conviene separar dos clases de problema, porque no son lo mismo. La <strong>redundancia</strong> y la <strong>inconsistencia</strong> son problemas del estado de los datos: se ven mirando la hoja quieta. Las tres <strong>anomalías</strong> son problemas que aparecen al operar sobre ella.</p>
+<ol class="pasos secuencia">
+  <li><strong>Redundancia.</strong> El mismo dato en varias filas. Es el punto de partida: todavía no rompió nada.</li>
+  <li><strong>Inconsistencia.</strong> Dos de esas copias dejan de coincidir. Ya hay un dato que contradice a otro.</li>
+  <li><strong>Al modificar.</strong> Cambiar el dato exige tocar todas las copias, y tocar una menos deja la contradicción instalada.</li>
+  <li><strong>Al insertar.</strong> Algo que existe no se puede registrar, porque falta el hecho que lo trae.</li>
+  <li><strong>Al borrar.</strong> Eliminar un hecho arrastra información que nadie quiso borrar.</li>
+</ol>
+<p class="nota">Los dos primeros se ven mirando la hoja. Los tres últimos aparecen recién cuando alguien la usa, y en ese orden: modificar, insertar, borrar.</p>
+<p>En el diseño de bases de datos se llama anomalía a un efecto no deseado que la estructura produce cuando se inserta, se modifica o se borra información. La palabra importa por lo que descarta: no es un error de quien carga los datos ni una falta de cuidado, es una consecuencia de cómo están organizados. Con la misma hoja y otra persona cargando, el problema vuelve a aparecer. Hay tres, una por cada operación: al modificar, al insertar y al borrar.</p>
+
+
+<p>Cada uno de los cinco tiene un nombre técnico que se usa en el campo profesional. Vale la pena aprenderlos con precisión, porque en la Unidad 3 son la herramienta con la que se decide si un modelo está bien construido.</p>
+
+<div class="problema">
+<h3><svg class="ico"><use href="#i-alerta"/></svg> Redundancia</h3>
+<p><strong>Redundancia</strong> es el mismo dato almacenado más de una vez en la misma estructura.</p>
+<p>El texto <code>A. Perez</code> figura seis veces, en las filas 1, 3, 8, 10, 14 y 18. Su curso, otras seis. El equipo <code>Notebook 3</code> aparece en las filas 1, 4, 6, 10, 13 y 17.</p>
+<p>Acá está el punto conceptual de todo el bloque, y conviene detenerse: <strong>el curso no es un dato del préstamo, es un dato de la persona</strong>. Que A. Perez esté en séptimo doce no depende de que se haya llevado un notebook un jueves de marzo. Sin embargo está escrito en la fila del préstamo, porque en esta estructura no existe otro lugar donde ponerlo. Nadie decidió repetirlo: la hoja plana obliga a repetirlo.</p>
+<p>Espacio, que hoy es lo de menos. Y sobre todo lo que viene a continuación: la redundancia es la causa de los otros cuatro problemas. Todo lo demás de esta sección se sigue de haber aceptado copias del mismo dato.</p>
+<p><button type="button" class="ver" data-p="redundancia"><svg class="ico"><use href="#i-ojo"/></svg> Ver en la planilla</button></p>
+</div>
+
+<div class="problema">
+<h3><svg class="ico"><use href="#i-alerta"/></svg> Inconsistencia</h3>
+<p><strong>Inconsistencia</strong> es tener dos copias del mismo dato que no coinciden entre sí, con lo cual <strong>la estructura afirma dos cosas a la vez</strong>.</p>
+<p>La fila 6 dice <code>Perez, A.</code> donde las otras dicen <code>A. Perez</code>. La fila 15 dice <code>Gomez L.</code> donde las filas 2, 5 y 11 dicen <code>L. Gomez</code>.</p>
+<p>Un dato que se escribe muchas veces se escribe a mano muchas veces. Para una persona que lee, <code>Perez, A.</code> y <code>A. Perez</code> son la misma alumna; para la planilla son dos textos diferentes, y por lo tanto dos personas. La planilla no tiene manera de saber que son la misma, porque el único vínculo entre las filas es que el texto coincida <em>carácter por carácter</em>.</p>
+<p>Toda cuenta que agrupe por alumno da mal. Si alguien pregunta cuántos préstamos hizo A. Perez, la respuesta es seis y también uno. Y el error es silencioso: nada avisa, el total simplemente está equivocado. La regla general que conviene retener: <strong>cuando un dato está repetido, tarde o temprano dos copias dicen cosas distintas</strong>.</p>
+<p><button type="button" class="ver" data-p="inconsistencia"><svg class="ico"><use href="#i-ojo"/></svg> Ver en la planilla</button></p>
+</div>
+
+<div class="problema">
+<h3><svg class="ico"><use href="#i-alerta"/></svg> Anomalía de actualización</h3>
+<p>La <strong>anomalía de actualización</strong> es la imposibilidad de modificar un dato en un solo movimiento, porque está copiado en varios lugares.</p>
+<p>Conviene plantearlo como una pregunta simple: <strong>¿en qué curso está A. Perez?</strong> La planilla responde las dos cosas. Séptimo doce, según las filas 1, 3 y 6. Séptimo trece, según las filas 8, 10, 14 y 18.</p>
+<p>Hay dos explicaciones posibles y la planilla no permite elegir entre ellas. La primera: A. Perez cambió de curso en abril, y quien hizo el cambio editó las filas nuevas y se olvidó de las tres viejas. La segunda: nunca cambió de curso, y alguien cargó mal cuatro filas. <strong>Los datos no alcanzan para decidir cuál de las dos pasó</strong>, y eso ya es una falla del registro: un sistema de información que no permite saber qué es verdad no está informando.</p>
+<p>Cada cambio de un dato repetido es una operación de riesgo. Hay que encontrar todas las copias, y basta olvidar una para que el registro quede contradiciéndose sin que nada lo señale. A mayor cantidad de filas, mayor probabilidad de olvidar una.</p>
+<p><button type="button" class="ver" data-p="actualizacion"><svg class="ico"><use href="#i-ojo"/></svg> Ver en la planilla</button></p>
+</div>
+
+<div class="problema">
+<h3><svg class="ico"><use href="#i-alerta"/></svg> Anomalía de inserción</h3>
+<p>La <strong>anomalía de inserción</strong> es la imposibilidad de registrar algo que existe, porque la estructura solo admite datos acompañados de un hecho que todavía no ocurrió.</p>
+<p>La Tablet 1 y la cámara Nikon están físicamente en el taller y no aparecen en ninguna fila, porque nunca se prestaron.</p>
+<p>En esta hoja, la unidad de registro es el préstamo. Un equipo entra a la planilla como un dato adentro de un préstamo, nunca por sí mismo. Dicho de otro modo: <strong>en esta estructura un equipo existe únicamente si alguien se lo llevó</strong>. Con los alumnos pasa lo mismo: un estudiante que todavía no pidió nada no tiene dónde ser anotado.</p>
+<p>El inventario del taller queda incompleto por diseño, y encima de forma engañosa: la planilla no está vacía en el lugar de la Tablet 1, es que no hay lugar. Nadie que lea el registro puede darse cuenta de que falta algo.</p>
+<p><button type="button" class="ver" data-p="insercion"><svg class="ico"><use href="#i-ojo"/></svg> Ver en la planilla</button></p>
+</div>
+
+<div class="problema">
+<h3><svg class="ico"><use href="#i-alerta"/></svg> Anomalía de borrado</h3>
+<p>La <strong>anomalía de borrado</strong> es la pérdida de un dato como efecto colateral de borrar otro.</p>
+<p>Supongamos una tarea de mantenimiento razonable: depurar los préstamos anteriores a mayo. Se borran las filas 1 a 14. Con ellas desaparece la <strong>Tablet 2</strong>, que solo figuraba en las filas 5, 9 y 14.</p>
+<p>Es la contracara exacta de la anomalía anterior. Si un equipo existe solamente dentro de los préstamos que lo mencionan, borrar el último préstamo que lo menciona lo borra del registro. El equipo sigue en el taller; lo que se perdió es el dato de que existe.</p>
+<p>Convierte cualquier limpieza en una operación peligrosa. Y produce el peor tipo de pérdida de información: la que nadie nota, porque el dato desaparece junto con el rastro de que estaba.</p>
+<p><button type="button" class="ver" data-p="borrado"><svg class="ico"><use href="#i-ojo"/></svg> Ver en la planilla</button></p>
+</div>
+
+<div class="alerta">
+  <span class="titulo"><svg class="ico"><use href="#i-alerta"/></svg> Los cinco tienen una sola causa</span>
+  <p>Ninguno es un problema de quien carga los datos, y ninguno se arregla siendo más cuidadoso. Los cinco se siguen de la misma decisión de estructura: haber puesto en una sola fila datos que pertenecen a <strong>tres cosas distintas</strong> , el alumno, el equipo y el préstamo. Mientras esas tres compartan fila, los cinco problemas están garantizados.</p>
+</div>
+
+<h3>El costo de consultar una hoja plana</h3>
+
+<p>Además de los cinco problemas hay un sexto asunto, que no produce datos incorrectos: vuelve caro averiguar lo que el registro sí contiene. Acá está desarrollado sobre la consulta que pide la consigna.</p>
+<details>
+  <summary>El procedimiento sobre la planilla, paso a paso</summary>
+
+
+
+<div class="destacado">
+  <p>La consigna 5 pide cinco consultas y nombra dos: «una de las consultas deberá indicar qué equipos se encuentran actualmente prestados» y «otra deberá mostrar el historial de préstamos de una persona». La primera es la que sigue.</p>
+</div>
+<p>La pregunta es la que cualquiera le haría a este registro: <strong>¿quién tiene el proyector ahora?</strong> El procedimiento para responderla sobre la planilla tiene cuatro pasos. Recorrer las dieciocho filas. Quedarse con las que mencionan el proyector, que son la 3, la 7, la 11 y la 16. Ordenarlas por fecha. Y mirar la más reciente que tenga <code>NO</code> en devuelto. La respuesta es la fila 11: L. Gomez, desde el 16 de abril.</p>
+
+<p>Ese procedimiento funciona porque dieciocho filas entran en una pantalla. Con cuatrocientas se vuelve un trabajo de varios minutos, con posibilidad de error en cada paso, y hay que repetirlo entero cada vez que alguien pregunta por otro equipo. La operación no escala, y no escala porque <strong>quien conoce el criterio de búsqueda es la persona, no el registro</strong>: la planilla guarda los datos pero no sabe nada sobre ellos.</p>
+
+<p>La alternativa consiste en poder <em>escribir la pregunta</em> y que el sistema la ejecute. Algo del orden de "traeme el préstamo más reciente del proyector que no esté devuelto", expresado de una forma que un programa entienda. Eso es exactamente lo que hace SQL, y es el contenido de la Unidad 5. Por ahora basta con registrar la carencia: mientras los datos vivan en una hoja plana, cada pregunta se paga en tiempo de lectura humana.</p>
+
+<p><button type="button" class="ver" data-p="consulta"><svg class="ico"><use href="#i-ojo"/></svg> Ver las filas del proyector</button></p>
+</details>
+<h3>La separación en tablas</h3>
+
+
+<p>Si el diagnóstico es que hay tres cosas compartiendo una fila, la salida es darle a cada una su propia tabla. La pregunta práctica es cómo se reconoce cuáles son esas cosas, y hay dos criterios que sirven para casi cualquier dominio.</p>
+<div class="destacado">
+  <p>En las dos consignas de la Olimpíada las cosas están nombradas en el propio enunciado. La consigna 5 pide registrar «personas, equipos, categorías, préstamos y devoluciones»: cinco. Y el entregable 6 de la otra escuela pide una vista de administrador que permita «carga de artículos, rubros y marcas»: tres cargas separadas, o tres tablas. Reconocer las cosas del dominio, en estos dos casos, empieza por leer con cuidado lo que ya está escrito.</p>
+</div>
+
+<p><strong>El primero es gramatical.</strong> Las cosas del dominio suelen ser los sustantivos con los que se lo describe. Si el taller presta equipos a los alumnos, ahí están nombrados el equipo, el alumno y el préstamo. Contar el dominio en una oración y subrayar los sustantivos es un procedimiento burdo, y es un buen punto de partida.</p>
+
+<p><strong>El segundo es la prueba de pertenencia.</strong> De cada dato hay que preguntar de quién es. El curso es de la persona. La categoría es del equipo. La fecha es del préstamo, y el préstamo es la única de las tres cosas de la que el dato "devuelto" también depende. Cuando dos datos de la misma fila responden a dueños distintos, esa fila está mezclando cosas.</p>
+
+<p>Aplicando los dos criterios, la planilla del taller se reescribe así:</p>
+
+<div class="par">
+  <div class="mini">
+    <div class="rot">Alumnos · 4 filas</div>
+    <div class="tabla-wrap"><table>
+      <thead><tr><th scope="col">alumno</th><th scope="col">curso</th></tr></thead>
+      <tbody>
+        <tr><td>A. Perez</td><td>7°13</td></tr>
+        <tr><td>L. Gomez</td><td>7°11</td></tr>
+        <tr><td>M. Quiroga</td><td>7°12</td></tr>
+        <tr><td>S. Vega</td><td>7°11</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="mini">
+    <div class="rot">Equipos · 6 filas</div>
+    <div class="tabla-wrap"><table>
+      <thead><tr><th scope="col">equipo</th><th scope="col">categoría</th></tr></thead>
+      <tbody>
+        <tr><td>Notebook 1</td><td>informática</td></tr>
+        <tr><td>Notebook 3</td><td>informática</td></tr>
+        <tr><td>Proyector 1</td><td>proyección</td></tr>
+        <tr><td>Tablet 2</td><td>informática</td></tr>
+        <tr class="nueva"><td>Tablet 1</td><td>informática</td></tr>
+        <tr class="nueva"><td>Cámara Nikon</td><td>registro</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<div class="mini">
+  <div class="rot">Préstamos · 18 filas</div>
+  <div class="tabla-wrap"><table>
+    <thead><tr><th scope="col">fecha</th><th scope="col">alumno</th><th scope="col">equipo</th><th scope="col">devuelto</th></tr></thead>
+    <tbody>
+      <tr><td class="fecha">12/03</td><td>A. Perez</td><td>Notebook 3</td><td>sí</td></tr>
+      <tr><td class="fecha">12/03</td><td>L. Gomez</td><td>Notebook 1</td><td>sí</td></tr>
+      <tr><td class="fecha">14/03</td><td>A. Perez</td><td>Proyector 1</td><td>sí</td></tr>
+      <tr><td class="fecha">…</td><td>…</td><td>…</td><td>…</td></tr>
+      <tr><td class="fecha">16/04</td><td>L. Gomez</td><td>Proyector 1</td><td><strong>NO</strong></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<p>Cuatro alumnos, seis equipos y dieciocho préstamos, contra dieciocho filas en las que estaba todo. Vale la pena mirar dos cosas que cambiaron con solo escribirlo de esta manera.</p>
+
+<p><strong>A. Perez aparece una sola vez, con un solo curso.</strong> Escribir la tabla obligó a decidir cuál de los dos cursos es el verdadero, y esa decisión se tomó una vez. La estructura ya no admite que el dato se contradiga, porque no hay dos lugares donde pueda diferir.</p>
+
+<p><strong>La Tablet 1 y la cámara entraron al registro</strong> aunque nunca se hayan prestado, y con ellas apareció espacio para la categoría de cada equipo, un dato que en la planilla original no tenía dónde ir. Esto último es más importante de lo que parece: cuando la estructura es correcta, agregar información nueva es fácil; cuando no lo es, cada dato nuevo hay que encajarlo a la fuerza.</p>
+<h3>Los problemas que la separación resuelve y los que deja abiertos</h3>
+
+
+<p>La separación se evalúa volviendo sobre los cinco problemas, uno por uno. Este es el resultado:</p>
+
+<div class="balance">
+  <div class="sigue">
+    <svg class="ico"><use href="#i-x"/></svg>
+    <span class="qué">Redundancia</span>
+    <span>A medias. El curso ya no se repite, pero el nombre del alumno sigue copiado en cada préstamo</span>
+  </div>
+  <div class="sigue">
+    <svg class="ico"><use href="#i-x"/></svg>
+    <span class="qué">Inconsistencia</span>
+    <span>Sigue. Nada impide escribir <code>Perez, A.</code> en la tabla de préstamos</span>
+  </div>
+  <div class="resuelto">
+    <svg class="ico"><use href="#i-ok"/></svg>
+    <span class="qué">Actualización</span>
+    <span>Resuelta. El curso vive en una sola fila y se cambia una sola vez</span>
+  </div>
+  <div class="resuelto">
+    <svg class="ico"><use href="#i-ok"/></svg>
+    <span class="qué">Inserción</span>
+    <span>Resuelta. Un equipo existe por sí mismo, sin necesidad de un préstamo que lo mencione</span>
+  </div>
+  <div class="resuelto">
+    <svg class="ico"><use href="#i-ok"/></svg>
+    <span class="qué">Borrado</span>
+    <span>Resuelta. Borrar préstamos no toca ni a los alumnos ni a los equipos</span>
+  </div>
+</div>
+
+<p>Tres de cinco es un avance considerable para una reescritura que no usó ninguna herramienta: se hizo con tres tablas dibujadas a mano. Y los dos que quedaron tienen una única causa, que conviene enunciar con precisión porque es el eje de las tres clases siguientes.</p>
+
+<div class="destacado">
+  <span class="titulo"><svg class="ico"><use href="#i-flecha"/></svg> Lo que queda sin resolver</span>
+  <p>La tabla de préstamos <strong>nombra al alumno copiando su nombre</strong>. El vínculo entre las dos tablas es un texto que hay que volver a escribir en cada fila, y todo texto que se vuelve a escribir se puede escribir distinto. De ahí que la redundancia persista a medias y que la inconsistencia persista entera.</p>
+</div>
+
+<p>Se necesitan dos cosas, y son las dos clases que vienen.</p>
+
+<ol class="pasos">
+  <li><strong>Un dato que identifique sin ambigüedad.</strong> Algo que designe a una y solo una alumna, que no pueda escribirse de dos formas y que no cambie con el tiempo. El nombre falla en los tres requisitos. Es el tema de la clase próxima, y se llama clave primaria.</li>
+  <li><strong>Una forma de que una tabla apunte a otra sin copiar el dato.</strong> Que la fila del préstamo remita al alumno en lugar de reescribirlo, y que el sistema impida remitir a un alumno que no existe. Es el tema de dos clases después, y se llama clave foránea.</li>
+</ol>
+
+<p>Cerrar el círculo completo de este análisis (separar, identificar y vincular) es lo que en la Unidad 3 se estudia con el nombre de <strong>normalización</strong>. Lo que se hizo hoy a ojo es el primer tramo de un procedimiento que tiene reglas explícitas.</p>
+</div>
+
+<h3>Chequeo de los cinco problemas y de la separación</h3>
+<p>Tres afirmaciones para responder antes de seguir. Al elegir una opción aparece la devolución.</p>
+
+<div class="quiz" data-correcta="b">
+  <p class="pregunta">1. En la hoja hay un dato escrito veinte veces y todavía nadie lo escribió mal. ¿Qué problema hay?</p>
+  <label><input type="radio" name="q1"> Ninguno, porque las copias coinciden</label>
+  <label><input type="radio" name="q1"> Hay redundancia, y es la que habilita a los otros cuatro problemas</label>
+  <label><input type="radio" name="q1"> Hay inconsistencia</label>
+  <div class="feedback" role="status">Hay redundancia. Inconsistencia todavía no, porque las copias coinciden; el problema es que alcanza con una escritura distinta para que dejen de coincidir.</div>
+</div>
+
+<div class="quiz" data-correcta="c">
+  <p class="pregunta">2. Un equipo dice que esto se arregla teniendo más cuidado al cargar. ¿Es cierto?</p>
+  <label><input type="radio" name="q2"> Sí, el problema es de quien carga los datos</label>
+  <label><input type="radio" name="q2"> Sí, con una planilla bien hecha alcanza</label>
+  <label><input type="radio" name="q2"> No, porque el problema es de la estructura y vuelve con otra persona cargando</label>
+  <div class="feedback" role="status">No. Por eso se llaman anomalías: son un efecto de cómo están organizados los datos, no de la atención de quien los escribe.</div>
+</div>
+
+<div class="quiz" data-correcta="a">
+  <p class="pregunta">3. Separar la hoja en varias tablas resuelve…</p>
+  <label><input type="radio" name="q3"> Tres de los cinco problemas</label>
+  <label><input type="radio" name="q3"> Los cinco problemas</label>
+  <label><input type="radio" name="q3"> Solamente la redundancia</label>
+  <div class="feedback" role="status">Tres de los cinco. Los dos que quedan dependen de cómo una tabla nombra a otra, y eso es el contenido de la clase que viene.</div>
+</div>
+
+<h3>El esquema del cambio</h3>
+<figure class="esquema">
+  <svg viewBox="0 0 860 300" role="img" aria-labelledby="tit-esq desc-esq">
+    <title id="tit-esq">De una hoja única a varias tablas</title>
+    <desc id="desc-esq">Una hoja con datos repetidos produce cinco problemas. Al separarla en tablas, la tabla del hecho resuelve tres, y los dos que quedan dependen de cómo esa tabla nombra a las demás.</desc>
+    <defs>
+      <marker id="fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker>
+      <marker id="fb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b31759"/></marker>
+    </defs>
+    <g font-family="var(--sans, system-ui), system-ui, sans-serif">
+
+      <rect x="8" y="96" width="178" height="96" rx="10" fill="#fdf2f6" stroke="#b31759" stroke-width="1.6"/>
+      <text x="97" y="126" text-anchor="middle" font-size="14" font-weight="700" fill="#17191d">una sola hoja</text>
+      <text x="97" y="148" text-anchor="middle" font-size="12" fill="#5b6169">el mismo dato,</text>
+      <text x="97" y="165" text-anchor="middle" font-size="12" fill="#5b6169">escrito muchas veces</text>
+      <text x="97" y="222" text-anchor="middle" font-size="12.5" font-weight="700" fill="#a8214b">5 problemas</text>
+      <text x="97" y="240" text-anchor="middle" font-size="11" fill="#5b6169">2 de estado + 3 al operar</text>
+
+      <g color="#8d96a3"><path d="M194 144 H250" stroke="currentColor" stroke-width="1.6" marker-end="url(#fa)"/></g>
+      <text x="222" y="132" text-anchor="middle" font-size="11" fill="#5b6169">separar</text>
+
+      <rect x="258" y="96" width="200" height="96" rx="10" fill="#ffffff" stroke="#17191d" stroke-width="1.8"/>
+      <text x="358" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#17191d">la tabla del hecho</text>
+      <text x="358" y="146" text-anchor="middle" font-size="12" fill="#33353b">una fila por cada préstamo,</text>
+      <text x="358" y="163" text-anchor="middle" font-size="12" fill="#33353b">producto o reserva</text>
+      <text x="358" y="222" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1f7a4d">3 resueltos</text>
+      <text x="358" y="240" text-anchor="middle" font-size="11" fill="#5b6169">actualizar, insertar, borrar</text>
+
+      <rect x="600" y="18" width="252" height="62" rx="10" fill="#ffffff" stroke="#8d96a3" stroke-width="1.4"/>
+      <text x="726" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#17191d">una cosa del dominio</text>
+      <text x="726" y="62" text-anchor="middle" font-size="11.5" fill="#5b6169">con sus propios datos, escritos una vez</text>
+
+      <rect x="600" y="113" width="252" height="62" rx="10" fill="#ffffff" stroke="#8d96a3" stroke-width="1.4"/>
+      <text x="726" y="137" text-anchor="middle" font-size="13" font-weight="700" fill="#17191d">otra cosa del dominio</text>
+      <text x="726" y="157" text-anchor="middle" font-size="11.5" fill="#5b6169">que ya no se repite en cada fila</text>
+
+      <rect x="600" y="208" width="252" height="62" rx="10" fill="#ffffff" stroke="#8d96a3" stroke-width="1.4"/>
+      <text x="726" y="232" text-anchor="middle" font-size="13" font-weight="700" fill="#17191d">y una tercera</text>
+      <text x="726" y="252" text-anchor="middle" font-size="11.5" fill="#5b6169">que existe aunque no tenga hechos</text>
+
+      <path d="M460 122 C530 122 530 49 596 49" stroke="#b31759" stroke-width="1.6" fill="none" marker-end="url(#fb)"/>
+      <path d="M460 144 H596" stroke="#b31759" stroke-width="1.6" fill="none" marker-end="url(#fb)"/>
+      <path d="M460 166 C530 166 530 239 596 239" stroke="#b31759" stroke-width="1.6" fill="none" marker-end="url(#fb)"/>
+      <text x="528" y="106" text-anchor="middle" font-size="12" font-weight="700" fill="#b31759">nombra a</text>
+      <text x="528" y="196" text-anchor="middle" font-size="11" fill="#a8214b">quedan 2, y dependen</text>
+      <text x="528" y="212" text-anchor="middle" font-size="11" fill="#a8214b">de cómo se escribe esto</text>
+    </g>
+  </svg>
+  <figcaption>
+    <span>De una hoja única a varias tablas. Los dos problemas que quedan abiertos dependen del vínculo entre ellas.</span>
+    <button type="button" class="ampliar">Ampliar</button>
+  </figcaption>
+</figure>
+<p>Las tres flechas de la derecha son el punto donde queda el trabajo de hoy. Cada una es un <strong>nombra a</strong>, y la manera de escribirlo es lo que resuelve los dos problemas que la separación deja abiertos.</p>
+</section>
+
+
+<!-- ================= 7 ================= -->
+<section id="s7">
+<h2><span class="n">04</span> El gestor de bases de datos</h2>
+
+<div class="destacado">
+  <p>Las dos consignas exigen un gestor, con esas palabras. El entregable 6 pide un listado donde «estos productos deben surgir de base de datos». Y la situación 6, la del sistema de reservas, pide «impedir que un mismo espacio sea reservado dos veces en el mismo horario»: eso es una regla que la planilla no puede sostener, y es el tema de este apartado.</p>
+</div>
+<p>La separación en tablas es una decisión de diseño y se puede tomar dentro de una planilla de cálculo: alcanza con abrir tres hojas. Lo que una planilla no puede hacer es <strong>sostener esa separación con reglas</strong>. Nada le impide a un usuario nombrar en una fila algo que no existe en la lista correspondiente —un rubro que nadie cargó, un equipo que no está en el inventario—, ni cargar dos veces la misma marca o el mismo alumno, ni poner una palabra donde va un precio. Para eso existe una categoría distinta de programa.</p>
+
+<div class="tabla-wrap">
+<table>
+  <thead><tr><th scope="col">Término</th><th scope="col">Qué nombra</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Base de datos</strong></td><td>El conjunto de datos, organizados en tablas relacionadas entre sí de manera explícita</td></tr>
+    <tr><td><strong>Gestor</strong><br><span style="color:var(--texto-tenue)">DBMS</span></td><td>El programa que administra esas tablas: guarda, controla, protege y responde consultas. En esta materia se trabaja con <strong>MySQL / MariaDB</strong></td></tr>
+    <tr><td><strong>SQL</strong></td><td>El idioma con el que se le habla al gestor. Es un estándar: se escribe casi igual en cualquier gestor, y también desde el código de un programa</td></tr>
+    <tr><td><strong>phpMyAdmin</strong></td><td>Un panel web para operar el gestor desde el navegador. Es una herramienta para ver y manipular la base, y conviene no confundirla con el gestor mismo</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Lo que el gestor agrega sobre la planilla</h3>
+
+<p><strong>Tipos de dato.</strong> Cada columna declara qué clase de valor acepta. La columna fecha guarda fechas, no textos que parecen fechas. La consecuencia práctica es que se pueden ordenar cronológicamente y preguntar por rangos —lo registrado en marzo— algo que sobre el texto <code>12/03</code> no funciona bien, porque ordenado como texto el 2 de abril va antes del 12 de marzo. Con el precio pasa lo mismo: guardado como texto, <code>900</code> resulta mayor que <code>3200</code>, porque la comparación mira el primer carácter y el 9 va después del 3.</p>
+
+<p><strong>Restricciones.</strong> Son reglas que el gestor verifica en cada operación y que impiden guardar datos incoherentes. Sobre estos casos: que no se pueda cargar un producto con un rubro que no existe en la lista de rubros, ni un préstamo de un equipo que no está en el inventario; que no haya dos marcas ni dos alumnos con el mismo identificador; que el precio y la fecha no queden vacíos. La diferencia con una planilla es de naturaleza: la regla no depende de que quien carga se acuerde.</p>
+
+<p><strong>Un dato en un solo lugar.</strong> El gestor permite que el proveedor de una marca, o el curso de una alumna, exista una vez y que todo lo demás lo consulte desde ahí. Es la implementación técnica de lo que se hizo a mano en la sección anterior.</p>
+
+<p><strong>Consultas.</strong> La pregunta del apartado anterior —los productos de un rubro ordenados por precio, o quién tiene el proyector sin devolver— se escribe en una línea de SQL y el gestor la ejecuta, sin importar si hay dieciocho filas o cuatrocientas mil. El criterio de búsqueda pasa a estar del lado del sistema.</p>
+
+<p><strong>Acceso simultáneo.</strong> Dos personas pueden cargar al mismo tiempo, cada una en su fila, sin sobrescribirse. En una planilla compartida, dos ediciones simultáneas de la misma celda terminan con una de las dos perdida.</p>
+
+<p><strong>Usuarios y permisos.</strong> Las dos consignas lo piden con esas palabras: una vista de administrador que cargue artículos, rubros y marcas, y un registro de usuarios con contraseña. El gestor distingue quién puede hacer qué: quien administra carga y modifica, quien visita solamente consulta. Es contenido de la Unidad 8 y de la tercera entrega.</p>
+
+<p><strong>Copias de seguridad.</strong> El gestor provee un mecanismo para exportar la base entera y volver a construirla en otra máquina. Frente a la rotura del equipo donde vive la planilla, la diferencia es tener los datos o no tenerlos.</p>
+
+
+<h3>Chequeo de la diferencia entre la planilla y el gestor</h3>
+<div class="quiz" data-correcta="b">
+  <p class="pregunta">Un equipo abre tres hojas en la misma planilla de cálculo y reparte ahí la información. Lo que le sigue faltando es</p>
+  <label><input type="radio" name="qb"> nada: separar en hojas es lo mismo que tener una base de datos</label>
+  <label><input type="radio" name="qb"> que la separación se sostenga con reglas, sin depender de que quien carga se acuerde</label>
+  <label><input type="radio" name="qb"> más columnas en la hoja principal</label>
+  <div class="feedback" role="status">La separación ya está tomada como decisión de diseño, y es correcta. Lo que la planilla no puede hacer es impedir que se cargue un producto con un rubro que no existe, ni que el mismo espacio quede reservado dos veces. Esas reglas son las que exige la consigna, y las sostiene el gestor.</div>
+</div>
+
+<div class="destacado">
+  <span class="titulo"><svg class="ico"><use href="#i-db"/></svg> Se aprende el idioma, no el botón</span>
+  <p>Todo lo que se hace con los botones de phpMyAdmin puede escribirse en SQL, y al revés. En esta materia se escribe SQL, porque es lo que después sigue funcionando en otro gestor, en otra máquina y dentro del código de un sistema. Los botones sirven únicamente dentro de phpMyAdmin.</p>
+</div>
+
+<p>Una aclaración sobre la elección de la herramienta. El Diseño Curricular plantea entre las capacidades del espacio la de <em>seleccionar el gestor que se adapte a las necesidades del contexto</em>: lo que se evalúa es el criterio de selección, no el manejo de un producto. Se trabaja con MySQL y MariaDB por su difusión en el ámbito profesional, porque son software libre y porque es el gestor que usan los proyectos de Sistemas Computacionales, lo cual permite compartir el trabajo entre los dos espacios.</p>
+</section>
+
+<!-- ================= 8 ================= -->
+<section id="s8">
+<h2><span class="n">05</span> XAMPP, phpMyAdmin y la creación de la base</h2>
+
+<p>Se trabaja con <strong>XAMPP</strong>, un paquete que instala en la propia máquina el servidor web Apache, el gestor MySQL y phpMyAdmin, sin necesidad de configurar nada por separado.</p>
+
+<ol class="pasos">
+  <li>Abrir XAMPP y presionar <strong>Start</strong> en <strong>Apache</strong> y en <strong>MySQL</strong>. Los dos tienen que quedar en verde. Apache hace falta porque phpMyAdmin es una aplicación web y necesita un servidor que la sirva.</li>
+  <li>En el navegador, entrar a <code>http://localhost/phpmyadmin</code>. La palabra <code>localhost</code> significa "esta misma máquina": el gestor corre acá, no en internet.</li>
+  <li>Botón <strong>Nueva</strong> para crear la base de datos del proyecto. El nombre, en minúsculas, sin espacios ni tildes, porque va a aparecer escrito dentro de código.</li>
+  <li>Cotejamiento: <code>utf8mb4_unicode_ci</code>. Define con qué alfabeto se guardan los textos y cómo se comparan entre sí.</li>
+  <li>La base queda creada y vacía. Las tablas se diseñan antes de escribirlas, y eso ocupa las clases que siguen.</li>
+</ol>
+
+<div class="alerta">
+  <span class="titulo"><svg class="ico"><use href="#i-alerta"/></svg> Por qué importa el cotejamiento</span>
+  <p>El cotejamiento determina qué caracteres puede almacenar la base. Con uno equivocado, las tildes, la ñ y cualquier símbolo fuera del inglés se guardan mal y aparecen como caracteres extraños al leerlos. El detalle es que <strong>el problema no se manifiesta al crear la base</strong>: se manifiesta meses después, con datos ya cargados, cuando corregirlo implica exportar, arreglar y volver a importar todo. Elegir <code>utf8mb4</code> al principio cuesta un clic.</p>
+</div>
+
+<p>Si alguna máquina no arranca XAMPP, se puede trabajar de a dos en una que funcione, o usar un entorno en línea como <a href="https://www.db-fiddle.com/" target="_blank" rel="noopener">DB Fiddle</a> eligiendo MySQL, que permite crear tablas y consultar sin instalar nada. Conviene resolver el entorno cuanto antes: la Unidad 5 son cuatro clases seguidas de laboratorio.</p>
+</section>
+
+<!-- ================= 9 ================= -->
+<section id="s9">
+<h2><span class="n">06</span> Síntesis</h2>
+
+<p>Guardar registros en una hoja plana obliga a repetir datos, y esa repetición produce cinco fallas: el mismo dato copiado muchas veces, copias que dejan de coincidir, cambios que hay que replicar en varios lugares, información que no se puede registrar porque todavía no tiene uso, e información que se pierde al borrar otra cosa. Ninguna de las cinco se corrige con más cuidado al cargar, porque las cinco se siguen de la estructura.</p>
+
+<p>Separar los datos en una tabla por cada cosa del dominio resuelve tres: las tres anomalías. La redundancia queda a medias y la inconsistencia sigue entera, porque el vínculo entre las tablas sigue siendo un texto copiado. Resolverlas requiere un dato que identifique sin ambigüedad y un mecanismo para que una tabla apunte a otra sin reescribirla, que son los dos temas inmediatos del recorrido.</p>
+
+<p>Un gestor de bases de datos agrega lo que la separación por sí sola no da: tipos de dato, reglas verificadas en cada operación, un lenguaje para consultar, acceso simultáneo, permisos por usuario y copias de seguridad. Sostiene con reglas una estructura que, dibujada en papel, es solo una intención.</p>
+</section>
+
+<!-- ================= 10 ================= -->
+<section id="s10">
+<h2><span class="n">07</span> Registro para la carpeta</h2>
+
+<p>Esto es lo que tiene que quedar <strong>escrito a mano</strong> en la carpeta al cerrar la clase. Copiarlo es parte del trabajo: lo que se escribe con la mano se retiene de otra manera que lo que se lee.</p>
+
+<div class="registro">
+  <div class="rot"><svg class="ico"><use href="#i-lapiz"/></svg> Se escribe a mano, no se imprime</div>
+<pre>=============================================
+CLASE 1 | Base de Datos | 7° - 2026
+Los archivos tradicionales y el gestor de bases de datos
+
+--- LA IDEA ---------------------------------
+El mismo dato escrito muchas veces es el problema.
+Separar en tablas resuelve TRES de los CINCO.
+
+--- LOS 5 PROBLEMAS DE LA HOJA UNICA --------
+redundancia      el mismo dato copiado en cada fila
+inconsistencia   el mismo dato escrito de dos formas
+actualizacion    cambiarlo obliga a tocar todas las copias
+insercion        lo que existe y no se uso, no entra
+borrado          borrar un registro se lleva otro dato
+   (los tres ultimos son las ANOMALIAS: aparecen al operar
+    sobre la hoja; los dos primeros se ven en la hoja quieta)
+
+--- MI CASO ---------------------------------
+La planilla que analice hoy: __________________
+Las cosas distintas que estan compartiendo una fila:
+   1) ______________   2) ______________
+   3) ______________   4) ______________
+Un dato escrito muchas veces, y de cual de esas
+cosas es en realidad: _________________________
+
+--- LA SALIDA -------------------------------
+una hoja con todo  ->  _______________________
+                       _______________________
+                       _______________________
+RESUELTOS:  actualizacion, insercion, borrado
+SIGUE:      la tabla del hecho nombra a la otra copiando
+            su texto, y todo texto que se vuelve a
+            escribir se puede escribir distinto
+
+--- VOCABULARIO -----------------------------
+base de datos  los datos organizados en tablas relacionadas
+gestor (DBMS)  el programa que las administra (MySQL / MariaDB)
+SQL            el idioma con el que se le habla al gestor
+phpMyAdmin     un panel web para operarlo; herramienta, no gestor
+
+--- EL PROYECTO DE LA MATERIA ---------------
+Dominio elegido: ______________________________
+Cosas que aparecen: ___________________________
+Un dato que se repetiria: _____________________
+   (si el dominio es el sitio de la Olimpiada,
+    las cosas ya son las listas de la actividad)
+
+--- LO QUE QUEDA ABIERTO --------------------
+1) un dato que identifique sin ambiguedad (proxima clase)
+2) una forma de apuntar a el sin copiarlo (dos clases despues)</pre>
+</div>
+
+<div class="barra">
+  <button type="button" onclick="window.print()"><svg class="ico"><use href="#i-print"/></svg> Imprimir esta página</button>
+  <a class="boton" href="clase-01-actividad.html"><svg class="ico"><use href="#i-flecha"/></svg> Ir a la actividad</a>
+</div>
+</section>
+
+<!-- ================= 11 ================= -->
+<section id="s10b">
+<h2><span class="n">08</span> Errores frecuentes</h2>
+<p>Cinco confusiones que aparecen todos los años en esta primera clase, con la corrección al lado.</p>
+<div class="tabla-wrap">
+<table>
+  <thead><tr><th scope="col" style="width:42%">Lo que se dice</th><th scope="col">Por qué no es así</th></tr></thead>
+  <tbody>
+    <tr><td>«Una base de datos es un archivo de Excel más grande»</td><td>La diferencia no está en el tamaño: está en que el gestor sostiene reglas sobre los datos. Una planilla acepta cualquier cosa en cualquier celda</td></tr>
+    <tr><td>«Ya tengo una tabla, entonces tengo una base de datos»</td><td>Una tabla suelta con datos repetidos en cada fila es la planilla con otro nombre. La base aparece cuando las tablas se nombran entre sí</td></tr>
+    <tr><td>«La redundancia se arregla borrando las filas repetidas»</td><td>Las filas no están repetidas: cada préstamo ocurrió. Lo que se repite es un dato dentro de filas distintas, y se arregla moviéndolo a su propia tabla</td></tr>
+    <tr><td>«La inconsistencia se evita escribiendo con cuidado»</td><td>Con catorce filas puede funcionar; con cuatrocientas y tres personas cargando, no. Por eso el dato se escribe una sola vez en un solo lugar</td></tr>
+    <tr><td>«Separar en tablas resuelve el problema»</td><td>Resuelve tres de los cinco. Los otros dos dependen de cómo una tabla nombra a otra, que es el contenido de la clase siguiente</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<section id="s10c">
+<h2><span class="n">09</span> Glosario</h2>
+<div class="tabla-wrap">
+<table>
+  <thead><tr><th scope="col" style="width:26%">Término</th><th scope="col">Qué nombra</th></tr></thead>
+  <tbody>
+    <tr><td>Dato</td><td>Un valor suelto: una fecha, un nombre, un número</td></tr>
+    <tr><td>Registro</td><td>El conjunto de datos que describen a la misma cosa o al mismo hecho</td></tr>
+    <tr><td>Hoja plana</td><td>Una fila por registro y una columna por dato, todo en la misma superficie</td></tr>
+    <tr><td>Redundancia</td><td>El mismo dato escrito en más de un lugar</td></tr>
+    <tr><td>Inconsistencia</td><td>Dos escrituras distintas del mismo dato, que el sistema lee como dos cosas</td></tr>
+    <tr><td>Anomalía de actualización</td><td>Un cambio que obliga a tocar muchas filas, y deja datos contradictorios si se toca una menos</td></tr>
+    <tr><td>Anomalía de inserción</td><td>Algo que existe y no se puede registrar porque falta el hecho que lo trae</td></tr>
+    <tr><td>Anomalía de borrado</td><td>Información que se pierde al eliminar un registro que ocupaba la misma fila</td></tr>
+    <tr><td>Entidad</td><td>Cada una de las cosas del dominio que merece su propia tabla</td></tr>
+    <tr><td>Base de datos</td><td>El conjunto de datos organizados en tablas relacionadas de manera explícita</td></tr>
+    <tr><td>Gestor de bases de datos</td><td>El programa que administra esas tablas: guarda, controla, protege y responde consultas</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<section id="s10d">
+<h2><span class="n">10</span> Próximos pasos</h2>
+<p>La clase que viene se ocupa de los dos problemas que quedaron abiertos: cómo una tabla nombra a otra sin copiar su texto. Los contenidos son entidades, atributos, tipos de dato y clave primaria, y se trabajan sobre el modelo del proyecto que cada equipo eligió hoy.</p>
+<p>Para llegar con lo necesario: la ficha del equipo completa, la base creada en el gestor, y las cosas del dominio propio anotadas con los datos que guarda cada una.</p>
+</section>
+
+<section id="s11">
+<h2><span class="n">11</span> Bibliografía</h2>
+
+<p>Los tres primeros títulos están disponibles en línea y en español, y cubren con más detalle lo de esta clase.</p>
+
+<p>Bertone, R., Thomas, P., y Pasini, A. (2019). <em>Introducción a las bases de datos: fundamentos y diseño</em>. Editorial de la Universidad Nacional de La Plata. <a href="http://sedici.unlp.edu.ar/handle/10915/86717" target="_blank" rel="noopener">sedici.unlp.edu.ar/handle/10915/86717</a> , capítulo 1, para la comparación entre archivos y bases de datos.</p>
+
+<p>Camps Paré, R., Casillas Santillán, L. A., Costal Costa, D., Gibert Ginestà, M., Martín Escofet, C., y Pérez Mora, O. (2005). <em>Bases de datos</em>. Universitat Oberta de Catalunya. <a href="https://openaccess.uoc.edu/bitstream/10609/56550/4/Bases%20de%20datos.pdf" target="_blank" rel="noopener">openaccess.uoc.edu</a> , introducción a los sistemas de gestión.</p>
+
+<p>Coronel, C., Morris, S., y Rob, P. (2011). <em>Bases de datos: diseño, implementación y administración</em> (9.ª ed.). Cengage Learning , capítulo 1, sobre las anomalías de los sistemas de archivos.</p>
+
+<p>Oracle Corporation. (s.f.). <em>Manual de referencia de MySQL</em>. <a href="https://dev.mysql.com/doc/" target="_blank" rel="noopener">dev.mysql.com/doc</a> · MariaDB Foundation. (s.f.). <em>Knowledge base</em>. <a href="https://mariadb.com/kb/es/" target="_blank" rel="noopener">mariadb.com/kb/es</a></p>
+</section>
+
+<nav class="nav-clase">
+  <span><a href="../index.html">Inicio de la materia</a></span>
+  <span><a href="clase-01-actividad.html">Actividad de la Clase 1 <svg class="ico"><use href="#i-flecha"/></svg></a></span>
+</nav>
+
+<footer>
+  Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional · EEST N.º 3, Mar del Plata · Ciclo 2026
+</footer>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var mapas = {
+    t5: {
+      redundancia:    { texto: '<strong>Redundancia.</strong> El nombre y el curso de A. Perez, copiados en las filas 1, 3, 8, 10, 14 y 18. El curso es un dato de la persona, no del préstamo.',
+                        celdas: [[1,'alumno'],[1,'curso'],[3,'alumno'],[3,'curso'],[8,'alumno'],[8,'curso'],[10,'alumno'],[10,'curso'],[14,'alumno'],[14,'curso'],[18,'alumno'],[18,'curso']] },
+      inconsistencia: { texto: '<strong>Inconsistencia.</strong> La fila 6 escribe <code>Perez, A.</code> y la 15 escribe <code>Gomez L.</code>. Para la planilla son personas distintas de las de las filas 1 y 2.',
+                        celdas: [[6,'alumno','b'],[15,'alumno','b']] },
+      actualizacion:  { texto: '<strong>Anomalía de actualización.</strong> El curso de A. Perez dice 7°12 en las filas 1, 3 y 6, y 7°13 en las 8, 10, 14 y 18. No se puede saber si cambió de curso o si alguien cargó mal.',
+                        celdas: [[1,'curso'],[3,'curso'],[6,'curso'],[8,'curso','b'],[10,'curso','b'],[14,'curso','b'],[18,'curso','b']] },
+      insercion:      { texto: '<strong>Anomalía de inserción.</strong> Las dos últimas líneas no existen en la planilla: un equipo que nunca se prestó no tiene fila donde ser anotado.',
+                        celdas: [], fantasmas: true },
+      borrado:        { texto: '<strong>Anomalía de borrado.</strong> La Tablet 2 figura solo en las filas 5, 9 y 14. Al depurar los préstamos anteriores a mayo, el equipo desaparece del registro.',
+                        filas: [5,9,14], tachar: true },
+      consulta:       { texto: '<strong>La consulta.</strong> El proyector aparece en las filas 3, 7, 11 y 16. La respuesta es la 11: es la más reciente sin devolver. Hubo que recorrer las 18 filas para encontrarla.',
+                        celdas: [[3,'equipo'],[7,'equipo'],[16,'equipo']], filas: [11] }
+    },
+    t3: {
+      redundancia:    { texto: '<strong>Redundancia.</strong> El rubro «Limpieza de pisos» en las filas 1, 4, 5, 8 y 10, y la marca «Brillex» en las filas 1, 2, 4, 5, 9 y 10. El nombre del rubro es un dato del rubro, no del producto.',
+                        celdas: [[1,'rubro'],[4,'rubro'],[5,'rubro'],[8,'rubro'],[10,'rubro'],[1,'marca','b'],[2,'marca','b'],[4,'marca','b'],[5,'marca','b'],[9,'marca','b'],[10,'marca','b']] },
+      inconsistencia: { texto: '<strong>Inconsistencia.</strong> La fila 7 escribe <code>lavandina 1 l</code>, <code>Limpieza pisos</code> y <code>brillex</code>. Para el sitio son un producto, un rubro y una marca distintos de los de la fila 1.',
+                        celdas: [[1,'producto'],[1,'rubro'],[1,'marca'],[7,'producto','b'],[7,'rubro','b'],[7,'marca','b']] },
+      actualizacion:  { texto: '<strong>Anomalía de actualización.</strong> La lavandina de 1 L vale 900 en la fila 1 y 950 en la fila 7. No se puede saber si hubo un aumento cargado a medias o un error de carga.',
+                        celdas: [[1,'precio'],[7,'precio','b']] },
+      insercion:      { texto: '<strong>Anomalía de inserción.</strong> Las dos últimas líneas no existen en la hoja: una marca o un rubro sin productos no tiene dónde ser anotado, y la consigna pide poder cargarlos.',
+                        celdas: [], fantasmas: true },
+      borrado:        { texto: '<strong>Anomalía de borrado.</strong> El rubro «Vidrios» figura solo en la fila 9. Al dar de baja ese producto, el rubro desaparece del sitio.',
+                        filas: [9], tachar: true },
+      consulta:       { texto: '<strong>La consulta.</strong> Los productos del rubro «Limpieza de pisos» son los de las filas 1, 4, 5, 8 y 10. La fila 7 queda afuera porque su rubro está escrito distinto, y el producto no aparece en el listado aunque exista.',
+                        celdas: [[1,'rubro'],[4,'rubro'],[5,'rubro'],[8,'rubro'],[10,'rubro'],[7,'rubro','b']] }
+    }
+  };
+
+  Array.prototype.forEach.call(document.querySelectorAll(".panel-esc"), function (panel) {
+    var clave = panel.classList.contains("t3") ? "t3" : "t5";
+    var mapa = mapas[clave];
+    var hoja = panel.querySelector("[data-hoja]");
+    var pie = panel.querySelector("[data-pie]");
+    var botones = Array.prototype.slice.call(panel.querySelectorAll(".resaltador button"));
+    if (!hoja || !pie || !botones.length) return;
+
+    function limpiar() {
+      hoja.querySelectorAll("td").forEach(function (td) { td.classList.remove("marca-a", "marca-b", "tachado"); });
+      hoja.querySelectorAll("tr").forEach(function (tr) { tr.classList.remove("marca-fila"); });
+      hoja.querySelectorAll("tr.fantasma").forEach(function (tr) { tr.hidden = true; });
+      pie.innerHTML = "";
+    }
+    function fila(n) { return hoja.querySelector('tr[data-f="' + n + '"]'); }
+
+    function aplicar(k) {
+      var cfg = mapa[k];
+      if (!cfg) return;
+      limpiar();
+      (cfg.celdas || []).forEach(function (c) {
+        var tr = fila(c[0]); if (!tr) return;
+        var td = tr.querySelector('[data-c="' + c[1] + '"]'); if (!td) return;
+        td.classList.add(c[2] === "b" ? "marca-b" : "marca-a");
+      });
+      (cfg.filas || []).forEach(function (n) {
+        var tr = fila(n); if (!tr) return;
+        tr.classList.add("marca-fila");
+        if (cfg.tachar) tr.querySelectorAll("td:not(.f)").forEach(function (td) { td.classList.add("tachado"); });
+      });
+      if (cfg.fantasmas) hoja.querySelectorAll("tr.fantasma").forEach(function (tr) { tr.hidden = false; });
+      pie.innerHTML = cfg.texto;
+    }
+
+    function activar(k) {
+      var yaEstaba = botones.some(function (b) { return b.dataset.p === k && b.getAttribute("aria-pressed") === "true"; });
+      botones.forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+      if (yaEstaba) { limpiar(); return; }
+      botones.forEach(function (b) { if (b.dataset.p === k) b.setAttribute("aria-pressed", "true"); });
+      aplicar(k);
+    }
+
+    botones.forEach(function (b) { b.addEventListener("click", function () { activar(b.dataset.p); }); });
+    panel.querySelectorAll("button.ver").forEach(function (b) {
+      b.addEventListener("click", function () {
+        activar(b.dataset.p);
+        hoja.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
+  });
+})();
+</script>
+
+<script>
+(function () {
+  "use strict";
+  var K="bd-clase1-escuela";
+  var b=Array.prototype.slice.call(document.querySelectorAll(".sel-esc"));
+  function ap(e){
+    document.body.classList.remove("esc-t3","esc-t5");
+    document.body.classList.add("esc-"+e);
+    b.forEach(function(x){ x.setAttribute("aria-pressed", String(x.dataset.esc===e)); });
+    try{ localStorage.setItem(K,e); }catch(err){}
+  }
+  b.forEach(function(x){ x.addEventListener("click", function(){ ap(x.dataset.esc); }); });
+  var g=null; try{ g=localStorage.getItem(K); }catch(err){}
+  ap(g==="t5" ? "t5" : "t3");
+})();
+</script>
+<script src="../js/estudiantes.js"></script>
+
+<script>
+(function () {
+  "use strict";
+  Array.prototype.forEach.call(document.querySelectorAll(".quiz"), function (q) {
+    var ok = q.dataset.correcta, etiquetas = Array.prototype.slice.call(q.querySelectorAll("label"));
+    etiquetas.forEach(function (l, i) {
+      l.querySelector("input").addEventListener("change", function () {
+        var letra = "abcdefg"[i];
+        etiquetas.forEach(function (x) { x.classList.remove("correcta", "incorrecta"); });
+        l.classList.add(letra === ok ? "correcta" : "incorrecta");
+        if (letra !== ok) etiquetas[ "abcdefg".indexOf(ok) ].classList.add("correcta");
+        q.classList.add("respondida");
+      });
+    });
+  });
+})();
+</script>
+
+<script>
+(function () {
+  "use strict";
+  Array.prototype.forEach.call(document.querySelectorAll("figure.esquema"), function (f) {
+    var b = f.querySelector(".ampliar");
+    function alternar() {
+      var abierto = f.classList.toggle("ampliado");
+      document.body.classList.toggle("esquema-abierto", abierto);
+      b.textContent = abierto ? "Cerrar" : "Ampliar";
+    }
+    b.addEventListener("click", alternar);
+    f.querySelector("svg").addEventListener("click", function () { if (f.classList.contains("ampliado")) alternar(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && f.classList.contains("ampliado")) alternar();
+    });
+  });
+})();
+</script>
+</body>
+</html>
