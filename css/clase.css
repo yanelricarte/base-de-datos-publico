@@ -636,3 +636,89 @@ fieldset.quiz legend { float: left; width: 100%; padding: 0; margin: 0 0 0.7rem;
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* ============================================================
+   resaltado de ideas clave: el marcador de color suave
+   se usa con <mark> sobre la frase importante
+   ============================================================ */
+mark {
+  background: var(--marca-b);
+  color: inherit;
+  padding: 0.06em 0.22em;
+  border-radius: 4px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---------- elección de consigna al primer ingreso ---------- */
+.bienvenida {
+  position: fixed; inset: 0; z-index: 90;
+  display: none; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  background: color-mix(in srgb, var(--fondo) 82%, transparent);
+  backdrop-filter: blur(2px);
+}
+.bienvenida.abierto { display: flex; }
+.bienvenida .panel {
+  background: var(--superficie);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio);
+  box-shadow: 0 14px 44px rgb(0 0 0 / 0.18);
+  max-width: 32rem; width: 100%;
+  padding: 1.6rem 1.7rem;
+}
+.bienvenida h2 { margin: 0 0 0.4rem; font-size: 1.22rem; }
+.bienvenida p { margin: 0 0 1.2rem; color: var(--texto-suave); font-size: 0.95rem; }
+.bienvenida .opciones { display: grid; gap: 0.7rem; }
+.bienvenida button {
+  font: inherit; font-size: 0.95rem; font-weight: 600;
+  text-align: left; cursor: pointer;
+  border: 1.5px solid var(--borde-fuerte); border-radius: 9px;
+  background: var(--fondo); color: var(--texto);
+  padding: 0.8rem 1rem;
+}
+.bienvenida button:hover { border-color: var(--acento); }
+.bienvenida button span {
+  display: block; font-weight: 400; font-size: 0.82rem;
+  color: var(--texto-suave); margin-top: 0.25rem;
+}
+
+/* ---------- consulta SQL como adelanto ---------- */
+.codigo {
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio);
+  overflow: hidden;
+  margin: 1.3rem 0;
+}
+.codigo .rot {
+  display: flex; align-items: center; gap: 0.45rem;
+  font-size: 0.74rem; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--acento);
+  background: var(--superficie-2);
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid var(--borde);
+}
+.codigo pre { margin: 0; border: none; border-radius: 0; }
+
+/* ---------- leyenda de los cinco problemas ---------- */
+.leyenda {
+  display: flex; flex-wrap: wrap; gap: 0.55rem 1.4rem;
+  margin: 0 0 1.1rem;
+  font-size: 0.86rem; color: var(--texto-suave);
+}
+.leyenda span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.leyenda i { width: 0.72rem; height: 0.72rem; border-radius: 3px; flex: none; }
+.punto-estado { background: var(--alerta); }
+.punto-operacion { background: var(--acento); }
+
+/* los de estado se ven mirando la hoja; las anomalías, al operar */
+.problema.estado { border-left-color: var(--alerta); }
+.problema.operacion { border-left-color: var(--acento); }
+
+/* descarga de la planilla */
+.hoja-cab .desc {
+  margin-left: auto; font-family: var(--sans); font-size: 0.78rem;
+  font-weight: 600; color: var(--acento); text-decoration: none; white-space: nowrap;
+  background: none; border: none; padding: 0; cursor: pointer;
+}
+.hoja-cab .desc:hover { text-decoration: underline; }
