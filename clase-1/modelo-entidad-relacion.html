@@ -73,42 +73,48 @@
 
 <div class="panel-esc t3">
 <h3>El sitio de la empresa</h3>
-<p>La planilla PRODUCTOS.xlsx se separó en tres tablas: rubros, marcas y productos. Esas tres tablas son las entidades del modelo.</p>
+<p>La planilla PRODUCTOS.xlsx se separó en tres tablas: rubros, marcas y productos. Esas tres tablas son las entidades del modelo; el diagrama muestra todos sus campos y las claves.</p>
 
 <figure class="er">
-  <svg viewBox="0 0 720 220" role="img" aria-labelledby="er-t3-tit er-t3-desc">
+  <svg viewBox="0 0 720 260" role="img" aria-labelledby="er-t3-tit er-t3-desc">
     <title id="er-t3-tit">Modelo entidad-relación del sitio de la empresa</title>
-    <desc id="er-t3-desc">Tres entidades: rubro, producto y marca. Un rubro agrupa muchos productos y una marca tiene muchos productos.</desc>
+    <desc id="er-t3-desc">Tres entidades con todos los campos de sus tablas y las claves: rubro, producto y marca. Un rubro agrupa muchos productos y una marca tiene muchos productos.</desc>
     <g class="er-entidad">
-      <rect x="20" y="55" width="170" height="120" rx="10"/>
-      <text class="nombre" x="105" y="82" text-anchor="middle">RUBRO</text>
-      <line class="divisor" x1="20" y1="92" x2="190" y2="92"/>
-      <text class="atributo" x="38" y="114">rubro (nombre)</text>
+      <rect x="20" y="45" width="170" height="160" rx="10"/>
+      <text class="nombre" x="105" y="72" text-anchor="middle">RUBRO</text>
+      <line class="divisor" x1="20" y1="82" x2="190" y2="82"/>
+      <text class="atributo" x="38" y="104">rubro <tspan class="er-pk">(clave)</tspan></text>
     </g>
     <g class="er-entidad">
-      <rect x="285" y="55" width="170" height="120" rx="10"/>
-      <text class="nombre" x="370" y="82" text-anchor="middle">PRODUCTO</text>
-      <line class="divisor" x1="285" y1="92" x2="455" y2="92"/>
-      <text class="atributo" x="303" y="114">producto (nombre)</text>
-      <text class="atributo" x="303" y="136">precio</text>
+      <rect x="285" y="45" width="170" height="160" rx="10"/>
+      <text class="nombre" x="370" y="72" text-anchor="middle">PRODUCTO</text>
+      <line class="divisor" x1="285" y1="82" x2="455" y2="82"/>
+      <text class="atributo" x="303" y="104">producto <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="303" y="124">precio</text>
+      <text class="atributo" x="303" y="144">rubro <tspan class="er-fk">(foránea)</tspan></text>
+      <text class="atributo" x="303" y="164">marca <tspan class="er-fk">(foránea)</tspan></text>
     </g>
     <g class="er-entidad">
-      <rect x="550" y="55" width="170" height="120" rx="10"/>
-      <text class="nombre" x="635" y="82" text-anchor="middle">MARCA</text>
-      <line class="divisor" x1="550" y1="92" x2="720" y2="92"/>
-      <text class="atributo" x="568" y="114">marca (nombre)</text>
-      <text class="atributo" x="568" y="136">proveedor</text>
+      <rect x="550" y="45" width="170" height="160" rx="10"/>
+      <text class="nombre" x="635" y="72" text-anchor="middle">MARCA</text>
+      <line class="divisor" x1="550" y1="82" x2="720" y2="82"/>
+      <text class="atributo" x="568" y="104">marca <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="568" y="124">proveedor</text>
     </g>
     <line class="er-linea" x1="190" y1="112" x2="285" y2="112"/>
-    <text class="er-card" x="202" y="104">1</text>
-    <text class="er-card" x="268" y="104">N</text>
-    <text class="er-verbo" x="237" y="130" text-anchor="middle">agrupa</text>
+    <text class="er-card" x="202" y="103">1</text>
+    <text class="er-card" x="268" y="103">N</text>
+    <text class="er-verbo" x="237" y="128" text-anchor="middle">agrupa</text>
     <line class="er-linea" x1="455" y1="112" x2="550" y2="112"/>
-    <text class="er-card" x="464" y="104">N</text>
-    <text class="er-card" x="536" y="104">1</text>
-    <text class="er-verbo" x="502" y="130" text-anchor="middle">tiene</text>
+    <text class="er-card" x="464" y="103">N</text>
+    <text class="er-card" x="536" y="103">1</text>
+    <text class="er-verbo" x="502" y="128" text-anchor="middle">tiene</text>
   </svg>
   <figcaption>Un rubro agrupa muchos productos; una marca tiene muchos productos.</figcaption>
+  <div class="er-leyenda">
+    <span><b class="pk">(clave)</b> identifica la fila</span>
+    <span><b class="fk">(foránea)</b> apunta a otra entidad</span>
+  </div>
 </figure>
 
 <ol class="pasos secuencia">
@@ -123,47 +129,53 @@
 <p>La planilla PRESTAMOS.xlsx se separó en tres tablas: alumnos, equipos y préstamos. Son las entidades del modelo.</p>
 
 <figure class="er">
-  <svg viewBox="0 0 720 220" role="img" aria-labelledby="er-t5-tit er-t5-desc">
+  <svg viewBox="0 0 720 260" role="img" aria-labelledby="er-t5-tit er-t5-desc">
     <title id="er-t5-tit">Modelo entidad-relación de los préstamos</title>
-    <desc id="er-t5-desc">Tres entidades: alumno, préstamo y equipo. Un alumno realiza muchos préstamos y un equipo se presta en muchos préstamos.</desc>
+    <desc id="er-t5-desc">Tres entidades con todos los campos de sus tablas y las claves: alumno, préstamo y equipo. Un alumno realiza muchos préstamos y un equipo se presta en muchos préstamos.</desc>
     <g class="er-entidad">
-      <rect x="20" y="55" width="170" height="120" rx="10"/>
-      <text class="nombre" x="105" y="82" text-anchor="middle">ALUMNO</text>
-      <line class="divisor" x1="20" y1="92" x2="190" y2="92"/>
-      <text class="atributo" x="38" y="114">alumno (nombre)</text>
-      <text class="atributo" x="38" y="136">curso</text>
+      <rect x="20" y="45" width="170" height="160" rx="10"/>
+      <text class="nombre" x="105" y="72" text-anchor="middle">ALUMNO</text>
+      <line class="divisor" x1="20" y1="82" x2="190" y2="82"/>
+      <text class="atributo" x="38" y="104">alumno <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="38" y="124">curso</text>
     </g>
     <g class="er-entidad">
-      <rect x="285" y="55" width="170" height="120" rx="10"/>
-      <text class="nombre" x="370" y="82" text-anchor="middle">PRÉSTAMO</text>
-      <line class="divisor" x1="285" y1="92" x2="455" y2="92"/>
-      <text class="atributo" x="303" y="114">fecha</text>
-      <text class="atributo" x="303" y="136">devuelto</text>
+      <rect x="285" y="45" width="170" height="160" rx="10"/>
+      <text class="nombre" x="370" y="72" text-anchor="middle">PRÉSTAMO</text>
+      <line class="divisor" x1="285" y1="82" x2="455" y2="82"/>
+      <text class="atributo" x="303" y="104">fecha</text>
+      <text class="atributo" x="303" y="124">devuelto</text>
+      <text class="atributo" x="303" y="144">alumno <tspan class="er-fk">(foránea)</tspan></text>
+      <text class="atributo" x="303" y="164">equipo <tspan class="er-fk">(foránea)</tspan></text>
     </g>
     <g class="er-entidad">
-      <rect x="550" y="55" width="170" height="120" rx="10"/>
-      <text class="nombre" x="635" y="82" text-anchor="middle">EQUIPO</text>
-      <line class="divisor" x1="550" y1="92" x2="720" y2="92"/>
-      <text class="atributo" x="568" y="114">equipo</text>
-      <text class="atributo" x="568" y="136">categoría</text>
+      <rect x="550" y="45" width="170" height="160" rx="10"/>
+      <text class="nombre" x="635" y="72" text-anchor="middle">EQUIPO</text>
+      <line class="divisor" x1="550" y1="82" x2="720" y2="82"/>
+      <text class="atributo" x="568" y="104">equipo <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="568" y="124">categoría</text>
     </g>
     <line class="er-linea" x1="190" y1="112" x2="285" y2="112"/>
-    <text class="er-card" x="202" y="104">1</text>
-    <text class="er-card" x="268" y="104">N</text>
-    <text class="er-verbo" x="237" y="130" text-anchor="middle">realiza</text>
+    <text class="er-card" x="202" y="103">1</text>
+    <text class="er-card" x="268" y="103">N</text>
+    <text class="er-verbo" x="237" y="128" text-anchor="middle">realiza</text>
     <line class="er-linea" x1="455" y1="112" x2="550" y2="112"/>
-    <text class="er-card" x="464" y="104">N</text>
-    <text class="er-card" x="536" y="104">1</text>
-    <text class="er-verbo" x="502" y="130" text-anchor="middle">se presta</text>
+    <text class="er-card" x="464" y="103">N</text>
+    <text class="er-card" x="536" y="103">1</text>
+    <text class="er-verbo" x="502" y="128" text-anchor="middle">se presta</text>
   </svg>
   <figcaption>Un alumno realiza muchos préstamos; un equipo se presta en muchos préstamos.</figcaption>
+  <div class="er-leyenda">
+    <span><b class="pk">(clave)</b> identifica la fila</span>
+    <span><b class="fk">(foránea)</b> apunta a otra entidad</span>
+  </div>
 </figure>
 
 <ol class="pasos secuencia">
   <li><strong>Un alumno realiza muchos préstamos.</strong> Cada préstamo lo hace un solo alumno.</li>
   <li><strong>Un equipo se presta en muchos préstamos.</strong> Cada préstamo lleva un solo equipo.</li>
 </ol>
-<p class="nota">El préstamo es la entidad del hecho: conecta a un alumno con un equipo y agrega la fecha y el estado devuelto. Sin él, alumno y equipo no tienen dónde encontrarse.</p>
+<p class="nota">El préstamo es la entidad del hecho: conecta a un alumno con un equipo y agrega la fecha y el estado devuelto. Sin él, alumno y equipo no tienen dónde encontrarse. Su clave queda sin marcar: la fecha sola no alcanza (dos préstamos pueden caer el mismo día), y elegirla es el tema de la próxima clase.</p>
 </div>
 
 </section>
@@ -175,12 +187,13 @@
 <p>El modelo de esta clase en tres ideas:</p>
 
 <ol class="pasos">
-  <li><strong>Las entidades son las tablas de la clase anterior.</strong> Cada una lleva sus atributos.</li>
+  <li><strong>Las entidades son las tablas de la clase anterior.</strong> Cada una lleva todos sus campos.</li>
+  <li><strong>Sobre esos campos se marcan las claves.</strong> La <strong>(clave)</strong> identifica cada fila; la <strong>(foránea)</strong> apunta a otra entidad. El préstamo deja la suya abierta: la fecha sola no alcanza.</li>
   <li><strong>Cada relación se describe con cardinalidad.</strong> En estos dos casos es 1 a muchos: un rubro agrupa muchos productos, un alumno realiza muchos préstamos.</li>
   <li><strong>Una relación muchos a muchos se desarma con una entidad del hecho.</strong> Un alumno se lleva muchos equipos y un equipo se lo llevan muchos alumnos; el préstamo convierte ese cruce en dos relaciones 1 a muchos.</li>
 </ol>
 
-<p>Lo que falta es decidir qué atributo identifica a cada fila sin ambigüedad (la <strong>clave primaria</strong>) y cómo una tabla apunta a otra sin copiar su texto (la <strong>clave foránea</strong>). Esos son los dos temas de las clases que vienen.</p>
+<p>Lo que sigue es formalizar cómo se elige la clave primaria (y por qué la fecha no sirve para el préstamo) y cómo una tabla apunta a otra sin copiar su texto (la clave foránea). Son los temas de las clases que vienen.</p>
 </section>
 
 <nav class="nav-clase">

@@ -65,7 +65,7 @@ body.esc-t5 .panel-esc.t5{display:block}
   <span class="rotulo"><svg class="ico"><use href="#i-db"/></svg> Base de Datos · Clase 1 · Actividad</span>
   <h1>Reconocimiento de los cinco problemas y separación en tablas</h1>
   <p class="entrada">
-    Seis puntos, en el orden en que se hacen. El primero es un diagnóstico sin nota. El segundo es la
+    Seis puntos, en el orden en que se hacen. El primero es un diagnóstico. El segundo es la
     práctica sobre otra planilla de la misma consigna. El tercero es el trabajo propio, sobre la
     información que el proyecto del equipo tiene que guardar. El cuarto se entrega antes de irse, y
     los dos últimos son para chequear lo entendido y para la próxima clase.
@@ -94,15 +94,6 @@ body.esc-t5 .panel-esc.t5{display:block}
 <!-- ================= PUNTO 1 ================= -->
 <section id="p1">
 <h2><span class="n">01</span> Lo que ya sabemos sobre guardar información</h2>
-
-<div class="destacado">
-  <span class="titulo"><svg class="ico"><use href="#i-ok"/></svg> Esto no lleva nota</span>
-  <p>El objetivo es saber desde dónde arranca el grupo, para ajustar la profundidad de las clases siguientes.
-  Conviene contestar lo que se piensa y no lo que parece la respuesta esperada: <strong>una respuesta en blanco
-  informa más que una copiada</strong>, porque señala exactamente dónde hay que detenerse en las próximas semanas.</p>
-</div>
-
-<p>Se responde <strong>en papel</strong>, de manera individual, con una o dos oraciones por punto. No hace falta vocabulario técnico: las situaciones están escritas para poder pensarse con sentido común. La última se responde solamente si corresponde.</p>
 
 <p class="rotulo"><svg class="ico"><use href="#i-reloj"/></svg> 15 minutos</p>
 
@@ -139,10 +130,10 @@ body.esc-t5 .panel-esc.t5{display:block}
   </ol>
 </div>
 
-<p class="nota">Estas respuestas no se corrigen ni se califican: se leen para saber por dónde arrancar, y dos de ellas vuelven después. La <strong>2</strong>, el dato que distingue a dos personas que se llaman igual, es el tema de la clase que viene y tiene un nombre técnico. La <strong>6</strong>, lo que quedó marcado con un círculo, es lo primero que nombra el desarrollo de hoy.</p>
+<p class="nota">Dos de estas respuestas vuelven después. La <strong>2</strong>, el dato que distingue a dos personas que se llaman igual, es el tema de la clase que viene y tiene un nombre técnico. La <strong>6</strong>, lo que quedó marcado con un círculo, es lo primero que nombra el desarrollo de hoy.</p>
 
 <div class="barra">
-  <button type="button" onclick="window.print()"><svg class="ico"><use href="#i-print"/></svg> Imprimir para responder en papel</button>
+  <button type="button" onclick="window.print()"><svg class="ico"><use href="#i-print"/></svg> Imprimir la actividad</button>
 </div>
 </section>
 
@@ -564,10 +555,12 @@ DECISION (marcar una y completarla):
 
 <h3>Las fuentes de estos conceptos</h3>
 <p>Redundancia, inconsistencia y las tres anomalías de esta hoja no son un invento de la clase: son los que la bibliografía de la materia describe como propios de guardar información sin un modelo detrás. Bertone, Thomas y Pasini (2019) y Camps Paré et al. (2005) los presentan al comparar el manejo de archivos con un sistema de gestión de bases de datos, y Coronel, Morris y Rob (2011) desarrollan las tres anomalías de actualización, inserción y borrado con el mismo nombre que se usó acá.</p>
-<p class="nota">Bertone, R., Thomas, P., y Pasini, A. (2019). <em>Introducción a las bases de datos: fundamentos y diseño</em>. EDULP. Recuperado de <a href="http://sedici.unlp.edu.ar/handle/10915/86717">sedici.unlp.edu.ar</a><br>
-Camps Paré, R., Casillas Santillán, L. A., Costal Costa, D., Gibert Ginestà, M., Martín Escofet, C., y Pérez Mora, O. (2005). <em>Bases de datos</em>. Universitat Oberta de Catalunya. Recuperado de <a href="https://openaccess.uoc.edu/bitstream/10609/56550/4/Bases%20de%20datos.pdf">openaccess.uoc.edu</a><br>
-Coronel, C., Morris, S., y Rob, P. (2011). <em>Bases de datos: diseño, implementación y administración</em> (9.ª ed.). Cengage Learning.<br>
-INET. (s.f.). <em>Olimpíada Nacional de la Educación Técnico Profesional</em>. Recuperado de <a href="https://www.inet.edu.ar/index.php/areas/encuentros-educativos/olimpiada-nacional-etp/">inet.edu.ar</a></p>
+<ul class="refs">
+  <li>Bertone, R., Thomas, P., y Pasini, A. (2019). <em>Introducción a las bases de datos: fundamentos y diseño</em>. EDULP. Recuperado de <a href="http://sedici.unlp.edu.ar/handle/10915/86717">sedici.unlp.edu.ar</a></li>
+  <li>Camps Paré, R., Casillas Santillán, L. A., Costal Costa, D., Gibert Ginestà, M., Martín Escofet, C., y Pérez Mora, O. (2005). <em>Bases de datos</em>. Universitat Oberta de Catalunya. Recuperado de <a href="https://openaccess.uoc.edu/bitstream/10609/56550/4/Bases%20de%20datos.pdf">openaccess.uoc.edu</a></li>
+  <li>Coronel, C., Morris, S., y Rob, P. (2011). <em>Bases de datos: diseño, implementación y administración</em> (9.ª ed.). Cengage Learning.</li>
+  <li>INET. (s.f.). <em>Olimpíada Nacional de la Educación Técnico Profesional</em>. Recuperado de <a href="https://www.inet.edu.ar/index.php/areas/encuentros-educativos/olimpiada-nacional-etp/">inet.edu.ar</a></li>
+</ul>
 
 <h3>Antes de seguir</h3>
 <div class="quiz" data-chequeo data-correcta="b">
@@ -684,7 +677,7 @@ ACUERDOS DEL EQUIPO
    no se sepa y traer la respuesta.</pre>
 </div>
 
-<p>El punto 2 es el que engancha con la Clase 2. La pregunta que quedó abierta hoy —con qué nombrar a una cosa para que no se pueda escribir mal— tiene una respuesta técnica, y buscarla sobre el dominio propio antes de que se explique hace que la explicación caiga sobre algo ya pensado.</p>
+<p>El punto 2 es el que engancha con la clase siguiente. En los cursos que ya trabajaron las claves en esta misma jornada, el punto 2 se responde con lo visto: la clave primaria de cada cosa, con la razón de esa elección. La pregunta que quedó abierta hoy —con qué nombrar a una cosa para que no se pueda escribir mal— tiene una respuesta técnica, y buscarla sobre el dominio propio antes de que se explique hace que la explicación caiga sobre algo ya pensado.</p>
 </section>
 
 <nav class="nav-clase">
@@ -693,7 +686,7 @@ ACUERDOS DEL EQUIPO
 </nav>
 
 <footer>
-  Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional · EEST N.º 3, Mar del Plata · Ciclo 2026
+  Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional · Mar del Plata · Ciclo 2026
 </footer>
 
 </main>

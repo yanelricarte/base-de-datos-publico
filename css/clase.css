@@ -638,109 +638,52 @@ fieldset.quiz legend { float: left; width: 100%; padding: 0; margin: 0 0 0.7rem;
 }
 
 /* ============================================================
-   resaltado de ideas clave: el marcador de color suave
-   se usa con <mark> sobre la frase importante
+   Jerarquía visual: menos cajas y subtítulos que se leen
    ============================================================ */
-mark {
-  background: var(--marca-b);
-  color: inherit;
-  padding: 0.06em 0.22em;
-  border-radius: 4px;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+
+/* los subtítulos de un punto se separan del cuerpo del texto */
+h3 {
+  font-size: 1.12rem; font-weight: 700; letter-spacing: -0.005em;
+  margin: 2.7rem 0 0.65rem;
+  color: var(--texto);
+}
+h3 + p, h3 + .quiz, h3 + .para-completar, h3 + details,
+h3 + .tabla-wrap, h3 + .hoja-cab, h3 + .registro { margin-top: 0; }
+section > h3:first-of-type { margin-top: 2.1rem; }
+
+/* las notas dejan de ser una caja más y pasan a leerse como un aparte */
+.nota {
+  background: transparent;
+  border: 0; border-left: 3px solid var(--borde-fuerte); border-radius: 0;
+  padding: 0.1rem 0 0.1rem 1.05rem;
+  margin: 1.5rem 0;
+  color: var(--texto-suave);
+  font-size: 0.96rem;
+}
+.nota strong { color: var(--texto); }
+
+/* lo destacado se distingue del resto de las cajas */
+.destacado { border-left: 3px solid var(--acento); }
+
+/* la bibliografía, con sangría francesa y una entrada por línea */
+ul.refs { list-style: none; margin: 1rem 0 0; padding: 0; }
+ul.refs li {
+  padding-left: 1.7rem; text-indent: -1.7rem;
+  margin: 0 0 0.6rem; max-width: 80ch;
+  font-size: 0.94rem; line-height: 1.6; color: var(--texto-suave);
+}
+ul.refs li:last-child { margin-bottom: 0; }
+ul.refs em, ul.refs a { color: var(--texto); }
+
+/* el aire entre puntos se nota sin abrir un hueco */
+h2 { margin-top: 3rem; }
+
+@media print {
+  .nota { border-left: 2px solid #999; color: #000; }
+  ul.refs li { color: #000; }
 }
 
-/* ---------- elección de consigna al primer ingreso ---------- */
-.bienvenida {
-  position: fixed; inset: 0; z-index: 90;
-  display: none; align-items: center; justify-content: center;
-  padding: 1.5rem;
-  background: color-mix(in srgb, var(--fondo) 82%, transparent);
-  backdrop-filter: blur(2px);
-}
-.bienvenida.abierto { display: flex; }
-.bienvenida .panel {
-  background: var(--superficie);
-  border: 1px solid var(--borde-fuerte);
-  border-radius: var(--radio);
-  box-shadow: 0 14px 44px rgb(0 0 0 / 0.18);
-  max-width: 32rem; width: 100%;
-  padding: 1.6rem 1.7rem;
-}
-.bienvenida h2 { margin: 0 0 0.4rem; font-size: 1.22rem; }
-.bienvenida p { margin: 0 0 1.2rem; color: var(--texto-suave); font-size: 0.95rem; }
-.bienvenida .opciones { display: grid; gap: 0.7rem; }
-.bienvenida button {
-  font: inherit; font-size: 0.95rem; font-weight: 600;
-  text-align: left; cursor: pointer;
-  border: 1.5px solid var(--borde-fuerte); border-radius: 9px;
-  background: var(--fondo); color: var(--texto);
-  padding: 0.8rem 1rem;
-}
-.bienvenida button:hover { border-color: var(--acento); }
-.bienvenida button span {
-  display: block; font-weight: 400; font-size: 0.82rem;
-  color: var(--texto-suave); margin-top: 0.25rem;
-}
-
-/* ---------- consulta SQL como adelanto ---------- */
-.codigo {
-  border: 1px solid var(--borde-fuerte);
-  border-radius: var(--radio);
-  overflow: hidden;
-  margin: 1.3rem 0;
-}
-.codigo .rot {
-  display: flex; align-items: center; gap: 0.45rem;
-  font-size: 0.74rem; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--acento);
-  background: var(--superficie-2);
-  padding: 0.55rem 0.9rem;
-  border-bottom: 1px solid var(--borde);
-}
-.codigo pre { margin: 0; border: none; border-radius: 0; }
-
-/* ---------- leyenda de los cinco problemas ---------- */
-.leyenda {
-  display: flex; flex-wrap: wrap; gap: 0.55rem 1.4rem;
-  margin: 0 0 1.1rem;
-  font-size: 0.86rem; color: var(--texto-suave);
-}
-.leyenda span { display: inline-flex; align-items: center; gap: 0.4rem; }
-.leyenda i { width: 0.72rem; height: 0.72rem; border-radius: 3px; flex: none; }
-.punto-estado { background: var(--alerta); }
-.punto-operacion { background: var(--acento); }
-
-/* los de estado se ven mirando la hoja; las anomalías, al operar */
-.problema.estado { border-left-color: var(--alerta); }
-.problema.operacion { border-left-color: var(--acento); }
-
-/* descarga de la planilla */
-.hoja-cab .desc {
-  margin-left: auto; font-family: var(--sans); font-size: 0.78rem;
-  font-weight: 600; color: var(--acento); text-decoration: none; white-space: nowrap;
-  background: none; border: none; padding: 0; cursor: pointer;
-}
-.hoja-cab .desc:hover { text-decoration: underline; }
-
-/* ---------- ficha del encabezado de la clase ---------- */
-.encuadre{margin:1.4rem 0 0; display:flex; flex-direction:column; gap:0.7rem}
-.encuadre > div{display:grid; grid-template-columns:9.5rem 1fr; gap:0.9rem; align-items:start;
-  padding:0.7rem 0; border-top:1px solid var(--borde)}
-.encuadre > div:first-child{border-top:0; padding-top:0}
-.encuadre .et{font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
-  color:var(--acento); padding-top:0.15rem}
-.encuadre p{margin:0}
-@media (max-width:620px){ .encuadre > div{grid-template-columns:1fr; gap:0.15rem} }
-@media (min-width:1100px){
-  .encuadre{display:block; columns:2; column-gap:2.6rem}
-  .encuadre > div{break-inside:avoid; grid-template-columns:8rem 1fr;
-    border-top:1px solid var(--borde); padding-top:0.75rem; margin:0 0 0.75rem}
-  .encuadre > div:first-child{border-top:0; padding-top:0}
-  .encuadre p{max-width:none}
-}
-
-/* ---------- selector de consigna (pestañas t3 / t5) ---------- */
+/* ---------- elección de consigna y modelo entidad-relación ---------- */
 .selector-esc{display:flex; gap:0.5rem; margin:1rem 0 1.4rem; flex-wrap:wrap}
 .sel-esc{font:inherit; font-size:0.88rem; font-weight:600; cursor:pointer; padding:0.55rem 1rem;
   border:1.5px solid var(--borde); border-radius:9px; background:var(--fondo); color:var(--texto); text-align:left}
@@ -770,6 +713,7 @@ figure.er text{ font-family: var(--sans, system-ui), system-ui, sans-serif; }
 .er-verbo{ fill:var(--texto-tenue); font-style:italic; font-size:11px }
 .er-pk{ font-weight:700; font-size:9px; fill:var(--acento) }
 .er-fk{ font-weight:600; font-size:9px; fill:var(--alerta) }
-.er-leyenda{ margin:0.55rem 0 0; font-size:0.86rem; color:var(--texto-suave) }
+.er-leyenda{ display:flex; flex-wrap:wrap; gap:0.55rem 1.4rem; align-items:baseline;
+  margin:0.55rem 0 0; font-size:0.86rem; color:var(--texto-suave) }
 .er-leyenda .pk{ color:var(--acento); font-weight:700 }
 .er-leyenda .fk{ color:var(--alerta); font-weight:700 }
