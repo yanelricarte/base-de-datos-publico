@@ -18,8 +18,12 @@
   --texto-tenue:  #68747b;
 
   /* acento */
-  --acento:       #2c4a52;
-  --acento-tenue: #e3edef;
+  --acento:       #14606c;
+  --acento-tenue: #e1eff1;
+
+  /* realce: lo importante del texto, en la misma familia pero más vivo */
+  --realce:       #17808f;
+  --realce-tenue: #ddf1f4;
 
   /* señales */
   --ok:           #3f6b4f;
@@ -58,8 +62,11 @@
     --texto-suave:  #a5abb2;
     --texto-tenue:  #8b9299;
 
-    --acento:       #9ec6d0;
-    --acento-tenue: #1e2a2e;
+    --acento:       #8ed2e0;
+    --acento-tenue: #16323a;
+
+    --realce:       #6fd6e6;
+    --realce-tenue: #16343c;
 
     --ok:           #86bb98;
     --ok-tenue:     #1c2620;
@@ -549,7 +556,7 @@ body.oscuro {
   --bg:#15171a; --fondo:#15171a; --superficie:#1c1f22; --superficie-2:#23272b;
   --borde:#31363b; --borde-fuerte:#454b52;
   --texto:#e7e9ea; --texto-suave:#a5abb2; --texto-tenue:#8b9299;
-  --acento:#9ec6d0; --acento-tenue:#1e2a2e;
+  --acento:#8ed2e0; --acento-tenue:#16323a; --realce:#6fd6e6; --realce-tenue:#16343c;
   --ok:#86bb98; --ok-tenue:#1c2620; --alerta:#d5a55e; --alerta-tenue:#2a2317;
   --marca-a:#2b4650; --marca-b:#4a3a22;
   --sombra:0 16px 38px -20px rgba(0,0,0,.5); --sombra-suave:0 10px 26px -18px rgba(0,0,0,.38);
@@ -560,7 +567,7 @@ body.claro {
   --bg:#f6f8f9; --fondo:#ffffff; --superficie:#ffffff; --superficie-2:#eef2f3;
   --borde:#dce4e6; --borde-fuerte:#b3c2c5;
   --texto:#1f2225; --texto-suave:#5c666c; --texto-tenue:#68747b;
-  --acento:#2c4a52; --acento-tenue:#e3edef;
+  --acento:#14606c; --acento-tenue:#e1eff1; --realce:#17808f; --realce-tenue:#ddf1f4;
   --ok:#3f6b4f; --ok-tenue:#e8f0ea; --alerta:#9a6420; --alerta-tenue:#fbf2e5;
   --marca-a:#d3e7ec; --marca-b:#f4e2cf;
   --sombra:0 16px 38px -20px rgba(44,74,82,.26); --sombra-suave:0 10px 26px -18px rgba(44,74,82,.18);
@@ -747,6 +754,10 @@ span.panel-esc{display:none}
 body.esc-t3 span.panel-esc.t3, body.esc-t5 span.panel-esc.t5{display:inline}
 body.esc-t3 .panel-esc.t3{display:block}
 body.esc-t5 .panel-esc.t5{display:block}
+/* sin JavaScript no hay pestaña elegida: se muestra la Técnica 3, que es donde se
+   dicta Base de Datos, en lugar de dejar los apartados vacíos */
+body:not(.esc-t3):not(.esc-t5) .panel-esc.t3{display:block}
+body:not(.esc-t3):not(.esc-t5) span.panel-esc.t3{display:inline}
 @media print{ .selector-esc{display:none} }
 
 ol.secuencia{margin:1rem 0 0.4rem}
@@ -765,7 +776,8 @@ figure.er text{ font-family: var(--sans, system-ui), system-ui, sans-serif; }
 .er-entidad .atributo{ fill:var(--texto); font-size:11.5px }
 .er-linea{ stroke:var(--texto-suave); stroke-width:1.5 }
 .er-card{ fill:var(--acento); font-weight:700; font-size:13px }
-.er-verbo{ fill:var(--texto-tenue); font-style:italic; font-size:11px }
+.er-verbo{ fill:var(--texto-tenue); font-style:italic; font-size:11px;
+  paint-order:stroke; stroke:var(--superficie); stroke-width:4px; stroke-linejoin:round }
 .er-pk{ font-weight:700; font-size:9px; fill:var(--acento) }
 .er-fk{ font-weight:600; font-size:9px; fill:var(--alerta) }
 .er-sueltas rect{ fill:var(--acento-tenue); stroke:var(--acento); stroke-dasharray:5 4 }
@@ -889,3 +901,78 @@ svg.svg-listas .caja-usuarios{fill:var(--acento-tenue); stroke:var(--acento); st
 svg.svg-listas .flecha{stroke:var(--acento); stroke-width:1.4; fill:none}
 svg.svg-listas .nombra{fill:var(--acento)}
 svg.svg-listas marker path{fill:var(--acento)}
+
+
+/* ============================================================
+   Realce, idea clave, modelo en lista y movimiento
+   ============================================================ */
+
+/* ---------- lo importante del texto ---------- */
+.realce{
+  background:var(--realce-tenue);
+  box-shadow:inset 0 -2px 0 var(--realce);
+  padding:0 .18em; border-radius:3px; font-weight:600;
+}
+
+/* ---------- la idea clave del apartado ---------- */
+.idea{
+  background:var(--realce-tenue);
+  border:1px solid color-mix(in srgb, var(--realce) 30%, var(--borde));
+  border-left:4px solid var(--realce);
+  border-radius:var(--radio);
+  padding:0.95rem 1.2rem; margin:1.3rem 0;
+}
+.idea .et{
+  display:block; font-size:0.7rem; font-weight:800; letter-spacing:0.11em;
+  text-transform:uppercase; color:var(--realce); margin-bottom:0.45rem;
+}
+.idea p{margin:0 0 0.6rem}
+.idea p:last-child{margin-bottom:0}
+.idea code{background:color-mix(in srgb, var(--fondo) 70%, transparent)}
+.idea .realce{background:color-mix(in srgb, var(--realce) 20%, var(--fondo))}
+
+.nota-inline{color:var(--texto-tenue); font-size:0.92em}
+
+/* ---------- el modelo escrito, para pantallas angostas ---------- */
+.er-lista{display:none}
+.er-lista .et{display:block; font-size:0.7rem; font-weight:800; letter-spacing:0.11em;
+  text-transform:uppercase; color:var(--acento); margin-bottom:0.5rem}
+.er-lista ul{margin:0 0 0.7rem; padding-left:1.1rem}
+.er-lista li{padding:0.2rem 0}
+.er-lista u{text-decoration-color:var(--acento); text-decoration-thickness:2px; text-underline-offset:2px}
+.er-lista i{color:var(--alerta); font-style:normal; font-weight:600}
+@media (max-width: 700px){
+  figure.er svg{display:none}
+  figure.er figcaption{margin-top:0}
+  figure.er .er-leyenda{display:none}
+  .er-lista{display:block; background:var(--superficie); border:1px solid var(--borde);
+    border-radius:var(--radio); padding:0.9rem 1.1rem; margin:1rem 0}
+}
+
+/* ---------- movimiento: entra al leer, sin marear ---------- */
+@keyframes desplegar{ from{opacity:0; transform:translateY(-4px)} to{opacity:1; transform:none} }
+@keyframes aparece{ from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:none} }
+
+@media (prefers-reduced-motion: no-preference){
+  body.js .revela{opacity:0}
+  body.js .revela.visible{animation:aparece .5s cubic-bezier(.22,.61,.36,1) both}
+  details[open] > *:not(summary){animation:desplegar .2s ease both}
+  body.esc-t3 .panel-esc.t3, body.esc-t5 .panel-esc.t5{animation:desplegar .26s ease both}
+  .idea{transition:border-color 160ms ease}
+  .pasos > li::before{transition:background-color 160ms ease, color 160ms ease, border-color 160ms ease}
+  .pasos > li:hover::before{background:var(--realce-tenue); border-color:var(--realce); color:var(--realce)}
+  details{transition:border-color 140ms ease, box-shadow 140ms ease}
+  details:hover{border-color:var(--borde-fuerte)}
+  figure.er svg{transition:box-shadow 200ms ease}
+}
+@media print{ .revela{opacity:1 !important; animation:none !important} }
+
+/* ---------- el índice, partido en las dos partes de la clase ---------- */
+.indice-parte{
+  margin:1.1rem 0 0.35rem; font-size:0.72rem; font-weight:800; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--texto-tenue);
+}
+.indice-parte:first-of-type{margin-top:0.2rem}
+.indice-parte a{text-decoration:none; color:inherit}
+.indice-parte a:hover{color:var(--acento)}
+.indice ol + .indice-parte{padding-top:0.9rem; border-top:1px solid var(--borde)}

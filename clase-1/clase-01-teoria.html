@@ -48,6 +48,7 @@
 
 <nav class="indice">
   <h2>Contenido</h2>
+  <p class="indice-parte">Parte 1 · La hoja que se rompe</p>
   <ol>
     <li><a href="#s1">El espacio curricular y el proyecto de la materia</a></li>
     <li><a href="#s2">El dato, el registro y la hoja plana</a></li>
@@ -61,12 +62,17 @@
     <li><a href="#s10d">Próximos pasos</a></li>
     <li><a href="#s11">Bibliografía</a></li>
   </ol>
+  <p class="indice-parte"><a href="#parte2">Parte 2 · Las claves y el diagrama</a></p>
   <ol>
-    <li><a href="#parte2">Parte 2 · Las claves y el diagrama</a></li>
     <li><a href="#derivacion">Las entidades y las relaciones</a></li>
+    <li><a href="#ent">Entidades y atributos</a></li>
     <li><a href="#pk">La clave primaria</a></li>
+    <li><a href="#fk">La clave foránea</a></li>
+    <li><a href="#card">La cardinalidad</a></li>
     <li><a href="#diagrama">El diagrama entidad-relación</a></li>
-    <li><a href="#consultas">Las consultas</a></li>
+    <li><a href="#consultas">Las consultas del modelo</a></li>
+    <li><a href="#prueba">La prueba del modelo</a></li>
+    <li><a href="#hacer">Para hacer</a></li>
     <li><a href="#chequeo">Para chequear lo entendido</a></li>
   </ol>
 </nav>
@@ -754,9 +760,11 @@
 </div>
 
 <section id="donde-se-pide">
-  <h2>Antes de empezar: en qué situaciones la consigna pide una base de datos</h2>
+  <h2>Antes de empezar: qué pide la consigna sobre la base de datos</h2>
+  <div class="panel-esc t5">
   <p>De las diez, la palabra «base de datos» aparece en tres, y en cada una significa algo distinto. De eso
   depende cuánto de este material entra en el entregable.</p>
+  </div>
 
   <div class="panel-esc t3">
     <p>En la consigna de la Técnica 3 la base de datos es el entregable mismo: el sitio pide un listado que «debe surgir de base de datos», la vista de administrador tiene que permitir «carga de artículos, rubros y marcas», y el registro de usuario pide guardar una cuenta con contraseña. Todo el material de esta parte se aplica sobre esa base, y el punto 9 cierra con lo que va al documento.</p>
@@ -806,9 +814,12 @@
                                                                (una línea del diagrama)</pre>
   </div>
 
-  <p>La pregunta que decide siempre es la misma: <span class="marca">¿de esto hay que guardar más de un dato?</span> De un
+  <p>La pregunta que decide siempre es la misma: <span class="marca">¿de esto hay que guardar más de un dato?</span> <span class="panel-esc t3">De una lavandina
+  concreta hay que guardar la descripción, el precio y de qué rubro es, así que producto es una entidad. Del
+  rubro «Limpieza de pisos» solo hay que guardar el nombre, así que cada rubro es una fila de la lista de
+  rubros y no un rectángulo aparte.</span><span class="panel-esc t5">De un
   proyector concreto hay que guardar marca, modelo e inventario, así que es una entidad. De «proyectores»
-  como tipo solo hay que guardar el nombre, así que es un valor de la lista de categorías.</p>
+  como tipo solo hay que guardar el nombre, así que es un valor de la lista de categorías.</span></p>
 
   <div class="panel-esc t3">
   <h3>El sitio de la empresa, aplicado</h3>
@@ -861,7 +872,7 @@
   </div>
 
   <div class="check">
-    <span class="et">Comprobá sobre tu situación</span>
+    <span class="et">Comprobá sobre <span class="panel-esc t3">el sitio</span><span class="panel-esc t5">tu situación</span></span>
     <p>Buscá en tu enunciado <b>un sustantivo que parezca entidad y no lo sea</b>. Escribilo y anotá al lado
     por qué es un atributo o un valor.</p>
     <details><summary>Una pista, si no aparece</summary><p>Suelen ser los tipos, los estados y las categorías:
@@ -933,10 +944,11 @@
   ellas funciona.</p>
   <p>Hay dos maneras de conseguirla:</p>
   <ul>
-    <li><b>Clave natural.</b> Un dato que ya existe en la realidad y es único: el número de inventario de
-    un equipo, el número de socio de una biblioteca.</li>
-    <li><b>Clave sustituta.</b> Un identificador que se agrega solo para identificar: <code>id_equipo</code>,
-    <code>id_persona</code>. No significa nada afuera del sistema, y por eso nunca cambia.</li>
+    <li><b>Clave natural.</b> Un dato que ya existe en la realidad y es único: el CUIT de un proveedor, el
+    número de inventario de un equipo, el número de socio de una biblioteca.</li>
+    <li><b>Clave sustituta.</b> Un identificador que se agrega solo para identificar:
+    <span class="panel-esc t3"><code>id_producto</code>, <code>id_rubro</code></span><span class="panel-esc t5"><code>id_equipo</code>, <code>id_persona</code></span>.
+    No significa nada afuera del sistema, y por eso nunca cambia.</li>
   </ul>
   <p>La pregunta que decide entre las dos es una sola: <b>¿ese dato lo tienen todas las filas, y no va a
   cambiar nunca?</b></p>
@@ -961,7 +973,7 @@
   </details>
 
   <div class="check">
-    <span class="et">Comprobá sobre tu situación</span>
+    <span class="et">Comprobá sobre <span class="panel-esc t3">el sitio</span><span class="panel-esc t5">tu situación</span></span>
     <p>Elegí una de tus listas y respondé: ¿hay algún dato que <b>todas</b> las filas tengan y que
     <b>nunca</b> vaya a cambiar? Si lo hay, esa es tu clave natural. Si no, escribí el nombre del
     identificador que vas a agregar.</p>
@@ -1018,6 +1030,69 @@
   <h2>5 · La cardinalidad</h2>
   <p>Es cuántas filas de una lista se relacionan con cuántas de la otra. Se resuelve preguntando en los
   dos sentidos, siempre sobre el caso propio:</p>
+  <div class="panel-esc t3">
+  <p><i>¿Un rubro puede tener muchos productos? Sí, «Limpieza de pisos» tiene cinco. ¿Un producto puede
+  estar en varios rubros? No, se muestra en uno solo.</i> Eso es <b>uno a muchos</b>, y es el caso más
+  frecuente.</p>
+  <p>Las tres relaciones del sitio se resuelven con la misma pregunta hecha en los dos sentidos, y la
+  respuesta se señala en el listado:</p>
+  <div class="tabla-wrap">
+    <table>
+      <thead><tr><th>Pregunta, ida</th><th>Pregunta, vuelta</th><th>Resultado</th></tr></thead>
+      <tbody>
+        <tr><td>¿Un rubro puede tener muchos productos? Sí: «Limpieza de pisos» está en las filas 1, 4, 5, 9 y 12</td><td>¿Un producto puede tener muchos rubros? No: cada producto se muestra en un solo rubro</td><td><b>1 — N</b>, de rubro a producto</td></tr>
+        <tr><td>¿Una marca puede tener muchos productos? Sí: Brillex está en siete filas</td><td>¿Un producto puede ser de muchas marcas? No</td><td><b>1 — N</b>, de marca a producto</td></tr>
+        <tr><td>¿Un proveedor puede abastecer muchos productos? Sí</td><td>¿Un producto puede venir de varios proveedores? En este listado, no</td><td><b>1 — N</b>, de proveedor a producto</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>La clave foránea va siempre <b>del lado muchos</b>: por eso <code>id_rubro</code>, <code>id_marca</code>
+  e <code>id_proveedor</code> viven en la lista de productos y no al revés.</p>
+  <h3>Las tres formas, con un ejemplo de cada una</h3>
+
+  <div class="idea">
+    <span class="et">Uno a muchos · es la del sitio</span>
+    <p>Una fila de la primera lista se relaciona con <b>muchas</b> de la segunda, y cada una de esas con
+    <b>una sola</b> de la primera.</p>
+    <p><b>El ejemplo:</b> el rubro «Limpieza de pisos» aparece en cinco productos —lavandina, detergente,
+    trapo, cera y jabón—, y la lavandina se muestra en un solo rubro. Por eso la lavandina puede guardar
+    <code>id_rubro = 1</code> en su fila, y el rubro no necesita guardar nada de los productos: sería una
+    lista de cinco números adentro de una celda.</p>
+    <p><span class="realce">La clave foránea va siempre del lado «muchos»</span>, que es el lado donde cada
+    fila tiene un solo valor para guardar.</p>
+  </div>
+
+  <details>
+    <summary>Uno a uno, opcional · cuando el sitio crezca</summary>
+    <p>Como máximo una fila de cada lado, y puede no haber ninguna.</p>
+    <p><b>El ejemplo:</b> si el sitio guardara los datos de facturación de cada usuario —CUIT, razón
+    social, dirección—, cada usuario tendría <b>una</b> ficha de facturación o ninguna, y cada ficha sería
+    de un solo usuario. Se separa en dos listas cuando esos datos los completa poca gente: así la lista de
+    usuarios no queda llena de columnas vacías.</p>
+    <p class="nota">Cómo se reconoce: la pregunta en los dos sentidos se responde «una sola» de los dos
+    lados.</p>
+  </details>
+
+  <details>
+    <summary>Muchos a muchos · la que no se puede dibujar directo</summary>
+    <p>Varias filas de cada lado. <b>No se dibuja con una línea</b>: se resuelve con una lista en el medio.</p>
+    <p><b>El ejemplo:</b> hoy cada producto viene de un solo proveedor. Si la empresa comprara la misma
+    lavandina a dos distribuidoras, un producto tendría varios proveedores y un proveedor varios productos.
+    Ninguno de los dos lados puede guardar el <code>id</code> del otro, porque no es uno solo. La solución
+    es una tercera lista, <b>suministro</b>, con una fila por cada par: <code>id_producto</code>,
+    <code>id_proveedor</code>, y sus datos propios, el precio de compra y la fecha.</p>
+    <p>Esa lista del medio convierte un «muchos a muchos» en <b>dos relaciones uno a muchos</b>, que son
+    las que sí se dibujan.</p>
+    <p class="nota">Que la lista del medio tenga datos propios es lo que justifica que exista como entidad.
+    Si solo tuviera los dos identificadores seguiría siendo necesaria, pero no habría nada que contar sobre
+    ella.</p>
+  </details>
+
+  <p class="nota">El modelo mínimo del sitio usa las tres relaciones uno a muchos. Los otros dos casos se
+  reconocen igual y conviene saber nombrarlos, porque aparecen apenas el sitio crece.</p>
+  </div>
+
+  <div class="panel-esc t5">
   <p><i>¿Una persona puede tener varios préstamos? Sí. ¿Un préstamo puede ser de varias personas? No, se
   registra a una responsable.</i> Eso es <b>uno a muchos</b>, y es el caso más frecuente.</p>
   <div class="tabla-wrap">
@@ -1033,9 +1108,10 @@
   <p class="nota">Que la lista del medio tenga datos propios es lo que justifica que exista como entidad y
   no como un simple cruce. Si solo tuviera los dos identificadores, seguiría siendo necesaria, pero no
   habría nada que contar sobre ella.</p>
+  </div>
 
   <div class="check">
-    <span class="et">Comprobá sobre tu situación</span>
+    <span class="et">Comprobá sobre <span class="panel-esc t3">el sitio</span><span class="panel-esc t5">tu situación</span></span>
     <p>Tomá dos de tus listas y hacé la pregunta en los dos sentidos, en voz alta. Escribí el resultado con
     esta forma: «una ____ puede tener muchas ____, y cada ____ pertenece a una sola ____».</p>
     <details><summary>Si la respuesta es «muchas de los dos lados»</summary><p>Entonces falta una lista en el
@@ -1050,6 +1126,132 @@
   usar siempre la misma en todo el documento: un <b>rectángulo</b> por entidad con sus atributos adentro,
   la <b>clave primaria subrayada</b>, la clave foránea señalada, y una <b>línea</b> por relación con la
   cardinalidad escrita en cada extremo.</p>
+  <div class="panel-esc t3">
+  <figure class="er">
+    <svg viewBox="0 0 720 600" role="img" aria-labelledby="er-sitio-tit er-sitio-desc">
+      <title id="er-sitio-tit">Modelo entidad-relación del sitio de la empresa</title>
+      <desc id="er-sitio-desc">Cinco entidades con todos los campos de sus tablas y las claves: rubros, proveedores, productos, marcas y usuarios. Un rubro agrupa muchos productos, una marca fabrica muchos productos y un proveedor provee muchos productos. Usuarios queda aparte, sin relación con el listado.</desc>
+      <g class="er-entidad">
+        <rect x="20" y="30" width="170" height="150" rx="10"/>
+        <text class="nombre" x="105" y="57" text-anchor="middle">RUBROS</text>
+        <line class="divisor" x1="20" y1="67" x2="190" y2="67"/>
+        <text class="atributo" x="38" y="89">id_rubro <tspan class="er-pk">(clave)</tspan></text>
+        <text class="atributo" x="38" y="109">nombre</text>
+      </g>
+      <g class="er-entidad">
+        <rect x="530" y="30" width="170" height="150" rx="10"/>
+        <text class="nombre" x="615" y="57" text-anchor="middle">PROVEEDORES</text>
+        <line class="divisor" x1="530" y1="67" x2="700" y2="67"/>
+        <text class="atributo" x="548" y="89">id_proveedor <tspan class="er-pk">(clave)</tspan></text>
+        <text class="atributo" x="548" y="109">nombre</text>
+        <text class="atributo" x="548" y="129">contacto</text>
+      </g>
+      <g class="er-entidad">
+        <rect x="275" y="210" width="170" height="170" rx="10"/>
+        <text class="nombre" x="360" y="237" text-anchor="middle">PRODUCTOS</text>
+        <line class="divisor" x1="275" y1="247" x2="445" y2="247"/>
+        <text class="atributo" x="293" y="269">id_producto <tspan class="er-pk">(clave)</tspan></text>
+        <text class="atributo" x="293" y="289">descripción</text>
+        <text class="atributo" x="293" y="309">precio</text>
+        <text class="atributo" x="293" y="329">id_rubro <tspan class="er-fk">(foránea)</tspan></text>
+        <text class="atributo" x="293" y="349">id_marca <tspan class="er-fk">(foránea)</tspan></text>
+        <text class="atributo" x="293" y="369">id_proveedor <tspan class="er-fk">(foránea)</tspan></text>
+      </g>
+      <g class="er-entidad">
+        <rect x="20" y="420" width="170" height="150" rx="10"/>
+        <text class="nombre" x="105" y="447" text-anchor="middle">MARCAS</text>
+        <line class="divisor" x1="20" y1="457" x2="190" y2="457"/>
+        <text class="atributo" x="38" y="479">id_marca <tspan class="er-pk">(clave)</tspan></text>
+        <text class="atributo" x="38" y="499">nombre</text>
+      </g>
+      <g class="er-entidad er-sueltas">
+        <rect x="530" y="420" width="170" height="150" rx="10"/>
+        <text class="nombre" x="615" y="447" text-anchor="middle">USUARIOS</text>
+        <line class="divisor" x1="530" y1="457" x2="700" y2="457"/>
+        <text class="atributo" x="548" y="479">id_usuario <tspan class="er-pk">(clave)</tspan></text>
+        <text class="atributo" x="548" y="499">usuario</text>
+        <text class="atributo" x="548" y="519">contraseña</text>
+      </g>
+      <line class="er-linea" x1="190" y1="105" x2="290" y2="210"/>
+      <text class="er-card" x="205" y="95">1</text>
+      <text class="er-card" x="278" y="207">N</text>
+      <text class="er-verbo" x="240" y="163" text-anchor="middle">agrupa</text>
+      <line class="er-linea" x1="530" y1="105" x2="430" y2="210"/>
+      <text class="er-card" x="512" y="95">1</text>
+      <text class="er-card" x="418" y="207">N</text>
+      <text class="er-verbo" x="480" y="163" text-anchor="middle">provee</text>
+      <line class="er-linea" x1="190" y1="495" x2="290" y2="380"/>
+      <text class="er-card" x="205" y="505">1</text>
+      <text class="er-card" x="278" y="377">N</text>
+      <text class="er-verbo" x="240" y="443" text-anchor="middle">fabrica</text>
+    </svg>
+    <figcaption>Un rubro agrupa muchos productos; una marca fabrica muchos productos; un proveedor provee muchos productos. Usuarios queda aparte, sin relación con el listado.</figcaption>
+    <div class="er-leyenda">
+      <span><b class="pk">(clave)</b> identifica la fila</span>
+      <span><b class="fk">(foránea)</b> apunta a otra entidad</span>
+    </div>
+  </figure>
+
+  <div class="er-lista">
+    <p class="et">El mismo modelo, en palabras</p>
+    <ul>
+      <li><b>rubros</b> — <u>id_rubro</u> · nombre</li>
+      <li><b>marcas</b> — <u>id_marca</u> · nombre</li>
+      <li><b>proveedores</b> — <u>id_proveedor</u> · nombre · contacto</li>
+      <li><b>productos</b> — <u>id_producto</u> · nombre · descripción · precio · <i>id_rubro</i> ·
+      <i>id_marca</i> · <i>id_proveedor</i></li>
+      <li><b>usuarios</b> — <u>id_usuario</u> · usuario · contraseña <span class="nota-inline">(sin
+      relación con las otras cuatro)</span></li>
+    </ul>
+    <p><u>subrayado</u> es la clave primaria · <i>en cursiva</i>, la clave foránea. Las tres relaciones:
+    rubro <b>1—N</b> producto, marca <b>1—N</b> producto, proveedor <b>1—N</b> producto.</p>
+  </div>
+  <p><b>La lectura en voz alta</b>, que es lo que van a preguntar en la defensa: «un rubro agrupa muchos
+  productos y cada producto pertenece a un solo rubro; una marca identifica muchos productos y cada
+  producto es de una sola marca; un proveedor abastece muchos productos y cada producto viene de un solo
+  proveedor».</p>
+  <p>El dibujo deja ver una decisión: <span class="marca">el nombre del rubro se escribe una sola vez, en
+  la lista de rubros</span>, y la fila de producto lo nombra por su número. Eso es lo que cierra la
+  inconsistencia de la fila 7 y lo que evita tener que tocar siete filas cuando Brillex cambia de nombre.</p>
+  <h3>Cómo se dibuja, paso a paso</h3>
+  <p>El diagrama del documento se hace en papel, con regla, y se le saca una foto. Estos son los pasos, en
+  este orden:</p>
+  <ol class="pasos">
+    <li><b>Un rectángulo por lista.</b> Cinco: productos, rubros, marcas, proveedores y usuarios. El nombre
+    va arriba, y se escribe siempre igual en todo el documento.</li>
+    <li><b>Adentro, los atributos</b>, uno por renglón, con el tipo de dato al lado: nombre (texto), precio
+    (número decimal).</li>
+    <li><b>Subrayá la clave primaria</b> de cada rectángulo. Si no hay ninguna subrayada, el dibujo todavía
+    no está terminado.</li>
+    <li><b>Una línea por relación.</b> Cada línea une <span class="realce">dos rectángulos, nunca tres</span>.
+    En el sitio son tres líneas, y las tres llegan a productos.</li>
+    <li><b>El número en cada extremo:</b> <code>1</code> del lado que tiene una sola, <code>N</code> del lado
+    que tiene muchas. Sale de preguntar en los dos sentidos, como en el punto anterior.</li>
+    <li><b>Señalá la clave foránea</b> del lado <code>N</code>: es el atributo que repite el
+    <code>id</code> del otro rectángulo. En el sitio, los tres viven en productos.</li>
+    <li><b>Escribí el verbo sobre la línea</b> —agrupa, fabrica, provee—. Es lo que permite leerlo en voz
+    alta, y leerlo en voz alta es lo que preguntan en la defensa.</li>
+  </ol>
+
+  <details>
+    <summary>Cuatro errores de dibujo que aparecen siempre</summary>
+    <ul>
+      <li><b>Encadenar rubro con marca y marca con proveedor.</b> Entre ellos no hay relación: los tres se
+      conectan con productos, que es la lista que los nombra.</li>
+      <li><b>Poner la clave foránea del lado 1.</b> Si <code>rubros</code> guardara los productos, tendría
+      que guardar cinco números en una celda. Va siempre del lado <code>N</code>.</li>
+      <li><b>Dibujar el valor en lugar de la lista.</b> El rectángulo es <code>rubros</code>, no «Limpieza
+      de pisos»: ese es una fila adentro.</li>
+      <li><b>Flechas sin números.</b> Una flecha no dice cuántos de cada lado. Lo que se evalúa es la
+      cardinalidad escrita en los dos extremos.</li>
+    </ul>
+  </details>
+
+  <p class="nota">El mismo diagrama, con todos los campos y para mirar en grande, está en la página
+  <a href="modelo-entidad-relacion.html">Modelo entidad-relación</a>.</p>
+  </div>
+
+  <div class="panel-esc t5">
   <div class="diagrama">
 <pre>   categoria                 equipo                    prestamo               devolucion
  ┌──────────────┐        ┌──────────────┐          ┌──────────────┐        ┌──────────────┐
@@ -1071,8 +1273,8 @@
   <p>Ese último detalle es una decisión de diseño que el dibujo deja ver: la devolución que falta es lo
   que permite responder qué equipos están prestados en este momento, que es una de las consultas que la
   consigna pide.</p>
-  <p>El diagrama del sitio de la Técnica 3 —las cinco listas con sus <code>id_*</code> y las tres relaciones— está
-  dibujado en la página <a href="modelo-entidad-relacion.html">Modelo entidad-relación</a>.</p>
+  </div>
+
   <details>
     <summary>El diagrama se puede dibujar a mano</summary>
     <p>Sí, y para el documento conviene: se dibuja en papel con regla, se le saca una foto derecha y con
@@ -1090,11 +1292,21 @@
 
 <section class="alerta" id="dibujos">
   <h2>Dos dibujos distintos que la consigna llama parecido</h2>
+  <div class="panel-esc t3">
+  <p>La consigna usa las palabras «esquema» y «diagrama» para cosas diferentes, y conviene no
+  confundirlas. El <b>diagrama entidad-relación</b> muestra <b>datos</b>: las listas del sitio y cómo se
+  nombran entre sí. Un <b>esquema de red</b> o un plano del equipamiento muestran <b>equipos</b>: máquinas,
+  puestos y conexiones. Si el documento lleva los dos, cada uno va con su epígrafe, para que el evaluador
+  sepa cuál está mirando.</p>
+  </div>
+
+  <div class="panel-esc t5">
   <p>La consigna usa las palabras «esquema» y «diagrama» para cosas diferentes, y conviene no
   confundirlas. Las situaciones 1, 8 y el punto B de la 10 piden un <b>esquema de red</b>: routers,
   switches, computadoras e impresoras, con los cables. Solo la situación 5 pide un <b>diagrama
   entidad-relación</b>, que muestra datos y no equipos. Un equipo que entrega el dibujo equivocado no
   cumple su pedido, aunque el dibujo esté bien hecho.</p>
+  </div>
 </section>
 
 <section id="consultas">
@@ -1104,6 +1316,39 @@
 
   <p>El camino es siempre el mismo, y empieza en castellano: primero se escribe la pregunta con palabras y
   recién después se traduce al idioma del gestor, que se llama <b>SQL</b>.</p>
+  <div class="panel-esc t3">
+  <div class="tabla-wrap">
+    <table>
+      <thead><tr><th style="width:22%">Paso</th><th>Sobre la consulta del listado público</th></tr></thead>
+      <tbody>
+        <tr><td><b>1 · La pregunta</b></td><td>Qué productos se muestran en el listado, con su rubro y su marca</td></tr>
+        <tr><td><b>2 · Los datos que quiero ver</b></td><td>El rubro, la descripción, la marca y el precio: los cuatro que la consigna nombra</td></tr>
+        <tr><td><b>3 · De qué listas salen</b></td><td>De <i>producto</i>, de <i>rubro</i> y de <i>marca</i>. Se unen por sus claves: producto nombra a las otras dos con <code>id_rubro</code> e <code>id_marca</code></td></tr>
+        <tr><td><b>4 · La condición</b></td><td>Ninguna, si el listado muestra todo. Si el usuario filtra, la condición es el rubro elegido</td></tr>
+        <tr><td><b>5 · La consulta</b></td><td>Se traduce al lenguaje del gestor uniendo las tres listas y ordenando por precio</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Esa consulta es la que sostiene la frase de la consigna: <span class="marca">«estos productos deben
+  surgir de base de datos»</span>. Mientras el listado esté escrito en el código, no hay consulta que
+  hacer, y el entregable no está cumplido.</p>
+  <h3>Las consultas que el sitio necesita</h3>
+  <ul>
+    <li><b>El listado público</b> <span class="nota">(la que pide la consigna)</span> · sale de producto,
+    rubro y marca · sin condición, ordenado por precio.</li>
+    <li><b>Los productos de un rubro</b> · las mismas tres listas · condición: el rubro elegido. Es el
+    filtro del listado.</li>
+    <li><b>Cuántos productos tiene cada marca</b> · sale de marca y producto · se agrupa por marca y se
+    cuentan los productos. Sirve al panel de administración.</li>
+    <li><b>Los productos de un proveedor</b> · sale de producto y proveedor · condición: ese proveedor.</li>
+    <li><b>Si un nombre de usuario ya existe</b> · sale de usuario · condición: ese nombre. Se hace
+    <b>antes</b> de aceptar el registro, y es la que impide dos cuentas iguales.</li>
+  </ul>
+  <p class="nota">Hoy las consultas se escriben en castellano: qué se ve, de qué listas sale y con qué
+  condición. La traducción al idioma del gestor corresponde a la unidad 5.</p>
+  </div>
+
+  <div class="panel-esc t5">
   <div class="tabla-wrap">
     <table>
       <thead><tr><th style="width:22%">Paso</th><th>Sobre la consulta «qué equipos están prestados ahora»</th></tr></thead>
@@ -1149,9 +1394,10 @@
   rechaza.</p>
   <p>Eso es lo que hay que escribir en el documento, y es la respuesta a la pregunta que el jurado va a
   hacer: con qué datos de qué lista se comprueba la regla.</p>
+  </div>
 
   <div class="check">
-    <span class="et">Comprobá sobre tu situación</span>
+    <span class="et">Comprobá sobre <span class="panel-esc t3">el sitio</span><span class="panel-esc t5">tu situación</span></span>
     <p>Escribí una pregunta que la organización de tu enunciado necesite hacerle a los datos, y respondé
     tres cosas: qué datos querés ver, de qué listas salen y cuál es la condición. Todavía en castellano.</p>
     <details><summary>Si tu pregunta es «lo que falta»</summary><p>—qué está sin devolver, qué no se usó
@@ -1162,6 +1408,25 @@
 
 <section id="prueba">
   <h2>8 · La prueba del modelo</h2>
+  <div class="panel-esc t3">
+  <p>El documento tiene un apartado donde se cuenta cómo se comprobó que la solución funciona, y las
+  fichas de caso de prueba son lo que lo llena. Probar el modelo se hace con casos: se carga algo, se
+  pregunta, y se compara lo que devuelve con lo que se esperaba.</p>
+  <div class="tabla-wrap">
+    <table>
+      <thead><tr><th style="width:10%">Caso</th><th style="width:32%">Qué afirmación verifica</th><th style="width:29%">Qué se carga o se hace</th><th>Qué tiene que pasar</th></tr></thead>
+      <tbody>
+        <tr><td>CP-01</td><td>El listado sale de la base y no del código</td><td>Se agrega un producto desde el gestor y se recarga la página</td><td>El producto nuevo aparece en el listado, sin tocar el código</td></tr>
+        <tr><td>CP-02</td><td>La base rechaza un producto de una marca que no existe</td><td>Se intenta cargar un producto con un <code>id_marca</code> inventado</td><td>La operación se rechaza por la clave foránea</td></tr>
+        <tr><td>CP-03</td><td>No puede haber dos cuentas con el mismo nombre de usuario</td><td>Se intenta registrar un usuario con un nombre ya usado</td><td>El registro se rechaza</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="nota">El CP-01 es el que prueba la frase de la consigna. Los otros dos son casos negativos, y
+  al menos uno conviene tener: es el que muestra que el modelo protege los datos.</p>
+  </div>
+
+  <div class="panel-esc t5">
   <p>La situación 5 no pide pruebas con esas palabras: pide el modelo, las tablas, las claves, la creación y
   las cinco consultas. Probar el modelo es, entonces, una manera de verificar el propio trabajo antes de
   entregarlo, y de paso da contenido al apartado donde se cuenta cómo se comprobó que funciona. Se hace con
@@ -1183,8 +1448,19 @@
   idea sobre sus planillas: se hace la pregunta que la organización necesita —qué equipos vencen este mes,
   qué usuario tiene acceso a esa carpeta— y se verifica que la planilla la responde sin recorrerla entera.
   Si no la responde, falta una lista o falta una columna.</p>
+  </div>
 
   <h3>Lo que de todo esto va al documento</h3>
+  <div class="panel-esc t3">
+  <ul>
+    <li><b>El diagrama entidad-relación del sitio</b> y la lista de tablas con sus claves, en el apartado
+    donde se desarrolla la solución. El diagrama en tamaño completo, al anexo.</li>
+    <li><b>La decisión «los productos salen de la base»</b>, en el apartado donde se comparan alternativas:
+    qué se eligió, con qué criterio y qué se resigna.</li>
+    <li><b>Las fichas de caso de prueba</b>, en el apartado de pruebas, con al menos un caso negativo.</li>
+  </ul>
+  </div>
+  <div class="panel-esc t5">
   <ul>
     <li><b>Situación 5:</b> el modelo entidad-relación, las tablas con sus claves, el script de creación y
     las cinco consultas. El diagrama en tamaño completo y el script entero, al anexo.</li>
@@ -1193,6 +1469,7 @@
     <li><b>Las otras ocho:</b> la planilla organizada, y la línea de decisión donde se declara el alcance. El
     diagrama, solo si aclara algo, y al anexo.</li>
   </ul>
+  </div>
 
   <h3>Cuatro preguntas para defender el modelo</h3>
   <p>Con esto cierra el trabajo sobre los datos, y son preguntas que el jurado hace:</p>
@@ -1242,6 +1519,32 @@
 <section id="hacer">
   <h2>9 · Para hacer, sobre su propia situación</h2>
 
+  <div class="panel-esc t3">
+  <div class="rama">
+    <h3>El modelo del sitio</h3>
+    <p>Esto es material del entregable: la consigna pide el listado que sale de la base, la carga separada
+    de artículos, rubros y marcas, y el registro con contraseña. Lo que sigue es lo que hay que tener
+    escrito y dibujado.</p>
+    <ol>
+      <li>Escriban las <b>cinco entidades</b> del sitio: producto, rubro, marca, proveedor y usuario.</li>
+      <li>Para cada una, sus <b>atributos</b> con el tipo de dato al lado.</li>
+      <li>Subrayen la <b>clave primaria</b> de cada una y escriban en una línea por qué ese dato distingue
+      sin ambigüedad, y por qué no alcanza el nombre.</li>
+      <li>Señalen las <b>claves foráneas</b>: producto nombra a rubro, a marca y a proveedor con sus
+      <code>id</code>.</li>
+      <li><b>Dibujen el diagrama</b> completo con la notación del punto 6 y la cardinalidad en cada extremo
+      de cada línea. En papel, con regla. Ese dibujo va al documento.</li>
+      <li>Escriban en castellano las <b>consultas</b> que el sitio necesita, empezando por la del listado:
+      qué datos se ven, de qué listas salen y con qué condición.</li>
+      <li><b>Creen la base</b> del proyecto en el gestor, con el nombre en minúsculas, sin espacios y con
+      cotejamiento <code>utf8mb4_unicode_ci</code>, para que las tildes del listado no salgan rotas.</li>
+    </ol>
+    <p class="nota">El límite de hoy es el modelo, la base creada y las consultas enunciadas. El código del
+    sitio que las ejecuta es trabajo de Sistemas Computacionales.</p>
+  </div>
+  </div>
+
+  <div class="panel-esc t5">
   <div class="rama">
     <h3>Si les tocó la situación 5 o la 6</h3>
     <p>Esto es directamente su entregable. La situación 5 pide, con esas palabras, «modelo Entidad-Relación;
@@ -1291,10 +1594,41 @@
       responder.</li>
     </ol>
   </div>
+  </div>
 </section>
 
 <section id="chequeo">
   <h2>10 · Para chequear lo entendido</h2>
+  <div class="panel-esc t3">
+  <details>
+    <summary>En la lista de productos, ¿sirve la marca como clave primaria?</summary>
+    <p>No. Hay muchos productos de la misma marca, así que no distingue una fila de otra. La marca
+    funciona como atributo, y además vive en su propia lista.</p>
+  </details>
+  <details>
+    <summary>¿Qué se guarda en la lista de productos para saber de qué rubro es cada uno?</summary>
+    <p>El <code>id_rubro</code>, que es la clave foránea. El nombre del rubro queda escrito una sola vez,
+    en la lista de rubros.</p>
+  </details>
+  <details>
+    <summary>Un rubro puede tener muchos productos y un producto es de un solo rubro. ¿Qué cardinalidad es, y de qué lado va la clave foránea?</summary>
+    <p>Uno a muchos, de rubro hacia producto. La clave foránea va en la lista de productos, que es la del
+    lado «muchos».</p>
+  </details>
+  <details>
+    <summary>¿Por qué no se guarda la cantidad de productos que tiene cada marca?</summary>
+    <p>Porque se calcula contando los productos de esa marca. Si se guardara, al cargar un producto nuevo
+    el número quedaría viejo y contradiría a la lista.</p>
+  </details>
+  <details>
+    <summary>Las filas 1 y 7 del listado son el mismo producto escrito distinto. ¿Qué problema muestra eso, y qué decisión del modelo lo resuelve?</summary>
+    <p>Muestra la inconsistencia. Lo resuelve la clave sustituta: como el producto se identifica por
+    <code>id_producto</code> y el rubro y la marca se eligen de sus listas, el texto deja de escribirse
+    dos veces.</p>
+  </details>
+  </div>
+
+  <div class="panel-esc t5">
   <details>
     <summary>En la lista de equipos, ¿sirve la marca como clave primaria?</summary>
     <p>No. Hay muchos equipos de la misma marca, así que no distingue una fila de otra. La marca funciona como atributo.</p>
@@ -1314,6 +1648,7 @@
     <p>Porque se calcula restando la fecha de devolución a la fecha del préstamo. Guardarlo abre la
     posibilidad de que quede en contradicción con las fechas.</p>
   </details>
+  </div>
 </section>
 
 </section>

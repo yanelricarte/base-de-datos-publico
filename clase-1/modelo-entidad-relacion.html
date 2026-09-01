@@ -64,7 +64,7 @@
 <h2><span class="n">02</span> El modelo de tu consigna</h2>
 <p>La consigna 5 de la Olimpíada pide «el modelo entidad-relación, las tablas, las claves». Este es el modelo de las dos consignas, sobre las tablas que ya se separaron en la clase 1.</p>
 
-<p>Sobre los atributos se marcan las claves: la <strong>(clave)</strong> identifica cada fila; la <strong>(foránea)</strong> apunta a otra entidad. En el sitio las claves son <strong>sustitutas</strong> (id_producto, id_rubro…): el sistema las asigna, porque el nombre de un producto o de un rubro puede repetirse. En los préstamos la clave es natural, el nombre mismo. Una de las dos consignas deja una entidad sin clave marcada, y elegirla es el tema de la próxima clase.</p>
+<p>Sobre los atributos se marcan las claves: la <strong>(clave)</strong> identifica cada fila; la <strong>(foránea)</strong> apunta a otra entidad. En el sitio las claves son <strong>sustitutas</strong> (id_producto, id_rubro…): el sistema las asigna, porque el nombre de un producto o de un rubro puede repetirse. En los préstamos la clave es natural, el nombre mismo. Una de las dos consignas deja una entidad sin clave marcada, y elegirla es parte del trabajo sobre las claves.</p>
 
 <div class="selector-esc">
   <button type="button" class="sel-esc" data-esc="t3" aria-pressed="true">E.E.S.T. N.º 3 · el sitio de la empresa</button>
@@ -199,7 +199,7 @@
   <li><strong>Un alumno realiza muchos préstamos.</strong> Cada préstamo lo hace un solo alumno.</li>
   <li><strong>Un equipo se presta en muchos préstamos.</strong> Cada préstamo lleva un solo equipo.</li>
 </ol>
-<p class="nota">El préstamo es la entidad del hecho: conecta a un alumno con un equipo y agrega la fecha y el estado devuelto. Sin él, alumno y equipo no tienen dónde encontrarse. Su clave queda sin marcar: la fecha sola no alcanza (dos préstamos pueden caer el mismo día), y elegirla es el tema de la próxima clase.</p>
+<p class="nota">El préstamo es la entidad del hecho: conecta a un alumno con un equipo y agrega la fecha y el estado devuelto. Sin él, alumno y equipo no tienen dónde encontrarse. Su clave queda sin marcar: la fecha sola no alcanza (dos préstamos pueden caer el mismo día), y elegirla es parte del trabajo sobre las claves.</p>
 </div>
 
 </section>
@@ -217,7 +217,7 @@
   <li><strong>Una relación muchos a muchos se desarma con una entidad del hecho.</strong> Un alumno se lleva muchos equipos y un equipo se lo llevan muchos alumnos; el préstamo convierte ese cruce en dos relaciones 1 a muchos.</li>
 </ol>
 
-<p>Lo que sigue es formalizar cómo se elige la clave primaria (y por qué la fecha no sirve para el préstamo) y cómo una tabla apunta a otra sin copiar su texto (la clave foránea). Son los temas de las clases que vienen.</p>
+<p>Lo que formaliza este modelo es cómo se elige la clave primaria (y por qué la fecha no sirve para el préstamo) y cómo una tabla apunta a otra sin copiar su texto (la clave foránea).</p>
 </section>
 
 <nav class="nav-clase">

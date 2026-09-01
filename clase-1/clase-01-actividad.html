@@ -36,7 +36,8 @@
     Seis puntos, en el orden en que se hacen. El primero es un diagnóstico. El segundo es la
     práctica sobre otra planilla de la misma consigna. El tercero es el trabajo propio, sobre la
     información que el proyecto del equipo tiene que guardar. El cuarto se entrega antes de irse, y
-    los dos últimos son para chequear lo entendido y para la próxima clase.
+    los dos últimos son para chequear lo entendido y para la próxima clase. El quinto arma el modelo:
+    las claves de cada lista y el diagrama que va al documento.
   </p>
   <details class="encuadre">
     <summary>Unidad, contenidos y capacidades</summary>
@@ -55,8 +56,9 @@
     <li><a href="#p2">Los cinco problemas en la planilla de tu consigna</a></li>
     <li><a href="#p3">Del enunciado a las listas</a></li>
     <li><a href="#p4">La ficha del equipo</a></li>
-    <li><a href="#p5">Autocomprobación</a></li>
-    <li><a href="#p6">Tarea para la próxima clase</a></li>
+    <li><a href="#p5">El modelo: las claves y el diagrama</a></li>
+    <li><a href="#p6">Autocomprobación</a></li>
+    <li><a href="#p7">Tarea para la próxima clase</a></li>
   </ol>
 </nav>
 
@@ -65,6 +67,7 @@
   <li>Los cinco problemas</li>
   <li>Del enunciado a las listas</li>
   <li>La ficha del equipo</li>
+  <li>Las claves y el diagrama</li>
   <li>Autocomprobación</li>
   <li>Tarea</li>
 </ol>
@@ -468,7 +471,7 @@
 </svg>
 </div>
 
-<p>Las tres flechas de la derecha son el punto donde queda el trabajo de hoy. Cada una es un <strong>nombra a</strong>: la lista de productos tiene que decir a qué rubro, a qué marca y a qué proveedor pertenece cada producto. <strong>Cómo se escribe ese vínculo</strong> —con el nombre copiado o con otra cosa— es el contenido de las clases que siguen, y es lo que resuelve los dos problemas que separar en listas deja abiertos.</p>
+<p>Las tres flechas de la derecha son el punto donde queda el trabajo de hoy. Cada una es un <strong>nombra a</strong>: la lista de productos tiene que decir a qué rubro, a qué marca y a qué proveedor pertenece cada producto. <strong>Cómo se escribe ese vínculo</strong> —con el nombre copiado o con otra cosa— es lo que resuelve los dos problemas que separar en listas deja abiertos.<span class="panel-esc t3"> Y es el punto que sigue: la clave primaria de cada lista y la clave foránea que las une.</span><span class="panel-esc t5"> Es el contenido de las clases que siguen.</span></p>
 
 <p class="nota panel-esc t3">Cuatro de las cinco listas se ven en la hoja. La quinta, <strong>usuarios</strong> —el usuario y la contraseña del registro que pide la consigna—, sale del enunciado del sitio: ninguna fila de la hoja la muestra, y es la lista que la vista de administrador necesita para guardar cada cuenta.</p>
 
@@ -606,7 +609,99 @@ ACUERDOS DEL EQUIPO
 
 <!-- ================= PUNTO 4 ================= -->
 <section id="p5">
-<h2><span class="n">05</span> Autocomprobación</h2>
+<h2><span class="n">05</span> El modelo: las claves y el diagrama</h2>
+
+<div class="panel-esc t3">
+<p>Este punto <strong>produce material del entregable</strong>. La consigna pide que el listado «surja de
+base de datos» y que la vista de administrador cargue artículos, rubros y marcas por separado: eso es un
+modelo con cinco listas, sus claves y sus relaciones. Lo que sale de acá se copia al documento.</p>
+
+<p class="nota"><b>60 minutos</b>, en equipo. La primera parte se escribe; la segunda se dibuja en papel,
+con regla.</p>
+
+<h3>Parte 1 · Las entidades con su clave</h3>
+<p>Una fila por lista. En la columna de la razón no vale «porque es el primero»: la razón es por qué ese
+dato distingue sin ambigüedad, y por qué no alcanza el nombre.</p>
+
+<div class="para-completar">
+<pre>LISTA        ATRIBUTOS (con el tipo al lado)         CLAVE PRIMARIA    POR QUE ESA
+producto     ______________________________________  ________________  ____________________
+rubro        ______________________________________  ________________  ____________________
+marca        ______________________________________  ________________  ____________________
+proveedor    ______________________________________  ________________  ____________________
+usuario      ______________________________________  ________________  ____________________
+
+LAS CLAVES FORANEAS: que lista nombra a que otra, y con que dato
+________________________________________________________________________</pre>
+</div>
+
+<div class="check">
+  <span class="et">Antes de seguir</span>
+  <p>Si alguien propuso el <b>nombre del producto</b> como clave primaria, buscá la fila 1 y la fila 7 del
+  listado y respondé: ¿son un producto o son dos?</p>
+  <details><summary>La respuesta</summary><p>Son el mismo producto escrito de dos maneras. Con el nombre
+  como clave, la empresa tendría dos lavandinas distintas. Por eso la clave es
+  <code>id_producto</code>, que el sistema asigna y nunca cambia.</p></details>
+</div>
+
+<h3>Parte 2 · El diagrama, en papel</h3>
+<p>Con la notación de la clase: un rectángulo por lista, los atributos adentro con su tipo, la clave
+primaria subrayada, la foránea señalada, una línea por relación y la cardinalidad en cada extremo.</p>
+
+<div class="destacado">
+  <span class="titulo"><svg class="ico"><use href="#i-ok"/></svg> Lista de cotejo del dibujo</span>
+  <p>Antes de sacarle la foto, el equipo comprueba las seis:</p>
+  <ol>
+    <li>Están los cinco rectángulos, con el nombre de la lista arriba.</li>
+    <li>Cada rectángulo tiene su clave primaria <b>subrayada</b>.</li>
+    <li>Las tres claves foráneas están señaladas, y las tres están en <code>producto</code>.</li>
+    <li>Hay tres líneas, y cada una une <b>dos</b> rectángulos: rubro–producto, marca–producto,
+    proveedor–producto.</li>
+    <li>Cada línea tiene su <code>1</code> y su <code>N</code> en los extremos.</li>
+    <li>El dibujo se lee en voz alta sin titubear: «un rubro agrupa muchos productos y cada producto
+    pertenece a un solo rubro…».</li>
+  </ol>
+</div>
+
+<h3>Parte 3 · Las consultas y la base</h3>
+<p>El modelo se prueba preguntándole. Escriban <b>en castellano</b> la consulta del listado, con las tres
+partes, y después creen la base del proyecto en el gestor.</p>
+
+<div class="para-completar">
+<pre>LA CONSULTA DEL LISTADO
+  que datos se ven:  ______________________________________________
+  de que listas salen: ____________________________________________
+  con que condicion y en que orden: _______________________________
+
+LA BASE DEL PROYECTO
+  nombre (minusculas, sin espacios): ______________________________
+  cotejamiento: utf8mb4_unicode_ci                      [ ] creada</pre>
+</div>
+
+<div class="idea">
+  <span class="et">Lo que va al documento de la Olimpíada</span>
+  <p><b>1.</b> La foto del diagrama, en el apartado donde se desarrolla la solución, y en tamaño completo
+  al anexo.</p>
+  <p><b>2.</b> La tabla de las cinco listas con sus claves primarias y foráneas.</p>
+  <p><b>3.</b> Un párrafo que explique, con el modelo delante, <span class="realce">por qué el listado sale
+  de la base y no del código</span>: qué se gana cuando cambia un precio o el nombre de una marca.</p>
+  <p><b>4.</b> La consulta del listado escrita en castellano, en el mismo apartado.</p>
+</div>
+</div>
+
+<div class="panel-esc t5">
+<p>Si a tu equipo le tocó la situación 5 o la 6, este punto <strong>es tu entregable</strong>: la situación
+5 pide con esas palabras el modelo, las tablas, las claves y las consultas. Si te tocó cualquiera de las
+otras ocho, el modelo es una herramienta para ordenar la planilla que sí tenés que entregar, y lo que va al
+documento es la planilla organizada más la línea que declara el alcance.</p>
+<p>Los pasos, en los dos casos, están en el punto <b>9 · Para hacer</b> de la
+<a href="clase-01-teoria.html">página de teoría</a>, con la lista de entidades, las claves, el diagrama y
+las consultas.</p>
+</div>
+</section>
+
+<section id="p6">
+<h2><span class="n">06</span> Autocomprobación</h2>
 
 <p>Tres preguntas sobre lo de hoy. Al comprobar, cada opción explica por qué es correcta o dónde falla, así que vale la pena leer también las que no se eligieron.</p>
 
@@ -643,8 +738,8 @@ ACUERDOS DEL EQUIPO
 </section>
 
 <!-- ================= TAREA ================= -->
-<section id="p6">
-<h2><span class="n">06</span> Tarea para la próxima clase</h2>
+<section id="p7">
+<h2><span class="n">07</span> Tarea para la próxima clase</h2>
 
 <div class="registro">
   <div class="rot"><svg class="ico"><use href="#i-lapiz"/></svg> Se trae escrito</div>
