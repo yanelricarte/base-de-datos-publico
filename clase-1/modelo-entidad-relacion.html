@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/clase.css">
 </head>
 <body class="esc-t3">
@@ -51,9 +51,9 @@
 <table>
   <thead><tr><th scope="col">Pieza</th><th scope="col">Qué nombra</th></tr></thead>
   <tbody>
-    <tr><td><strong>Entidad</strong></td><td>Cada cosa del dominio que merece su propia tabla. En el taller: el alumno, el equipo y el préstamo. En el sitio: el rubro, la marca y el producto.</td></tr>
-    <tr><td><strong>Atributo</strong></td><td>Cada dato que describe a una entidad. El préstamo tiene fecha y devuelto; el producto tiene producto, precio, rubro y marca.</td></tr>
-    <tr><td><strong>Relación</strong></td><td>El vínculo entre dos entidades, con su cardinalidad: un alumno realiza préstamos, un rubro agrupa productos.</td></tr>
+    <tr><td><strong>Entidad</strong></td><td>Cada cosa del dominio que merece su propia tabla. En el taller: el alumno, el equipo y el préstamo. En el sitio: el rubro, la marca, el proveedor, el producto y los usuarios.</td></tr>
+    <tr><td><strong>Atributo</strong></td><td>Cada dato que describe a una entidad. El préstamo tiene fecha y devuelto; el producto tiene descripción, precio y los <code>id</code> de su rubro, su marca y su proveedor.</td></tr>
+    <tr><td><strong>Relación</strong></td><td>El vínculo entre dos entidades, con su cardinalidad: un alumno realiza préstamos, un rubro agrupa productos, una marca fabrica productos.</td></tr>
   </tbody>
 </table>
 </div>
@@ -64,7 +64,7 @@
 <h2><span class="n">02</span> El modelo de tu consigna</h2>
 <p>La consigna 5 de la Olimpíada pide «el modelo entidad-relación, las tablas, las claves». Este es el modelo de las dos consignas, sobre las tablas que ya se separaron en la clase 1.</p>
 
-<p>Sobre los atributos se marcan las claves: la <strong>(clave)</strong> identifica cada fila; la <strong>(foránea)</strong> apunta a otra entidad. En una de las dos consignas una entidad queda sin clave marcada, y elegirla es el tema de la próxima clase.</p>
+<p>Sobre los atributos se marcan las claves: la <strong>(clave)</strong> identifica cada fila; la <strong>(foránea)</strong> apunta a otra entidad. En el sitio las claves son <strong>sustitutas</strong> (id_producto, id_rubro…): el sistema las asigna, porque el nombre de un producto o de un rubro puede repetirse. En los préstamos la clave es natural, el nombre mismo. Una de las dos consignas deja una entidad sin clave marcada, y elegirla es el tema de la próxima clase.</p>
 
 <div class="selector-esc">
   <button type="button" class="sel-esc" data-esc="t3" aria-pressed="true">E.E.S.T. N.º 3 · el sitio de la empresa</button>
@@ -73,44 +73,67 @@
 
 <div class="panel-esc t3">
 <h3>El sitio de la empresa</h3>
-<p>La planilla PRODUCTOS.xlsx se separó en tres tablas: rubros, marcas y productos. Esas tres tablas son las entidades del modelo; el diagrama muestra todos sus campos y las claves.</p>
+<p>La planilla PRODUCTOS.xlsx se separó en cinco listas: productos, rubros, marcas, proveedores y usuarios. Son las entidades del modelo; el diagrama muestra todos sus campos y las claves. Rubro, marca y proveedor agrupan productos, y por eso se conectan con esa entidad. Usuarios queda apartado, sin relación con el listado.</p>
 
 <figure class="er">
-  <svg viewBox="0 0 720 260" role="img" aria-labelledby="er-t3-tit er-t3-desc">
+  <svg viewBox="0 0 720 600" role="img" aria-labelledby="er-t3-tit er-t3-desc">
     <title id="er-t3-tit">Modelo entidad-relación del sitio de la empresa</title>
-    <desc id="er-t3-desc">Tres entidades con todos los campos de sus tablas y las claves: rubro, producto y marca. Un rubro agrupa muchos productos y una marca tiene muchos productos.</desc>
+    <desc id="er-t3-desc">Cinco entidades con todos los campos de sus tablas y las claves: rubros, proveedores, productos, marcas y usuarios. Un rubro agrupa muchos productos, una marca fabrica muchos productos y un proveedor provee muchos productos. Usuarios queda aparte, sin relación con el listado.</desc>
     <g class="er-entidad">
-      <rect x="20" y="45" width="170" height="160" rx="10"/>
-      <text class="nombre" x="105" y="72" text-anchor="middle">RUBRO</text>
-      <line class="divisor" x1="20" y1="82" x2="190" y2="82"/>
-      <text class="atributo" x="38" y="104">rubro <tspan class="er-pk">(clave)</tspan></text>
+      <rect x="20" y="30" width="170" height="150" rx="10"/>
+      <text class="nombre" x="105" y="57" text-anchor="middle">RUBROS</text>
+      <line class="divisor" x1="20" y1="67" x2="190" y2="67"/>
+      <text class="atributo" x="38" y="89">id_rubro <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="38" y="109">nombre</text>
     </g>
     <g class="er-entidad">
-      <rect x="285" y="45" width="170" height="160" rx="10"/>
-      <text class="nombre" x="370" y="72" text-anchor="middle">PRODUCTO</text>
-      <line class="divisor" x1="285" y1="82" x2="455" y2="82"/>
-      <text class="atributo" x="303" y="104">producto <tspan class="er-pk">(clave)</tspan></text>
-      <text class="atributo" x="303" y="124">precio</text>
-      <text class="atributo" x="303" y="144">rubro <tspan class="er-fk">(foránea)</tspan></text>
-      <text class="atributo" x="303" y="164">marca <tspan class="er-fk">(foránea)</tspan></text>
+      <rect x="530" y="30" width="170" height="150" rx="10"/>
+      <text class="nombre" x="615" y="57" text-anchor="middle">PROVEEDORES</text>
+      <line class="divisor" x1="530" y1="67" x2="700" y2="67"/>
+      <text class="atributo" x="548" y="89">id_proveedor <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="548" y="109">nombre</text>
+      <text class="atributo" x="548" y="129">contacto</text>
     </g>
     <g class="er-entidad">
-      <rect x="550" y="45" width="170" height="160" rx="10"/>
-      <text class="nombre" x="635" y="72" text-anchor="middle">MARCA</text>
-      <line class="divisor" x1="550" y1="82" x2="720" y2="82"/>
-      <text class="atributo" x="568" y="104">marca <tspan class="er-pk">(clave)</tspan></text>
-      <text class="atributo" x="568" y="124">proveedor</text>
+      <rect x="275" y="210" width="170" height="170" rx="10"/>
+      <text class="nombre" x="360" y="237" text-anchor="middle">PRODUCTOS</text>
+      <line class="divisor" x1="275" y1="247" x2="445" y2="247"/>
+      <text class="atributo" x="293" y="269">id_producto <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="293" y="289">descripción</text>
+      <text class="atributo" x="293" y="309">precio</text>
+      <text class="atributo" x="293" y="329">id_rubro <tspan class="er-fk">(foránea)</tspan></text>
+      <text class="atributo" x="293" y="349">id_marca <tspan class="er-fk">(foránea)</tspan></text>
+      <text class="atributo" x="293" y="369">id_proveedor <tspan class="er-fk">(foránea)</tspan></text>
     </g>
-    <line class="er-linea" x1="190" y1="112" x2="285" y2="112"/>
-    <text class="er-card" x="202" y="103">1</text>
-    <text class="er-card" x="268" y="103">N</text>
-    <text class="er-verbo" x="237" y="128" text-anchor="middle">agrupa</text>
-    <line class="er-linea" x1="455" y1="112" x2="550" y2="112"/>
-    <text class="er-card" x="464" y="103">N</text>
-    <text class="er-card" x="536" y="103">1</text>
-    <text class="er-verbo" x="502" y="128" text-anchor="middle">tiene</text>
+    <g class="er-entidad">
+      <rect x="20" y="420" width="170" height="150" rx="10"/>
+      <text class="nombre" x="105" y="447" text-anchor="middle">MARCAS</text>
+      <line class="divisor" x1="20" y1="457" x2="190" y2="457"/>
+      <text class="atributo" x="38" y="479">id_marca <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="38" y="499">nombre</text>
+    </g>
+    <g class="er-entidad er-sueltas">
+      <rect x="530" y="420" width="170" height="150" rx="10"/>
+      <text class="nombre" x="615" y="447" text-anchor="middle">USUARIOS</text>
+      <line class="divisor" x1="530" y1="457" x2="700" y2="457"/>
+      <text class="atributo" x="548" y="479">id_usuario <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="548" y="499">usuario</text>
+      <text class="atributo" x="548" y="519">contraseña</text>
+    </g>
+    <line class="er-linea" x1="190" y1="105" x2="290" y2="210"/>
+    <text class="er-card" x="205" y="95">1</text>
+    <text class="er-card" x="278" y="207">N</text>
+    <text class="er-verbo" x="240" y="163" text-anchor="middle">agrupa</text>
+    <line class="er-linea" x1="530" y1="105" x2="430" y2="210"/>
+    <text class="er-card" x="512" y="95">1</text>
+    <text class="er-card" x="418" y="207">N</text>
+    <text class="er-verbo" x="480" y="163" text-anchor="middle">provee</text>
+    <line class="er-linea" x1="190" y1="495" x2="290" y2="380"/>
+    <text class="er-card" x="205" y="505">1</text>
+    <text class="er-card" x="278" y="377">N</text>
+    <text class="er-verbo" x="240" y="443" text-anchor="middle">fabrica</text>
   </svg>
-  <figcaption>Un rubro agrupa muchos productos; una marca tiene muchos productos.</figcaption>
+  <figcaption>Un rubro agrupa muchos productos; una marca fabrica muchos productos; un proveedor provee muchos productos. Usuarios queda aparte, sin relación con el listado.</figcaption>
   <div class="er-leyenda">
     <span><b class="pk">(clave)</b> identifica la fila</span>
     <span><b class="fk">(foránea)</b> apunta a otra entidad</span>
@@ -119,9 +142,10 @@
 
 <ol class="pasos secuencia">
   <li><strong>Un rubro agrupa muchos productos.</strong> Cada producto pertenece a un solo rubro: la lavandina es de limpieza de pisos y de ningún otro.</li>
-  <li><strong>Una marca tiene muchos productos.</strong> Cada producto es de una sola marca: Brillex fabrica varios.</li>
+  <li><strong>Una marca fabrica muchos productos.</strong> Cada producto es de una sola marca: Brillex fabrica varios.</li>
+  <li><strong>Un proveedor provee muchos productos.</strong> Cada producto llega de un solo proveedor: Distribuidora Sur entrega varios.</li>
 </ol>
-<p class="nota">El proveedor no es una entidad: es un dato de la marca. Una marca tiene un solo proveedor, y por eso el dato vive en la entidad Marca, no en la del producto.</p>
+<p class="nota">El proveedor tiene su propia entidad, con su <code>id_proveedor</code>: la lista de productos lo nombra como atributo foráneo, y el dato se escribe una sola vez. Usuarios queda apartado: guarda las cuentas del registro que pide la consigna, y entra en el modelo cuando el sitio incorpora la vista de administrador.</p>
 </div>
 
 <div class="panel-esc t5">
