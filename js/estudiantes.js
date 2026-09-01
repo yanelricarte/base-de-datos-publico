@@ -72,6 +72,28 @@
     });
   });
 
+  /* Movimiento suave al leer: cada apartado aparece cuando entra en pantalla.
+     La clase "js" en el body es la que habilita el estado inicial oculto, para que
+     sin JavaScript (o al imprimir) el texto se vea igual. */
+  var mueve = !window.matchMedia || !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (mueve && "IntersectionObserver" in window) {
+    document.body.classList.add("js");
+    var piezas = Array.prototype.slice.call(
+      document.querySelectorAll("main > section, .idea, figure.er, .check")
+    );
+    piezas.forEach(function (el) { el.classList.add("revela"); });
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.04 });
+    piezas.forEach(function (el) { obs.observe(el); });
+    /* red de seguridad: si algo queda sin observar, a los 3 segundos se muestra igual */
+    setTimeout(function () {
+      piezas.forEach(function (el) { el.classList.add("visible"); });
+    }, 3000);
+  }
+
   Array.prototype.forEach.call(document.querySelectorAll(".hoja-wrap"), function (w) {
     function avisar() { w.classList.toggle("desliza", w.scrollWidth > w.clientWidth + 2); }
     avisar();

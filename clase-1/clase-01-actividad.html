@@ -7,40 +7,8 @@
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/clase.css">
-<style>
-.encuadre{margin:1.4rem 0 0; display:flex; flex-direction:column; gap:0.7rem}
-.encuadre > div{display:grid; grid-template-columns:9.5rem 1fr; gap:0.9rem; align-items:start;
-  padding:0.7rem 0; border-top:1px solid var(--borde)}
-.encuadre > div:first-child{border-top:0; padding-top:0}
-.encuadre .et{font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
-  color:var(--acento); padding-top:0.15rem}
-.encuadre p{margin:0}
-@media (max-width:620px){ .encuadre > div{grid-template-columns:1fr; gap:0.15rem} }
-
-/* la ficha usa el ancho disponible en pantallas grandes */
-@media (min-width:1100px){
-  .encuadre{display:block; columns:2; column-gap:2.6rem}
-  .encuadre > div{break-inside:avoid; grid-template-columns:8rem 1fr;
-    border-top:1px solid var(--borde); padding-top:0.75rem; margin:0 0 0.75rem}
-  .encuadre > div:first-child{border-top:0; padding-top:0}
-  .encuadre p{max-width:none}
-}
-</style>
-<style>
-.selector-esc{display:flex; gap:0.5rem; margin:1rem 0 1.3rem; flex-wrap:wrap}
-.sel-esc{font:inherit; font-size:0.9rem; font-weight:600; cursor:pointer; padding:0.5rem 0.95rem;
-  border:1.5px solid var(--borde); border-radius:9px; background:var(--fondo); color:var(--texto)}
-.sel-esc:hover{border-color:var(--acento)}
-.sel-esc[aria-pressed="true"]{background:var(--acento); border-color:var(--acento); color:#fff}
-.panel-esc{display:none}
-span.panel-esc{display:none}
-body.esc-t3 span.panel-esc.t3, body.esc-t5 span.panel-esc.t5{display:inline}
-body.esc-t3 .panel-esc.t3{display:block}
-body.esc-t5 .panel-esc.t5{display:block}
-@media print{ .selector-esc{display:none} .panel-esc{display:block !important} }
-</style>
 </head>
 <body class="esc-t3">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -63,46 +31,50 @@ body.esc-t5 .panel-esc.t5{display:block}
 
 <header class="encabezado">
   <span class="rotulo"><svg class="ico"><use href="#i-db"/></svg> Base de Datos · Clase 1 · Actividad</span>
-  <h1>Reconocimiento de anomalías y separación en tablas</h1>
+  <h1>Reconocimiento de los cinco problemas y separación en tablas</h1>
   <p class="entrada">
-    Seis puntos, en el orden en que se hacen. El primero es un diagnóstico sin nota. El segundo es la
+    Seis puntos, en el orden en que se hacen. El primero es un diagnóstico. El segundo es la
     práctica sobre otra planilla de la misma consigna. El tercero es el trabajo propio, sobre la
     información que el proyecto del equipo tiene que guardar. El cuarto se entrega antes de irse, y
-    los dos últimos son para chequear lo entendido y para la próxima clase.
+    los dos últimos son para chequear lo entendido y para la próxima clase. El quinto arma el modelo:
+    las claves de cada lista y el diagrama que va al documento.
   </p>
-  <div class="encuadre">
+  <details class="encuadre">
+    <summary>Unidad, contenidos y capacidades</summary>
     <div><span class="et">Unidad</span><p>1. Fundamentos de la gestión de datos.</p></div>
     <div><span class="et">Contenidos</span><p>Redundancia, inconsistencia y anomalías de actualización, inserción y borrado. La separación de los datos en tablas y su límite.</p></div>
     <div><span class="et">Capacidades</span><p>Analizar el funcionamiento de una organización para reconocer los datos que necesita guardar. Determinar el nombre de las entidades del dominio propio.</p></div>
     <div><span class="et">Trabajo de la clase</span><p>Las cinco preguntas del desarrollo, aplicadas a dos planillas: la de la consigna de cada escuela y la del propio proyecto.</p></div>
     <div><span class="et">Producción</span><p>Las listas del proyecto identificadas y la ficha del equipo entregada.</p></div>
-  </div>
+  </details>
 </header>
 
 <nav class="indice">
   <h2>Contenido</h2>
   <ol>
     <li><a href="#p1">Lo que ya sabemos sobre guardar información</a></li>
-    <li><a href="#p2">Anomalías en la planilla de tu consigna</a></li>
-    <li><a href="#p3">La información del propio proyecto</a></li>
+    <li><a href="#p2">Los cinco problemas en la planilla de tu consigna</a></li>
+    <li><a href="#p3">Del enunciado a las listas</a></li>
     <li><a href="#p4">La ficha del equipo</a></li>
-    <li><a href="#p5">Autocomprobación</a></li>
-    <li><a href="#p6">Tarea para la próxima clase</a></li>
+    <li><a href="#p5">El modelo: las claves y el diagrama</a></li>
+    <li><a href="#p6">Autocomprobación</a></li>
+    <li><a href="#p7">Tarea para la próxima clase</a></li>
   </ol>
 </nav>
+
+<ol class="trayecto">
+  <li>Lo que ya sabemos</li>
+  <li>Los cinco problemas</li>
+  <li>Del enunciado a las listas</li>
+  <li>La ficha del equipo</li>
+  <li>Las claves y el diagrama</li>
+  <li>Autocomprobación</li>
+  <li>Tarea</li>
+</ol>
 
 <!-- ================= PUNTO 1 ================= -->
 <section id="p1">
 <h2><span class="n">01</span> Lo que ya sabemos sobre guardar información</h2>
-
-<div class="destacado">
-  <span class="titulo"><svg class="ico"><use href="#i-ok"/></svg> Esto no lleva nota</span>
-  <p>El objetivo es saber desde dónde arranca el grupo, para ajustar la profundidad de las clases siguientes.
-  Conviene contestar lo que se piensa y no lo que parece la respuesta esperada: <strong>una respuesta en blanco
-  informa más que una copiada</strong>, porque señala exactamente dónde hay que detenerse en las próximas semanas.</p>
-</div>
-
-<p>Se responde <strong>en papel</strong>, de manera individual, con una o dos oraciones por punto. No hace falta vocabulario técnico: las situaciones están escritas para poder pensarse con sentido común. La última se responde solamente si corresponde.</p>
 
 <p class="rotulo"><svg class="ico"><use href="#i-reloj"/></svg> 15 minutos</p>
 
@@ -139,14 +111,16 @@ body.esc-t5 .panel-esc.t5{display:block}
   </ol>
 </div>
 
+<p class="nota">Dos de estas respuestas vuelven después. La <strong>2</strong>, el dato que distingue a dos personas que se llaman igual, es el tema de la clase que viene y tiene un nombre técnico. La <strong>6</strong>, lo que quedó marcado con un círculo, es lo primero que nombra el desarrollo de hoy.</p>
+
 <div class="barra">
-  <button type="button" onclick="window.print()"><svg class="ico"><use href="#i-print"/></svg> Imprimir para responder en papel</button>
+  <button type="button" onclick="window.print()"><svg class="ico"><use href="#i-print"/></svg> Imprimir la actividad</button>
 </div>
 </section>
 
 <!-- ================= PUNTO 2 ================= -->
 <section id="p2">
-<h2><span class="n">02</span> Anomalías en la planilla de tu consigna</h2>
+<h2><span class="n">02</span> Los cinco problemas en la planilla de tu consigna</h2>
 
 <p>En el desarrollo se trabajó una planilla con el docente. Esta es otra, sacada de la misma consigna, con los cinco problemas adentro pero en otras posiciones. La consigna del punto es reconocerlos sin que nadie los señale.</p>
 
@@ -187,7 +161,7 @@ body.esc-t5 .panel-esc.t5{display:block}
 </div>
 <p class="nota">Dos datos de la empresa que la hoja no contiene: la sala de usos múltiples tiene equipos multimediales y hay un servidor de archivos. A ninguno de los dos se le hizo mantenimiento todavía.</p>
 
-<h3>Las cinco anomalías en esta planilla</h3>
+<h3>Los cinco problemas en esta planilla</h3>
 <p>Para cada uno, escribir en la carpeta qué dato está mal, en qué filas se ve y qué pasaría si no se corrige.</p>
 
 <details>
@@ -267,6 +241,8 @@ body.esc-t5 .panel-esc.t5{display:block}
   <p>Nada impide todavía anotar un mantenimiento de un equipo que no está en la tabla de equipos, ni escribir <code>escritorio</code> en una fila y <code>Escritorio</code> en otra. El vínculo entre las tablas sigue siendo un texto que se vuelve a escribir.</p>
   <p>Y aparece algo que la consigna pide y la hoja no puede dar: <strong>la fecha probable del próximo mantenimiento</strong>. Para calcularla hace falta la periodicidad, que no es un dato del equipo ni de la intervención, sino de la tarea. Esa tabla todavía no existe, y decidir que hace falta es parte del modelo.</p>
 </details>
+
+<p class="nota">Sobre la entrega: el entregable 1 se presenta <strong>como planilla</strong> y así queda. Separarla en tablas es el ejercicio de este punto, y sirve para dos cosas: entender por qué esa planilla se desordena sola, y llegar con el criterio hecho al entregable 6, que sí va a base de datos.</p>
 </div>
 
 <!-- ---------- TÉCNICA 5 ---------- -->
@@ -297,7 +273,7 @@ body.esc-t5 .panel-esc.t5{display:block}
 </div>
 <p class="nota">Un dato de la escuela que la planilla no contiene: la sala multimedia también se puede reservar y todavía nadie la reservó.</p>
 
-<h3>Las cinco anomalías en esta planilla</h3>
+<h3>Los cinco problemas en esta planilla</h3>
 <p>Para cada uno, escribir en la carpeta qué dato está mal, en qué filas se ve y qué pasaría si no se corrige.</p>
 
 <details>
@@ -404,13 +380,14 @@ body.esc-t5 .panel-esc.t5{display:block}
 
 <!-- ================= PUNTO 3 · EL LISTADO DEL SITIO ================= -->
 <section id="p3">
-<h2><span class="n">03</span> La información del propio proyecto</h2>
+<h2><span class="n">03</span> Las listas que salen del enunciado</h2>
 
-<p>Los dos casos anteriores son ejemplos. Este es el trabajo propio: el listado de productos que el sitio de la Olimpíada tiene que mostrar. La consigna lo pide con estas palabras: «listado de productos a la venta (Rubro, descripción, marca, precio)», y aclara que «estos productos deben surgir de base de datos». La vista de administrador, además, tiene que permitir «carga de artículos, rubros y marcas».</p>
+<p><span class="panel-esc t3">Este es el entregable 6 de tu consigna: el sitio pide un «listado de productos a la venta (Rubro, descripción, marca, precio)» y aclara que «estos productos deben surgir de base de datos». La vista de administrador, además, tiene que permitir «carga de artículos, rubros y marcas». El punto llega hasta las listas que hacen falta y cómo cada una nombra a las otras.</span><span class="panel-esc t5">El listado que sigue es de la consigna de la otra escuela, y por eso sirve para practicar: son datos que no viste desarrollados. Lo que se ejercita es el paso que tu situación también pide: reconocer las listas que el enunciado deja ver. Al final hay un punto para hacer lo mismo sobre la tuya.</span></p>
 
 <p class="rotulo"><svg class="ico"><use href="#i-reloj"/></svg> 30 minutos</p>
 
-<p>Abajo está la hoja con la que un equipo empezó a armar ese listado. Tiene los mismos cinco problemas, y esta vez <strong>nadie los señala</strong>: se aplican las cinco preguntas de la clase y se anotan los números de fila.</p>
+<p class="panel-esc t3">Abajo está la misma hoja que se trabajó en el desarrollo, con cuatro productos más y por lo tanto con otros números de fila. Los cinco problemas ya quedaron reconocidos ahí, así que el trabajo de este punto empieza un paso después: separar la hoja en las listas del sitio.</p>
+<p class="panel-esc t5">Abajo está la hoja con la que un equipo empezó a armar ese listado. Tiene los mismos cinco problemas, y esta vez <strong>nadie los señala</strong>: se aplican las cinco preguntas de la clase y se anotan los números de fila.</p>
 
 <div class="hoja-cab"><svg class="ico"><use href="#i-tabla"/></svg> PRODUCTOS.xlsx · una sola hoja</div>
 <div class="hoja-wrap">
@@ -438,6 +415,7 @@ body.esc-t5 .panel-esc.t5{display:block}
 </div>
 <p class="nota">Dos datos de la empresa que la hoja no contiene: incorporó la marca <strong>Nova</strong> y el rubro <strong>Baño</strong>, y todavía no cargó ningún producto de ninguno de los dos.</p>
 
+<div class="panel-esc t5">
 <h3>Las cinco preguntas sobre el listado</h3>
 <p>Una respuesta por pregunta, con los números de fila. Se resuelve en equipo y queda en la carpeta.</p>
 <ol class="pasos">
@@ -447,52 +425,64 @@ body.esc-t5 .panel-esc.t5{display:block}
   <li><strong>¿Se puede guardar algo que existe y todavía no se usa?</strong> Anotar la marca Nova y el rubro Baño en esta hoja, sin inventar un producto.</li>
   <li><strong>Si se borra una fila, ¿qué otra cosa se pierde?</strong> Borrar la fila 10 y decir qué rubro desaparece del sitio.</li>
 </ol>
-
-<div class="alerta">
-  <p><strong>La pregunta 4 tiene una respuesta que está en la consigna.</strong> Con una sola hoja no hay dónde anotar una marca que no tiene productos. Y la consigna pide que la vista de administrador permita «carga de artículos, rubros y marcas»: tres cargas separadas, porque son tres listas separadas. El enunciado del trabajo ya contiene el modelo.</p>
 </div>
 
-<h3>Las cuatro listas del sitio</h3>
+<div class="alerta">
+  <p><strong>La marca que existe y no tiene productos tiene su respuesta escrita en la consigna.</strong> Con una sola hoja no hay dónde anotarla. Y la consigna pide que la vista de administrador permita «carga de artículos, rubros y marcas»: tres cargas separadas, porque son tres listas separadas. El enunciado del trabajo ya contiene el modelo.</p>
+</div>
+
+<h3>Las cinco listas del sitio</h3>
 <p>Separar la hoja en las listas que hacen falta, y decidir cómo cada una nombra a las otras. Este es el esquema al que se llega:</p>
 
 <div class="tabla-wrap">
-<svg viewBox="0 0 720 300" role="img" aria-labelledby="tit-esq desc-esq" style="width:100%;height:auto;max-width:720px">
-  <title id="tit-esq">De una hoja a cuatro listas</title>
-  <desc id="desc-esq">Una hoja única con datos repetidos se separa en cuatro listas: productos, rubros, marcas y proveedores. La lista de productos nombra a las otras tres.</desc>
-  <rect x="8" y="106" width="150" height="88" rx="8" fill="#fdf2f6" stroke="#b31759" stroke-width="1.5"/>
-  <text x="83" y="140" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#17191d">PRODUCTOS.xlsx</text>
-  <text x="83" y="160" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" fill="#6f7681">14 filas</text>
-  <text x="83" y="177" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" fill="#6f7681">todo junto</text>
-  <path d="M166 150 H214" stroke="#8d96a3" stroke-width="1.5" marker-end="url(#fl)"/>
-  <defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8d96a3"/></marker></defs>
-  <rect x="222" y="106" width="170" height="88" rx="8" fill="#fff" stroke="#17191d" stroke-width="1.5"/>
-  <text x="307" y="132" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#17191d">productos</text>
-  <text x="307" y="152" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" fill="#33353b">13 productos reales</text>
-  <text x="307" y="170" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" fill="#33353b">nombre · precio</text>
-  <text x="307" y="186" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6f7681">y a quién pertenece</text>
-  <g font-family="system-ui,sans-serif" font-size="12" fill="#17191d">
-    <rect x="470" y="16" width="150" height="52" rx="8" fill="#fff" stroke="#8d96a3" stroke-width="1.3"/>
-    <text x="545" y="38" text-anchor="middle" font-weight="700">rubros</text>
-    <text x="545" y="56" text-anchor="middle" font-size="11.5" fill="#6f7681">5, con Baño incluido</text>
-    <rect x="470" y="124" width="150" height="52" rx="8" fill="#fff" stroke="#8d96a3" stroke-width="1.3"/>
-    <text x="545" y="146" text-anchor="middle" font-weight="700">marcas</text>
-    <text x="545" y="164" text-anchor="middle" font-size="11.5" fill="#6f7681">4, con Nova incluida</text>
-    <rect x="470" y="232" width="150" height="52" rx="8" fill="#fff" stroke="#8d96a3" stroke-width="1.3"/>
-    <text x="545" y="254" text-anchor="middle" font-weight="700">proveedores</text>
-    <text x="545" y="272" text-anchor="middle" font-size="11.5" fill="#6f7681">2</text>
+<svg viewBox="0 0 720 400" class="svg-listas" role="img" aria-labelledby="tit-esq desc-esq">
+  <title id="tit-esq">De una hoja a cinco listas</title>
+  <desc id="desc-esq">Una hoja única con datos repetidos se separa en cinco listas: productos, rubros, marcas, proveedores y usuarios. La lista de productos nombra a rubros, marcas y proveedores; usuarios sale del enunciado.</desc>
+  <defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z"/></marker></defs>
+  <rect class="caja-prim" x="8" y="156" width="150" height="88" rx="8"/>
+  <text class="titulo" x="83" y="190" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700">PRODUCTOS.xlsx</text>
+  <text class="sub" x="83" y="210" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5">14 filas</text>
+  <text class="sub" x="83" y="227" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5">todo junto</text>
+  <path class="flecha" d="M166 200 H214" marker-end="url(#fl)"/>
+  <rect class="caja" x="222" y="156" width="170" height="88" rx="8"/>
+  <text class="titulo" x="307" y="182" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700">productos</text>
+  <text class="sub" x="307" y="202" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5">13 productos reales</text>
+  <text class="sub" x="307" y="220" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5">nombre · precio</text>
+  <text class="sub" x="307" y="236" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11">y a quién pertenece</text>
+  <g font-family="system-ui,sans-serif" font-size="12">
+    <rect class="caja" x="470" y="16" width="150" height="52" rx="8"/>
+    <text class="titulo" x="545" y="38" text-anchor="middle" font-weight="700">rubros</text>
+    <text class="sub" x="545" y="56" text-anchor="middle" font-size="11.5">5, con Baño incluido</text>
+    <rect class="caja" x="470" y="108" width="150" height="52" rx="8"/>
+    <text class="titulo" x="545" y="130" text-anchor="middle" font-weight="700">marcas</text>
+    <text class="sub" x="545" y="148" text-anchor="middle" font-size="11.5">4, con Nova incluida</text>
+    <rect class="caja" x="470" y="200" width="150" height="52" rx="8"/>
+    <text class="titulo" x="545" y="222" text-anchor="middle" font-weight="700">proveedores</text>
+    <text class="sub" x="545" y="240" text-anchor="middle" font-size="11.5">2</text>
+    <rect class="caja-usuarios" x="470" y="292" width="150" height="52" rx="8"/>
+    <text class="titulo" x="545" y="314" text-anchor="middle" font-weight="700">usuarios</text>
+    <text class="sub" x="545" y="332" text-anchor="middle" font-size="11.5">usuario y contraseña</text>
   </g>
-  <path d="M394 138 C430 138 435 42 466 42" stroke="#b31759" stroke-width="1.4" fill="none" marker-end="url(#fl2)"/>
-  <path d="M394 150 H466" stroke="#b31759" stroke-width="1.4" fill="none" marker-end="url(#fl2)"/>
-  <path d="M394 162 C430 162 435 258 466 258" stroke="#b31759" stroke-width="1.4" fill="none" marker-end="url(#fl2)"/>
-  <defs><marker id="fl2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b31759"/></marker></defs>
-  <text x="430" y="106" font-family="system-ui,sans-serif" font-size="11" fill="#b31759">nombra a</text>
+  <text class="sub" x="545" y="366" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11">sale del enunciado</text>
+  <path class="flecha" d="M394 200 C420 200 425 42 466 42" marker-end="url(#fl)"/>
+  <path class="flecha" d="M394 200 C425 200 425 134 466 134" marker-end="url(#fl)"/>
+  <path class="flecha" d="M394 200 C430 200 435 226 466 226" marker-end="url(#fl)"/>
+  <text class="nombra" x="432" y="92" font-family="system-ui,sans-serif" font-size="11">nombra a</text>
 </svg>
 </div>
 
-<p>Las tres flechas de la derecha son el punto donde queda el trabajo de hoy. Cada una es un <strong>nombra a</strong>: la lista de productos tiene que decir a qué rubro, a qué marca y a qué proveedor pertenece cada producto. <strong>Cómo se escribe ese vínculo</strong> —con el nombre copiado o con otra cosa— es el contenido de las clases que siguen, y es lo que resuelve los dos problemas que separar en listas deja abiertos.</p>
+<p>Las tres flechas de la derecha son el punto donde queda el trabajo de hoy. Cada una es un <strong>nombra a</strong>: la lista de productos tiene que decir a qué rubro, a qué marca y a qué proveedor pertenece cada producto. <strong>Cómo se escribe ese vínculo</strong> —con el nombre copiado o con otra cosa— es lo que resuelve los dos problemas que separar en listas deja abiertos.<span class="panel-esc t3"> Y es el punto que sigue: la clave primaria de cada lista y la clave foránea que las une.</span><span class="panel-esc t5"> Es el contenido de las clases que siguen.</span></p>
+
+<p class="nota panel-esc t3">Cuatro de las cinco listas se ven en la hoja. La quinta, <strong>usuarios</strong> —el usuario y la contraseña del registro que pide la consigna—, sale del enunciado del sitio: ninguna fila de la hoja la muestra, y es la lista que la vista de administrador necesita para guardar cada cuenta.</p>
 
 <div class="registro">
-  <p><strong>Para la carpeta y para el documento de la Olimpíada:</strong> las cuatro listas con sus columnas, y una línea que diga qué rubro y qué marca existen hoy en la empresa sin tener ningún producto cargado. Eso responde por escrito el punto de la consigna sobre la carga de rubros y marcas.</p>
+  <p class="panel-esc t3"><strong>Para la carpeta y para el documento de la Olimpíada:</strong> las cinco listas con sus columnas, y una línea que diga qué rubro y qué marca existen hoy en la empresa sin tener ningún producto cargado. Eso responde por escrito el punto de la consigna sobre la carga de rubros y marcas.</p>
+  <div class="panel-esc t5">
+    <h3>Lo mismo, sobre tu situación</h3>
+    <p>El listado de productos ya mostró el procedimiento: leer el enunciado, sacar de ahí las listas y decidir cuál nombra a cuál. Ahora se hace sobre la situación que le tocó al equipo, y el enunciado propio ya trae la respuesta escrita.</p>
+    <p>La situación 5 pide registrar «personas, equipos, categorías, préstamos y devoluciones»: son cinco listas, nombradas una por una. La situación 6 pide «visualizar los espacios», «realizar una reserva» y «consultar las reservas existentes», y de ahí salen los espacios, las reservas y quién reserva. En las dos, lo que hay que decidir es la parte que el enunciado no dice: cuál nombra a cuál.</p>
+    <p><strong>Para la carpeta y para el documento de la Olimpíada:</strong> las listas de tu situación con sus columnas, y una línea por cada «nombra a». Si tu situación no guarda información, este punto se resuelve igual sobre el listado de productos: el procedimiento es el que se evalúa.</p>
+  </div>
 </div>
 
 
@@ -507,10 +497,14 @@ body.esc-t5 .panel-esc.t5{display:block}
 <pre>ENTREGABLE 5 y 6 - la base del sitio
 
 LISTAS QUE TIENE LA BASE (una tabla por lista)
-  productos ....... nombre, descripcion, precio, y a que rubro y marca pertenece
+  productos ....... nombre, descripcion, precio, y a que rubro,
+                    marca y proveedor pertenece
   rubros .......... nombre
   marcas .......... nombre
-  usuarios ........ usuario y contrasena (para el registro que pide la consigna)
+  proveedores ..... nombre y contacto
+  usuarios ........ usuario y contrasena
+                    (esta no sale de la hoja: sale del registro
+                     con contrasena que pide la consigna)
 
 RUBROS QUE EXISTEN HOY: ....................................................
 MARCAS QUE EXISTEN HOY: ....................................................
@@ -545,18 +539,20 @@ DECISION (marcar una y completarla):
 
 <h3>Las fuentes de estos conceptos</h3>
 <p>Redundancia, inconsistencia y las tres anomalías de esta hoja no son un invento de la clase: son los que la bibliografía de la materia describe como propios de guardar información sin un modelo detrás. Bertone, Thomas y Pasini (2019) y Camps Paré et al. (2005) los presentan al comparar el manejo de archivos con un sistema de gestión de bases de datos, y Coronel, Morris y Rob (2011) desarrollan las tres anomalías de actualización, inserción y borrado con el mismo nombre que se usó acá.</p>
-<p class="nota">Bertone, R., Thomas, P., y Pasini, A. (2019). <em>Introducción a las bases de datos: fundamentos y diseño</em>. EDULP. Recuperado de <a href="http://sedici.unlp.edu.ar/handle/10915/86717">sedici.unlp.edu.ar</a><br>
-Camps Paré, R., Casillas Santillán, L. A., Costal Costa, D., Gibert Ginestà, M., Martín Escofet, C., y Pérez Mora, O. (2005). <em>Bases de datos</em>. Universitat Oberta de Catalunya. Recuperado de <a href="https://openaccess.uoc.edu/bitstream/10609/56550/4/Bases%20de%20datos.pdf">openaccess.uoc.edu</a><br>
-Coronel, C., Morris, S., y Rob, P. (2011). <em>Bases de datos: diseño, implementación y administración</em> (9.ª ed.). Cengage Learning.<br>
-INET. (s.f.). <em>Olimpíada Nacional de la Educación Técnico Profesional</em>. Recuperado de <a href="https://www.inet.edu.ar/index.php/areas/encuentros-educativos/olimpiada-nacional-etp/">inet.edu.ar</a></p>
+<ul class="refs">
+  <li>Bertone, R., Thomas, P., y Pasini, A. (2019). <em>Introducción a las bases de datos: fundamentos y diseño</em>. EDULP. Recuperado de <a href="http://sedici.unlp.edu.ar/handle/10915/86717">sedici.unlp.edu.ar</a></li>
+  <li>Camps Paré, R., Casillas Santillán, L. A., Costal Costa, D., Gibert Ginestà, M., Martín Escofet, C., y Pérez Mora, O. (2005). <em>Bases de datos</em>. Universitat Oberta de Catalunya. Recuperado de <a href="https://openaccess.uoc.edu/bitstream/10609/56550/4/Bases%20de%20datos.pdf">openaccess.uoc.edu</a></li>
+  <li>Coronel, C., Morris, S., y Rob, P. (2011). <em>Bases de datos: diseño, implementación y administración</em> (9.ª ed.). Cengage Learning.</li>
+  <li>INET. (s.f.). <em>Olimpíada Nacional de la Educación Técnico Profesional</em>. Recuperado de <a href="https://www.inet.edu.ar/index.php/areas/encuentros-educativos/olimpiada-nacional-etp/">inet.edu.ar</a></li>
+</ul>
 
 <h3>Antes de seguir</h3>
-<div class="quiz" data-chequeo data-correcta="c">
-  <p class="pregunta">Separar la información en listas resuelve tres de los cinco problemas. ¿De qué depende que se resuelvan los otros dos?</p>
-  <label><input type="radio" name="c2"> De usar un programa en lugar de una planilla</label>
-  <label><input type="radio" name="c2"> De tener más cuidado al escribir</label>
-  <label><input type="radio" name="c2"> De cómo una lista nombra a otra</label>
-  <p class="feedback" role="status">De cómo una lista nombra a otra. Mientras el vínculo sea un texto que se vuelve a escribir, se puede escribir distinto. Ese es el contenido de la clase que viene.</p>
+<div class="quiz" data-chequeo data-correcta="b">
+  <p class="pregunta">Un club anota en una sola hoja: la fecha de cada clase, el nombre del socio, su teléfono, la actividad y el nombre del profesor que la da. ¿Cuántas listas separadas salen de esa hoja?</p>
+  <label><input type="radio" name="c2"> Tres: socios, actividades y clases, porque el nombre del profesor es un dato de la actividad</label>
+  <label><input type="radio" name="c2"> Cuatro: socios, actividades, profesores y clases</label>
+  <label><input type="radio" name="c2"> Dos: socios y clases, porque la actividad y el profesor describen a la clase</label>
+  <p class="feedback" role="status">Cuatro, y la prueba de pertenencia lo resuelve: el teléfono es del socio, el nombre del profesor es del profesor, la fecha es de la clase. La opción de tres se sostiene mientras cada actividad tenga un solo profesor y del profesor no se guarde nada más; en cuanto haya que anotarle un teléfono, o un profesor tome dos actividades, su nombre queda copiado y vuelve el problema de siempre.</p>
 </div>
 </section>
 
@@ -565,6 +561,8 @@ INET. (s.f.). <em>Olimpíada Nacional de la Educación Técnico Profesional</em>
 <h2><span class="n">04</span> La ficha del equipo</h2>
 
 <p>Se completa en clase y <strong>se entrega antes de irse</strong>. Es el punto de partida del proyecto de todo el cuatrimestre, así que conviene discutirla en serio y no llenarla apurados en los últimos cinco minutos.</p>
+
+<p>Dos caminos llegan más rápido que empezar de cero. Uno es <strong>el sitio de la consigna de la Olimpíada</strong>, cuyas listas quedaron identificadas en el punto 03: el equipo las anota como dominio, la Olimpíada se lleva la versión mínima en septiembre y el mismo modelo es el que crece en las tres entregas de la materia. El otro es el sistema que el equipo ya desarrolla en otro espacio. Cualquier otro dominio se puede proponer, y tiene que cumplir las tres condiciones de abajo.</p>
 
 <div class="destacado">
   <span class="titulo"><svg class="ico"><use href="#i-ok"/></svg> Tres condiciones que tiene que cumplir el dominio</span>
@@ -582,6 +580,8 @@ INTEGRANTES: ________________________________________________
 DOMINIO (de qué se ocupa el sistema u organización, en UNA oración):
 _____________________________________________________________
 _____________________________________________________________
+   (si es el sitio de la consigna, alcanza con escribirlo: las
+    cosas y sus datos ya estan en el punto 03)
 
 COSAS que aparecen ahí (los sustantivos), y qué datos guarda cada una:
 
@@ -609,7 +609,99 @@ ACUERDOS DEL EQUIPO
 
 <!-- ================= PUNTO 4 ================= -->
 <section id="p5">
-<h2><span class="n">05</span> Autocomprobación</h2>
+<h2><span class="n">05</span> El modelo: las claves y el diagrama</h2>
+
+<div class="panel-esc t3">
+<p>Este punto <strong>produce material del entregable</strong>. La consigna pide que el listado «surja de
+base de datos» y que la vista de administrador cargue artículos, rubros y marcas por separado: eso es un
+modelo con cinco listas, sus claves y sus relaciones. Lo que sale de acá se copia al documento.</p>
+
+<p class="nota"><b>60 minutos</b>, en equipo. La primera parte se escribe; la segunda se dibuja en papel,
+con regla.</p>
+
+<h3>Parte 1 · Las entidades con su clave</h3>
+<p>Una fila por lista. En la columna de la razón no vale «porque es el primero»: la razón es por qué ese
+dato distingue sin ambigüedad, y por qué no alcanza el nombre.</p>
+
+<div class="para-completar">
+<pre>LISTA        ATRIBUTOS (con el tipo al lado)         CLAVE PRIMARIA    POR QUE ESA
+producto     ______________________________________  ________________  ____________________
+rubro        ______________________________________  ________________  ____________________
+marca        ______________________________________  ________________  ____________________
+proveedor    ______________________________________  ________________  ____________________
+usuario      ______________________________________  ________________  ____________________
+
+LAS CLAVES FORANEAS: que lista nombra a que otra, y con que dato
+________________________________________________________________________</pre>
+</div>
+
+<div class="check">
+  <span class="et">Antes de seguir</span>
+  <p>Si alguien propuso el <b>nombre del producto</b> como clave primaria, buscá la fila 1 y la fila 7 del
+  listado y respondé: ¿son un producto o son dos?</p>
+  <details><summary>La respuesta</summary><p>Son el mismo producto escrito de dos maneras. Con el nombre
+  como clave, la empresa tendría dos lavandinas distintas. Por eso la clave es
+  <code>id_producto</code>, que el sistema asigna y nunca cambia.</p></details>
+</div>
+
+<h3>Parte 2 · El diagrama, en papel</h3>
+<p>Con la notación de la clase: un rectángulo por lista, los atributos adentro con su tipo, la clave
+primaria subrayada, la foránea señalada, una línea por relación y la cardinalidad en cada extremo.</p>
+
+<div class="destacado">
+  <span class="titulo"><svg class="ico"><use href="#i-ok"/></svg> Lista de cotejo del dibujo</span>
+  <p>Antes de sacarle la foto, el equipo comprueba las seis:</p>
+  <ol>
+    <li>Están los cinco rectángulos, con el nombre de la lista arriba.</li>
+    <li>Cada rectángulo tiene su clave primaria <b>subrayada</b>.</li>
+    <li>Las tres claves foráneas están señaladas, y las tres están en <code>producto</code>.</li>
+    <li>Hay tres líneas, y cada una une <b>dos</b> rectángulos: rubro–producto, marca–producto,
+    proveedor–producto.</li>
+    <li>Cada línea tiene su <code>1</code> y su <code>N</code> en los extremos.</li>
+    <li>El dibujo se lee en voz alta sin titubear: «un rubro agrupa muchos productos y cada producto
+    pertenece a un solo rubro…».</li>
+  </ol>
+</div>
+
+<h3>Parte 3 · Las consultas y la base</h3>
+<p>El modelo se prueba preguntándole. Escriban <b>en castellano</b> la consulta del listado, con las tres
+partes, y después creen la base del proyecto en el gestor.</p>
+
+<div class="para-completar">
+<pre>LA CONSULTA DEL LISTADO
+  que datos se ven:  ______________________________________________
+  de que listas salen: ____________________________________________
+  con que condicion y en que orden: _______________________________
+
+LA BASE DEL PROYECTO
+  nombre (minusculas, sin espacios): ______________________________
+  cotejamiento: utf8mb4_unicode_ci                      [ ] creada</pre>
+</div>
+
+<div class="idea">
+  <span class="et">Lo que va al documento de la Olimpíada</span>
+  <p><b>1.</b> La foto del diagrama, en el apartado donde se desarrolla la solución, y en tamaño completo
+  al anexo.</p>
+  <p><b>2.</b> La tabla de las cinco listas con sus claves primarias y foráneas.</p>
+  <p><b>3.</b> Un párrafo que explique, con el modelo delante, <span class="realce">por qué el listado sale
+  de la base y no del código</span>: qué se gana cuando cambia un precio o el nombre de una marca.</p>
+  <p><b>4.</b> La consulta del listado escrita en castellano, en el mismo apartado.</p>
+</div>
+</div>
+
+<div class="panel-esc t5">
+<p>Si a tu equipo le tocó la situación 5 o la 6, este punto <strong>es tu entregable</strong>: la situación
+5 pide con esas palabras el modelo, las tablas, las claves y las consultas. Si te tocó cualquiera de las
+otras ocho, el modelo es una herramienta para ordenar la planilla que sí tenés que entregar, y lo que va al
+documento es la planilla organizada más la línea que declara el alcance.</p>
+<p>Los pasos, en los dos casos, están en el punto <b>9 · Para hacer</b> de la
+<a href="clase-01-teoria.html">página de teoría</a>, con la lista de entidades, las claves, el diagrama y
+las consultas.</p>
+</div>
+</section>
+
+<section id="p6">
+<h2><span class="n">06</span> Autocomprobación</h2>
 
 <p>Tres preguntas sobre lo de hoy. Al comprobar, cada opción explica por qué es correcta o dónde falla, así que vale la pena leer también las que no se eligieron.</p>
 
@@ -631,10 +723,10 @@ ACUERDOS DEL EQUIPO
   </fieldset>
 
   <fieldset class="quiz" data-correcta="a">
-    <legend class="pregunta">3. Después de separar la hoja en varias tablas, todavía se puede escribir mal el nombre de la cosa a la que una fila hace referencia. Eso ocurre porque</legend>
-    <label><input type="radio" name="q3" value="a"> la tabla del hecho nombra a la otra copiando su texto, y un texto que se vuelve a escribir se puede escribir distinto.</label>
-    <label><input type="radio" name="q3" value="b"> a la tabla nombrada le falta una regla que obligue a escribir bien.</label>
-    <label><input type="radio" name="q3" value="c"> separar en tablas no resuelve nada y hace falta un gestor.</label>
+    <legend class="pregunta">3. Una escuela separó la información en tablas de espacios, docentes y reservas. Aun así, dos docentes anotaron el mismo espacio el mismo día y en el mismo horario. Eso pasa porque</legend>
+    <label><input type="radio" name="q3" value="a"> separar en tablas ordena la información y no impone reglas sobre ella: impedir la segunda reserva es trabajo del gestor.</label>
+    <label><input type="radio" name="q3" value="b"> la tabla de reservas quedó mal armada y hay que rehacerla con otras columnas.</label>
+    <label><input type="radio" name="q3" value="c"> falta separar un poco más, con una tabla de horarios.</label>
     <p class="feedback" role="status"></p>
   </fieldset>
 
@@ -646,8 +738,8 @@ ACUERDOS DEL EQUIPO
 </section>
 
 <!-- ================= TAREA ================= -->
-<section id="p6">
-<h2><span class="n">06</span> Tarea para la próxima clase</h2>
+<section id="p7">
+<h2><span class="n">07</span> Tarea para la próxima clase</h2>
 
 <div class="registro">
   <div class="rot"><svg class="ico"><use href="#i-lapiz"/></svg> Se trae escrito</div>
@@ -661,7 +753,7 @@ ACUERDOS DEL EQUIPO
    no se sepa y traer la respuesta.</pre>
 </div>
 
-<p>El punto 2 es el que engancha con la Clase 2. La pregunta que quedó abierta hoy —con qué nombrar a una cosa para que no se pueda escribir mal— tiene una respuesta técnica, y buscarla sobre el dominio propio antes de que se explique hace que la explicación caiga sobre algo ya pensado.</p>
+<p>El punto 2 es el que engancha con la clase siguiente. En los cursos que ya trabajaron las claves en esta misma jornada, el punto 2 se responde con lo visto: la clave primaria de cada cosa, con la razón de esa elección. La pregunta que quedó abierta hoy —con qué nombrar a una cosa para que no se pueda escribir mal— tiene una respuesta técnica, y buscarla sobre el dominio propio antes de que se explique hace que la explicación caiga sobre algo ya pensado.</p>
 </section>
 
 <nav class="nav-clase">
@@ -670,7 +762,7 @@ ACUERDOS DEL EQUIPO
 </nav>
 
 <footer>
-  Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional · EEST N.º 3, Mar del Plata · Ciclo 2026
+  Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional · Mar del Plata · Ciclo 2026
 </footer>
 
 </main>
@@ -689,9 +781,9 @@ ACUERDOS DEL EQUIPO
       c: 'Correcto. La cosa no tiene existencia propia: depende de que haya un hecho que la mencione.'
     },
     q3: {
-      a: 'Correcto. Es el residuo que la separación no resuelve, y de ahí sale la clase que viene.',
-      b: 'Una regla en la tabla nombrada controla esa tabla, y el texto mal escrito está en la otra. El problema es cómo una nombra a la otra.',
-      c: 'Separar resuelve tres de los cinco problemas. Lo que falta es que la fila apunte a la otra tabla en lugar de copiar su texto.'
+      a: 'Correcto. Las tres tablas evitan que el nombre del espacio se repita, y nada más. La regla que rechaza la segunda reserva la verifica el gestor en cada carga, y es justamente lo que la consigna pide impedir.',
+      b: 'La tabla está bien armada: fecha, horario, espacio y quién reserva son los datos de una reserva. Lo que falta es la regla que impida repetir esa combinación.',
+      c: 'Una tabla de horarios ordena los nombres de los horarios, y nada impide cargar dos filas con la misma combinación de fecha, horario y espacio.'
     }
   };
 

@@ -1,39 +1,58 @@
 /* ============================================================
    Base de Datos · 7.º año TECIP — estilos de las clases
-   Sobrio y plano. Sin degradés. Coherente en claro y oscuro.
+   Blanco con acento teal. Jerarquía marcada, movimiento suave.
+   Coherente en claro y oscuro.
    ============================================================ */
 
 :root {
-  /* neutros */
-  --fondo:        #eeece7;
-  --superficie:   #f9f8f5;
-  --superficie-2: #e9e7e1;
-  --borde:        #dcdad3;
-  --borde-fuerte: #c3c0b8;
+  /* neutros: la página es un blanco suave con tinte teal; las
+     superficies que sobresalen van en blanco papel */
+  --bg:           #f6f8f9;
+  --fondo:        #ffffff;
+  --superficie:   #ffffff;
+  --superficie-2: #eef2f3;
+  --borde:        #dce4e6;
+  --borde-fuerte: #b3c2c5;
   --texto:        #1f2225;
-  --texto-suave:  #61666d;
-  --texto-tenue:  #696e74;
+  --texto-suave:  #5c666c;
+  --texto-tenue:  #68747b;
 
   /* acento */
-  --acento:       #2c4a52;
-  --acento-tenue: #e7eef0;
+  --acento:       #14606c;
+  --acento-tenue: #e1eff1;
+
+  /* realce: lo importante del texto, en la misma familia pero más vivo */
+  --realce:       #17808f;
+  --realce-tenue: #ddf1f4;
 
   /* señales */
   --ok:           #3f6b4f;
   --ok-tenue:     #e8f0ea;
   --alerta:       #9a6420;
   --alerta-tenue: #fbf2e5;
-  --marca-a:      #cfe4ea;
-  --marca-b:      #f3ddc4;
+  --marca-a:      #d3e7ec;
+  --marca-b:      #f4e2cf;
+
+  /* sombras de las tarjetas, con tinte teal */
+  --sombra:       0 16px 38px -20px rgba(44,74,82,.26);
+  --sombra-suave: 0 10px 26px -18px rgba(44,74,82,.18);
+
+  /* el fondo del cuerpo: lavados teal sobre un degradado suave */
+  --grad-fondo:
+    radial-gradient(56% 40% at 100% 0%, rgba(94,152,166,.10), transparent 62%),
+    radial-gradient(42% 34% at 0% 10%, rgba(211,231,236,.48), transparent 58%),
+    linear-gradient(180deg, #fbfdfd, var(--bg));
 
   --radio:  10px;
   --radio-s: 6px;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Manrope", var(--sans);
   --mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --bg:           #15171a;
     --fondo:        #15171a;
     --superficie:   #1c1f22;
     --superficie-2: #23272b;
@@ -43,8 +62,11 @@
     --texto-suave:  #a5abb2;
     --texto-tenue:  #8b9299;
 
-    --acento:       #9ec6d0;
-    --acento-tenue: #1e2a2e;
+    --acento:       #8ed2e0;
+    --acento-tenue: #16323a;
+
+    --realce:       #6fd6e6;
+    --realce-tenue: #16343c;
 
     --ok:           #86bb98;
     --ok-tenue:     #1c2620;
@@ -52,6 +74,12 @@
     --alerta-tenue: #2a2317;
     --marca-a:      #2b4650;
     --marca-b:      #4a3a22;
+
+    --sombra:       0 16px 38px -20px rgba(0,0,0,.5);
+    --sombra-suave: 0 10px 26px -18px rgba(0,0,0,.38);
+    --grad-fondo:
+      radial-gradient(52% 38% at 100% 0%, rgba(158,198,208,.07), transparent 62%),
+      linear-gradient(180deg, #171a1d, var(--bg));
   }
 }
 
@@ -62,7 +90,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 1rem; }
 body {
   margin: 0;
   padding: 0 1.25rem 5rem;
-  background: var(--fondo);
+  background: var(--grad-fondo);
   color: var(--texto);
   font-family: var(--sans);
   font-size: 16.5px;
@@ -85,37 +113,52 @@ main { max-width: 860px; margin: 0 auto; }
 }
 
 /* ---------- encabezado ---------- */
-.encabezado { padding: 3rem 0 1.75rem; border-bottom: 1px solid var(--borde); margin-bottom: 2.25rem; }
+.encabezado {
+  padding: 2.6rem 0 1.75rem;
+  margin-bottom: 2.25rem;
+  border-bottom: 1px solid var(--borde);
+  background: linear-gradient(180deg, var(--acento-tenue), transparent 74%);
+  border-radius: 0 0 var(--radio) var(--radio);
+}
+.encabezado.parte2 { padding-top: 1.9rem; margin-top: 3.4rem; }
+.encabezado.parte2 h2 {
+  border: none; padding: 0; margin: 0 0 0.9rem;
+  font-size: 1.7rem; letter-spacing: -0.02em;
+}
 
 .rotulo {
   display: inline-flex; align-items: center; gap: 0.4rem;
-  font-size: 0.75rem; font-weight: 600;
-  letter-spacing: 0.09em; text-transform: uppercase;
-  color: var(--texto-tenue);
-  margin-bottom: 0.75rem;
+  font-size: 0.73rem; font-weight: 800;
+  letter-spacing: 0.11em; text-transform: uppercase;
+  color: var(--acento);
+  margin-bottom: 0.8rem;
 }
 
-h1 { font-size: 2.15rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin: 0 0 0.85rem; }
+h1 {
+  font-family: var(--display);
+  font-size: 2.3rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.12;
+  margin: 0 0 0.9rem;
+}
 
 h2 {
-  font-size: 1.05rem; font-weight: 700;
-  letter-spacing: 0.01em;
+  font-family: var(--display);
+  font-size: 1.22rem; font-weight: 700; letter-spacing: -0.01em;
   margin: 3.25rem 0 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--borde-fuerte);
+  border-bottom: 2px solid color-mix(in srgb, var(--acento) 40%, var(--borde-fuerte));
   display: flex; align-items: baseline; gap: 0.6rem;
 }
 h2 .n {
-  font-family: var(--mono); font-size: 0.85rem; font-weight: 500;
-  color: var(--texto-tenue);
+  font-family: var(--mono); font-size: 0.8rem; font-weight: 600;
+  color: var(--acento);
 }
 
-h3 { font-size: 0.98rem; font-weight: 650; margin: 2rem 0 0.5rem; }
+h3 { font-family: var(--display); font-size: 1.02rem; font-weight: 700; margin: 2rem 0 0.5rem; }
 
 p { margin: 0 0 1rem; }
 .entrada { color: color-mix(in srgb, var(--texto) 86%, var(--fondo)); font-size: 1.08rem; max-width: 70ch; }
 
-a { color: var(--acento); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a { color: var(--acento); text-decoration-thickness: 1px; text-underline-offset: 2px; transition: color 120ms ease; }
 
 strong { font-weight: 650; }
 
@@ -346,6 +389,7 @@ details {
   border-radius: var(--radio-s);
   padding: 0.65rem 1rem;
   margin: 0.65rem 0;
+  box-shadow: var(--sombra-suave);
 }
 details[open] { padding-bottom: 0.95rem; border-color: var(--borde-fuerte); }
 summary { cursor: pointer; font-weight: 600; font-size: 0.93rem; list-style: none; display: flex; align-items: center; gap: 0.5rem; }
@@ -456,6 +500,13 @@ footer { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--b
   border: 1px solid var(--borde);
   border-radius: var(--radio);
   padding: 1rem 1.15rem;
+  box-shadow: var(--sombra-suave);
+  transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+}
+.tarjeta:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--acento) 40%, var(--borde));
+  box-shadow: var(--sombra);
 }
 .tarjeta h3 { margin: 0 0 0.35rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.45rem; }
 .tarjeta h3 .ico { color: var(--acento); }
@@ -502,20 +553,27 @@ h2 { max-width: 60ch; }
 
 /* ---------- tema elegido por quien lee (el botón manda sobre el sistema) ---------- */
 body.oscuro {
-  --fondo:#15171a; --superficie:#1c1f22; --superficie-2:#23272b;
+  --bg:#15171a; --fondo:#15171a; --superficie:#1c1f22; --superficie-2:#23272b;
   --borde:#31363b; --borde-fuerte:#454b52;
   --texto:#e7e9ea; --texto-suave:#a5abb2; --texto-tenue:#8b9299;
-  --acento:#9ec6d0; --acento-tenue:#1e2a2e;
+  --acento:#8ed2e0; --acento-tenue:#16323a; --realce:#6fd6e6; --realce-tenue:#16343c;
   --ok:#86bb98; --ok-tenue:#1c2620; --alerta:#d5a55e; --alerta-tenue:#2a2317;
   --marca-a:#2b4650; --marca-b:#4a3a22;
+  --sombra:0 16px 38px -20px rgba(0,0,0,.5); --sombra-suave:0 10px 26px -18px rgba(0,0,0,.38);
+  --grad-fondo:radial-gradient(52% 38% at 100% 0%, rgba(158,198,208,.07), transparent 62%),
+               linear-gradient(180deg, #171a1d, var(--bg));
 }
 body.claro {
-  --fondo:#eeece7; --superficie:#f9f8f5; --superficie-2:#e9e7e1;
-  --borde:#dcdad3; --borde-fuerte:#c3c0b8;
-  --texto:#1f2225; --texto-suave:#61666d; --texto-tenue:#696e74;
-  --acento:#2c4a52; --acento-tenue:#e7eef0;
+  --bg:#f6f8f9; --fondo:#ffffff; --superficie:#ffffff; --superficie-2:#eef2f3;
+  --borde:#dce4e6; --borde-fuerte:#b3c2c5;
+  --texto:#1f2225; --texto-suave:#5c666c; --texto-tenue:#68747b;
+  --acento:#14606c; --acento-tenue:#e1eff1; --realce:#17808f; --realce-tenue:#ddf1f4;
   --ok:#3f6b4f; --ok-tenue:#e8f0ea; --alerta:#9a6420; --alerta-tenue:#fbf2e5;
-  --marca-a:#cfe4ea; --marca-b:#f3ddc4;
+  --marca-a:#d3e7ec; --marca-b:#f4e2cf;
+  --sombra:0 16px 38px -20px rgba(44,74,82,.26); --sombra-suave:0 10px 26px -18px rgba(44,74,82,.18);
+  --grad-fondo:radial-gradient(56% 40% at 100% 0%, rgba(94,152,166,.10), transparent 62%),
+               radial-gradient(42% 34% at 0% 10%, rgba(211,231,236,.48), transparent 58%),
+               linear-gradient(180deg, #fbfdfd, var(--bg));
 }
 body.grande { font-size: 1.12rem; }
 
@@ -636,3 +694,285 @@ fieldset.quiz legend { float: left; width: 100%; padding: 0; margin: 0 0 0.7rem;
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* ============================================================
+   Jerarquía visual: menos cajas y subtítulos que se leen
+   ============================================================ */
+
+/* los subtítulos de un punto se separan del cuerpo del texto */
+h3 {
+  font-family: var(--display);
+  font-size: 1.12rem; font-weight: 700; letter-spacing: -0.005em;
+  margin: 2.7rem 0 0.65rem;
+  color: var(--texto);
+}
+h3 + p, h3 + .quiz, h3 + .para-completar, h3 + details,
+h3 + .tabla-wrap, h3 + .hoja-cab, h3 + .registro { margin-top: 0; }
+section > h3:first-of-type { margin-top: 2.1rem; }
+
+/* las notas dejan de ser una caja más y pasan a leerse como un aparte */
+.nota {
+  background: transparent;
+  border: 0; border-left: 3px solid var(--borde-fuerte); border-radius: 0;
+  padding: 0.1rem 0 0.1rem 1.05rem;
+  margin: 1.5rem 0;
+  color: var(--texto-suave);
+  font-size: 0.96rem;
+}
+.nota strong { color: var(--texto); }
+
+/* lo destacado se distingue del resto de las cajas */
+.destacado { border-left: 3px solid var(--acento); }
+
+/* la bibliografía, con sangría francesa y una entrada por línea */
+ul.refs { list-style: none; margin: 1rem 0 0; padding: 0; }
+ul.refs li {
+  padding-left: 1.7rem; text-indent: -1.7rem;
+  margin: 0 0 0.6rem; max-width: 80ch;
+  font-size: 0.94rem; line-height: 1.6; color: var(--texto-suave);
+}
+ul.refs li:last-child { margin-bottom: 0; }
+ul.refs em, ul.refs a { color: var(--texto); }
+
+/* el aire entre puntos se nota sin abrir un hueco */
+h2 { margin-top: 3rem; }
+
+@media print {
+  .nota { border-left: 2px solid #999; color: #000; }
+  ul.refs li { color: #000; }
+}
+
+/* ---------- elección de consigna y modelo entidad-relación ---------- */
+.selector-esc{display:flex; gap:0.5rem; margin:1rem 0 1.4rem; flex-wrap:wrap}
+.sel-esc{font:inherit; font-size:0.88rem; font-weight:600; cursor:pointer; padding:0.55rem 1rem;
+  border:1.5px solid var(--borde); border-radius:9px; background:var(--fondo); color:var(--texto); text-align:left;
+  transition: background-color 130ms ease, color 130ms ease, border-color 130ms ease}
+.sel-esc:hover{border-color:var(--acento)}
+.sel-esc[aria-pressed="true"]{background:var(--acento); border-color:var(--acento); color:var(--fondo)}
+.panel-esc{display:none}
+span.panel-esc{display:none}
+body.esc-t3 span.panel-esc.t3, body.esc-t5 span.panel-esc.t5{display:inline}
+body.esc-t3 .panel-esc.t3{display:block}
+body.esc-t5 .panel-esc.t5{display:block}
+/* sin JavaScript no hay pestaña elegida: se muestra la Técnica 3, que es donde se
+   dicta Base de Datos, en lugar de dejar los apartados vacíos */
+body:not(.esc-t3):not(.esc-t5) .panel-esc.t3{display:block}
+body:not(.esc-t3):not(.esc-t5) span.panel-esc.t3{display:inline}
+@media print{ .selector-esc{display:none} }
+
+ol.secuencia{margin:1rem 0 0.4rem}
+ol.secuencia li{margin-bottom:0.45rem}
+
+/* ---------- diagrama entidad-relación ---------- */
+figure.er{ margin: 1.3rem 0; }
+figure.er svg{ width:100%; height:auto; display:block; background:var(--superficie);
+  border:1px solid var(--borde); border-radius:var(--radio) }
+figure.er figcaption{ display:flex; gap:1rem; align-items:baseline; justify-content:space-between;
+  margin-top:0.55rem; font-size:0.88rem; color:var(--texto-suave) }
+figure.er text{ font-family: var(--sans, system-ui), system-ui, sans-serif; }
+.er-entidad rect{ fill:var(--superficie); stroke:var(--borde-fuerte); stroke-width:1.6 }
+.er-entidad .nombre{ fill:var(--acento); font-weight:700; font-size:13px }
+.er-entidad .divisor{ stroke:var(--borde); stroke-width:1 }
+.er-entidad .atributo{ fill:var(--texto); font-size:11.5px }
+.er-linea{ stroke:var(--texto-suave); stroke-width:1.5 }
+.er-card{ fill:var(--acento); font-weight:700; font-size:13px }
+.er-verbo{ fill:var(--texto-tenue); font-style:italic; font-size:11px;
+  paint-order:stroke; stroke:var(--superficie); stroke-width:4px; stroke-linejoin:round }
+.er-pk{ font-weight:700; font-size:9px; fill:var(--acento) }
+.er-fk{ font-weight:600; font-size:9px; fill:var(--alerta) }
+.er-sueltas rect{ fill:var(--acento-tenue); stroke:var(--acento); stroke-dasharray:5 4 }
+.er-leyenda{ display:flex; flex-wrap:wrap; gap:0.55rem 1.4rem; align-items:baseline;
+  margin:0.55rem 0 0; font-size:0.86rem; color:var(--texto-suave) }
+.er-leyenda .pk{ color:var(--acento); font-weight:700 }
+.er-leyenda .fk{ color:var(--alerta); font-weight:700 }
+
+/* ============================================================
+   Componentes compartidos (antes inline en cada página)
+   ============================================================ */
+
+/* ---------- ficha de la clase, colapsable ---------- */
+details.encuadre {
+  margin: 1.4rem 0 0; padding: 0; overflow: hidden;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+details.encuadre > summary {
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem; font-weight: 650; color: var(--texto-suave);
+}
+details.encuadre[open] > summary { border-bottom: 1px solid var(--borde); }
+details.encuadre > *:not(summary) { margin-top: 0; }
+.encuadre > div {
+  display: grid; grid-template-columns: 9.5rem 1fr; gap: 0.9rem; align-items: start;
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--borde);
+}
+.encuadre > div:first-of-type { border-top: 0; }
+.encuadre .et {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--acento); padding-top: 0.15rem;
+}
+.encuadre p { margin: 0; }
+@media (max-width: 620px) { .encuadre > div { grid-template-columns: 1fr; gap: 0.15rem; } }
+@media print { details.encuadre { display: none; } }
+
+/* ---------- figura con esquema y botón ampliar ---------- */
+figure.esquema{margin:1.3rem 0; padding:0}
+figure.esquema svg{width:100%; height:auto; display:block; background:var(--superficie);
+  border:1px solid var(--borde); border-radius:var(--radio)}
+svg.esquema-cambio text{fill:var(--texto)}
+svg.esquema-cambio .tit{font-weight:700}
+svg.esquema-cambio .sub{fill:var(--texto-suave)}
+svg.esquema-cambio .caja-hoja{fill:var(--acento-tenue); stroke:var(--acento); stroke-width:1.6}
+svg.esquema-cambio .caja-facto{fill:var(--superficie); stroke:var(--borde-fuerte); stroke-width:1.8}
+svg.esquema-cambio .caja-sec{fill:var(--superficie); stroke:var(--borde); stroke-width:1.4}
+svg.esquema-cambio .num-prob{fill:var(--acento); font-weight:700}
+svg.esquema-cambio .num-ok{fill:var(--ok); font-weight:700}
+svg.esquema-cambio .flecha-prim{stroke:var(--acento); stroke-width:1.6; fill:none}
+svg.esquema-cambio .nombra{fill:var(--acento); font-weight:700}
+svg.esquema-cambio .queda{fill:var(--acento)}
+svg.esquema-cambio marker path{fill:var(--acento)}
+figure.esquema figcaption{display:flex; gap:1rem; align-items:baseline; justify-content:space-between;
+  margin-top:0.55rem; font-size:0.88rem; color:var(--texto-suave)}
+figure.esquema .ampliar{flex:0 0 auto; font:inherit; font-size:0.8rem; font-weight:600; cursor:pointer;
+  padding:0.35rem 0.7rem; border:1px solid var(--borde-fuerte); border-radius:7px;
+  background:var(--superficie); color:var(--texto-suave);
+  transition: color 120ms ease, border-color 120ms ease}
+figure.esquema .ampliar:hover{border-color:var(--acento); color:var(--acento)}
+body.esquema-abierto{overflow:hidden}
+figure.esquema.ampliado{position:fixed; inset:0; z-index:80; margin:0; padding:2vh 2vw;
+  background:var(--fondo); display:grid; grid-template-rows:1fr auto; align-content:center}
+figure.esquema.ampliado svg{max-height:88vh; width:100%; height:auto}
+@media print{ figure.esquema .ampliar{display:none} }
+
+/* ---------- diagrama ASCII ---------- */
+.diagrama{overflow-x:auto; margin:1.3rem 0; background:var(--superficie);
+  border:1px solid var(--borde); border-radius:10px; padding:0.9rem 1.1rem}
+.diagrama pre{font-family:var(--mono); font-size:0.78rem; line-height:1.5; margin:0; white-space:pre}
+
+/* ---------- marca y subrayado acentuado ---------- */
+.marca{background:var(--marca-a); padding:0 .18em; border-radius:3px; font-weight:600}
+.sub-acento{text-decoration:underline; text-decoration-color:var(--acento);
+  text-decoration-thickness:3px; text-underline-offset:3px}
+
+/* ---------- punto de comprobación ---------- */
+.check{border:1.5px dashed color-mix(in srgb, var(--acento) 55%, var(--borde)); border-radius:11px;
+  padding:0.9rem 1.15rem; margin:1.3rem 0; background:var(--acento-tenue)}
+.check .et{display:block; font-size:0.7rem; font-weight:800; letter-spacing:0.11em;
+  text-transform:uppercase; color:var(--acento); margin-bottom:0.45rem}
+.check p{margin:0 0 0.5rem}
+.check p:last-child{margin-bottom:0}
+.check ol,.check ul{margin:0.3rem 0 0; padding-left:1.3rem}
+.check details{border:0; background:transparent; padding:0; margin:0.6rem 0 0}
+.check details summary{font-size:0.94rem; font-weight:600}
+
+/* ---------- rama (para hacer) ---------- */
+.rama{border-left:4px solid var(--acento); padding-left:1.2rem; margin:1.6rem 0}
+.rama h3{margin-top:0}
+.rama ol{margin-bottom:0}
+
+/* ---------- trayecto: el recorrido de la clase ---------- */
+.trayecto{counter-reset: trayecto; display:flex; flex-wrap:wrap; gap:0.5rem;
+  margin:1.2rem 0 1.6rem; padding:0; list-style:none}
+.trayecto li{
+  counter-increment: trayecto;
+  display:inline-flex; align-items:center; gap:0.5rem;
+  background:var(--superficie); border:1px solid var(--borde); border-radius:999px;
+  padding:0.32rem 0.85rem 0.32rem 0.5rem;
+  font-size:0.85rem; font-weight:600; color:var(--texto-suave)}
+.trayecto li::before{
+  content: counter(trayecto);
+  flex:none; width:1.35rem; height:1.35rem; border-radius:50%;
+  display:grid; place-items:center;
+  font-family:var(--mono); font-size:0.72rem; font-weight:700;
+  background:color-mix(in srgb, var(--acento) 14%, var(--superficie));
+  color:var(--acento)}
+.trayecto li::after{content:"→"; color:var(--texto-tenue); margin-left:0.1rem}
+.trayecto li:last-child::after{display:none}
+
+/* ---------- esquema de las listas del sitio (SVG) ---------- */
+svg.svg-listas{display:block; width:100%; height:auto; max-width:720px}
+svg.svg-listas text{fill:var(--texto)}
+svg.svg-listas .sub{fill:var(--texto-suave)}
+svg.svg-listas .caja{fill:var(--superficie); stroke:var(--borde-fuerte); stroke-width:1.3}
+svg.svg-listas .caja-prim{fill:var(--acento-tenue); stroke:var(--acento); stroke-width:1.5}
+svg.svg-listas .caja-usuarios{fill:var(--acento-tenue); stroke:var(--acento); stroke-width:1.3; stroke-dasharray:4 3}
+svg.svg-listas .flecha{stroke:var(--acento); stroke-width:1.4; fill:none}
+svg.svg-listas .nombra{fill:var(--acento)}
+svg.svg-listas marker path{fill:var(--acento)}
+
+
+/* ============================================================
+   Realce, idea clave, modelo en lista y movimiento
+   ============================================================ */
+
+/* ---------- lo importante del texto ---------- */
+.realce{
+  background:var(--realce-tenue);
+  box-shadow:inset 0 -2px 0 var(--realce);
+  padding:0 .18em; border-radius:3px; font-weight:600;
+}
+
+/* ---------- la idea clave del apartado ---------- */
+.idea{
+  background:var(--realce-tenue);
+  border:1px solid color-mix(in srgb, var(--realce) 30%, var(--borde));
+  border-left:4px solid var(--realce);
+  border-radius:var(--radio);
+  padding:0.95rem 1.2rem; margin:1.3rem 0;
+}
+.idea .et{
+  display:block; font-size:0.7rem; font-weight:800; letter-spacing:0.11em;
+  text-transform:uppercase; color:var(--realce); margin-bottom:0.45rem;
+}
+.idea p{margin:0 0 0.6rem}
+.idea p:last-child{margin-bottom:0}
+.idea code{background:color-mix(in srgb, var(--fondo) 70%, transparent)}
+.idea .realce{background:color-mix(in srgb, var(--realce) 20%, var(--fondo))}
+
+.nota-inline{color:var(--texto-tenue); font-size:0.92em}
+
+/* ---------- el modelo escrito, para pantallas angostas ---------- */
+.er-lista{display:none}
+.er-lista .et{display:block; font-size:0.7rem; font-weight:800; letter-spacing:0.11em;
+  text-transform:uppercase; color:var(--acento); margin-bottom:0.5rem}
+.er-lista ul{margin:0 0 0.7rem; padding-left:1.1rem}
+.er-lista li{padding:0.2rem 0}
+.er-lista u{text-decoration-color:var(--acento); text-decoration-thickness:2px; text-underline-offset:2px}
+.er-lista i{color:var(--alerta); font-style:normal; font-weight:600}
+@media (max-width: 700px){
+  figure.er svg{display:none}
+  figure.er figcaption{margin-top:0}
+  figure.er .er-leyenda{display:none}
+  .er-lista{display:block; background:var(--superficie); border:1px solid var(--borde);
+    border-radius:var(--radio); padding:0.9rem 1.1rem; margin:1rem 0}
+}
+
+/* ---------- movimiento: entra al leer, sin marear ---------- */
+@keyframes desplegar{ from{opacity:0; transform:translateY(-4px)} to{opacity:1; transform:none} }
+@keyframes aparece{ from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:none} }
+
+@media (prefers-reduced-motion: no-preference){
+  body.js .revela{opacity:0}
+  body.js .revela.visible{animation:aparece .5s cubic-bezier(.22,.61,.36,1) both}
+  details[open] > *:not(summary){animation:desplegar .2s ease both}
+  body.esc-t3 .panel-esc.t3, body.esc-t5 .panel-esc.t5{animation:desplegar .26s ease both}
+  .idea{transition:border-color 160ms ease}
+  .pasos > li::before{transition:background-color 160ms ease, color 160ms ease, border-color 160ms ease}
+  .pasos > li:hover::before{background:var(--realce-tenue); border-color:var(--realce); color:var(--realce)}
+  details{transition:border-color 140ms ease, box-shadow 140ms ease}
+  details:hover{border-color:var(--borde-fuerte)}
+  figure.er svg{transition:box-shadow 200ms ease}
+}
+@media print{ .revela{opacity:1 !important; animation:none !important} }
+
+/* ---------- el índice, partido en las dos partes de la clase ---------- */
+.indice-parte{
+  margin:1.1rem 0 0.35rem; font-size:0.72rem; font-weight:800; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--texto-tenue);
+}
+.indice-parte:first-of-type{margin-top:0.2rem}
+.indice-parte a{text-decoration:none; color:inherit}
+.indice-parte a:hover{color:var(--acento)}
+.indice ol + .indice-parte{padding-top:0.9rem; border-top:1px solid var(--borde)}
