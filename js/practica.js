@@ -17,37 +17,40 @@
   function guardar() { try { localStorage.setItem(LLAVE, JSON.stringify(guardado)); } catch (e) {} }
 
   var LLAVE_CODIGO = "bd-clase2-codigo";
-  var codigo = null;
+  var LLAVE_DERIVADA = "bd-clase2-derivada";
+  var codigo = null, derivada = null;
   try { codigo = localStorage.getItem(LLAVE_CODIGO); } catch (e) {}
   var alDestrabar = [];
+  var PAQUETE = (typeof SOLUCIONES_CLASE2 !== "undefined") ? SOLUCIONES_CLASE2 : null;
+  var ITEMS = (PAQUETE && PAQUETE.items) ? PAQUETE.items : (PAQUETE || {});
 
   /* ---------- utilidades ---------- */
 
-  function normalizar(c) {
-    return String(c).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, "");
+  /* Del código salen las claves con PBKDF2 (ver js/cripto.js). Se hace una vez
+     por página y el resultado queda guardado, así una recarga no vuelve a
+     esperar el segundo que tarda la derivación. */
+  function derivarDe(cod) {
+    if (!PAQUETE || !PAQUETE.sal || typeof Cripto === "undefined") return null;
+    return Cripto.derivar(cod, PAQUETE.sal, PAQUETE.iteraciones);
   }
 
-  /* Las consultas resueltas viajan cifradas (XOR con el código de la clase, en
-     base64, con el centinela «OK::» adelante). Si el código no es el correcto,
-     el texto que sale no empieza con el centinela y se descarta. */
-  function descifrar(b64, cod) {
-    var clave = normalizar(cod || "");
-    if (!clave) return null;
-    var bin;
-    try { bin = atob(b64); } catch (e) { return null; }
-    var bytes = new Uint8Array(bin.length);
-    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i) ^ clave.charCodeAt(i % clave.length);
-    var txt;
-    try { txt = new TextDecoder("utf-8").decode(bytes); }
-    catch (e) {
-      txt = "";
-      for (var j = 0; j < bytes.length; j++) txt += String.fromCharCode(bytes[j]);
-      try { txt = decodeURIComponent(escape(txt)); } catch (e2) {}
-    }
-    return txt.indexOf("OK::") === 0 ? txt.slice(4) : null;
+  function guardarDerivada(bytes) {
+    try { localStorage.setItem(LLAVE_DERIVADA, Cripto.bytesAb64(bytes)); } catch (e) {}
   }
 
-  function hayCodigo() { return !!codigo; }
+  function derivadaGuardada() {
+    try {
+      var v = localStorage.getItem(LLAVE_DERIVADA);
+      return v ? Cripto.b64aBytes(v) : null;
+    } catch (e) { return null; }
+  }
+
+  function descifrar(item) {
+    if (!derivada || !item) return null;
+    return Cripto.abrir(derivada, item);
+  }
+
+  function hayCodigo() { return !!derivada; }
 
   function el(tag, clase, texto) {
     var n = document.createElement(tag);
@@ -249,7 +252,7 @@
   ejercicios.forEach(function (ej, n) {
     var id = ej.id || ("ej" + (n + 1));
     ej.id = id;
-    var dato = (typeof SOLUCIONES_CLASE2 !== "undefined") ? SOLUCIONES_CLASE2[id] : null;
+    var dato = ITEMS[id] || null;
     var preSol = ej.querySelector(".solucion");
     if (!dato && !preSol) return;
     var pistas = Array.prototype.slice.call(ej.querySelectorAll(".pistas li"));
@@ -298,7 +301,7 @@
     /* la consulta resuelta se arma en el momento, con el código puesto */
     var cajaSol = null;
     function mostrarSolucion() {
-      var sql = dato ? descifrar(dato.cifrado, codigo) : (preSol ? preSol.textContent.trim() : null);
+      var sql = dato ? descifrar(dato) : (preSol ? preSol.textContent.trim() : null);
       if (!sql) return false;
       if (!cajaSol) {
         cajaSol = el("pre", "solucion");
@@ -397,10 +400,14 @@
     fila.appendChild(entrada); fila.appendChild(boton); fila.appendChild(estado);
     zona.appendChild(texto); zona.appendChild(fila);
 
-    function prueba(cod) {
-      var ids = (typeof SOLUCIONES_CLASE2 !== "undefined") ? Object.keys(SOLUCIONES_CLASE2) : [];
+    function abreConEstos(bytes) {
+      var ids = Object.keys(ITEMS);
       if (!ids.length) return true;
-      return descifrar(SOLUCIONES_CLASE2[ids[0]].cifrado, cod) !== null;
+      var guardada = derivada;
+      derivada = bytes;
+      var ok = descifrar(ITEMS[ids[0]]) !== null;
+      if (!ok) derivada = guardada;
+      return ok;
     }
 
     function destrabado() {
@@ -415,19 +422,35 @@
     boton.addEventListener("click", function () {
       var cod = entrada.value.trim();
       if (!cod) return;
-      if (prueba(cod)) {
-        codigo = cod;
-        try { localStorage.setItem(LLAVE_CODIGO, cod); } catch (e) {}
-        destrabado();
-      } else {
-        estado.textContent = "Ese código no abre";
-        zona.classList.add("cerrado");
-      }
+      estado.textContent = "Abriendo…";
+      boton.disabled = true;
+      /* la derivación bloquea un segundo: primero se pinta el aviso */
+      setTimeout(function () {
+        var bytes = derivarDe(cod);
+        if (bytes && abreConEstos(bytes)) {
+          codigo = cod;
+          try { localStorage.setItem(LLAVE_CODIGO, cod); } catch (e) {}
+          guardarDerivada(bytes);
+          destrabado();
+        } else {
+          estado.textContent = "Ese código no abre";
+          zona.classList.add("cerrado");
+          boton.disabled = false;
+        }
+      }, 30);
     });
     entrada.addEventListener("keydown", function (e) { if (e.key === "Enter") boton.click(); });
 
-    if (codigo && prueba(codigo)) destrabado();
-    else if (codigo) { codigo = null; try { localStorage.removeItem(LLAVE_CODIGO); } catch (e) {} }
+    var previa = derivadaGuardada();
+    if (previa && abreConEstos(previa)) destrabado();
+    else if (codigo) {
+      var bytes = derivarDe(codigo);
+      if (bytes && abreConEstos(bytes)) { guardarDerivada(bytes); destrabado(); }
+      else {
+        codigo = null;
+        try { localStorage.removeItem(LLAVE_CODIGO); localStorage.removeItem(LLAVE_DERIVADA); } catch (e) {}
+      }
+    }
   });
 
   /* ---------- 5 · descargar lo trabajado ---------- */
