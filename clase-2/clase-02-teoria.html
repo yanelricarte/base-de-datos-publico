@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teoría Clase 2 — Base de Datos</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/componentes.css">
+<link rel="stylesheet" href="../css/practica.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></symbol>
+    <symbol id="i-tabla" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/></symbol>
+    <symbol id="i-flecha" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-alerta" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-ojo" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  </defs>
+</svg>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<main id="contenido">
+
+<header class="encabezado">
+  <span class="rotulo"><svg class="ico"><use href="#i-db"/></svg> Base de Datos · Clase 2 · Teoría</span>
+  <h1>Las relaciones del modelo y su cardinalidad</h1>
+  <p class="entrada">
+    La clase anterior dejó el sitio separado en listas, cada una con su clave, y las flechas
+    dibujadas entre ellas. Acá se trabaja lo que esas flechas dicen: cuántas filas de una lista
+    corresponden a una fila de la otra, dónde va la clave foránea en cada caso, y qué se hace
+    cuando la respuesta es «muchas» de los dos lados. Al final, las primeras consultas: la
+    pregunta que el modelo tiene que poder responder, escrita en el idioma del gestor.
+  </p>
+  <details class="encuadre">
+    <summary>Unidad, contenidos y capacidades</summary>
+    <div><span class="et">Unidad</span><p>2. Modelo entidad-relación y diseño conceptual.</p></div>
+    <div><span class="et">Contenidos</span><p>Relaciones. Cardinalidad de las entidades en una relación: uno a muchos, muchos a muchos y uno a uno. La tabla intermedia. Dependencia de existencia y de identificación. Primeras consultas sobre el modelo.</p></div>
+    <div><span class="et">Capacidades</span><p>Determinar la cardinalidad de una relación preguntando en los dos sentidos. Resolver una relación de muchos a muchos con una tabla intermedia. Escribir una consulta que recorra las relaciones del modelo.</p></div>
+    <div><span class="et">Producción</span><p>El diagrama del sitio con la relación de muchos a muchos resuelta, y las consultas del listado escritas y probadas.</p></div>
+  </details>
+</header>
+
+<nav class="indice">
+  <h2>Contenido</h2>
+  <ol>
+    <li><a href="#s1">Modelo de la clase anterior</a></li>
+    <li><a href="#s2">Relaciones y verbos del enunciado</a></li>
+    <li><a href="#s3">Cardinalidad y las dos preguntas</a></li>
+    <li><a href="#s4">Uno a muchos: dónde va la clave foránea</a></li>
+    <li><a href="#s5">Muchos a muchos: tabla intermedia</a></li>
+    <li><a href="#s6">Uno a uno: dos casos que lo justifican</a></li>
+    <li><a href="#s7">Participación obligatoria y opcional</a></li>
+    <li><a href="#s8">Errores frecuentes en el diagrama</a></li>
+    <li><a href="#s9">Del diagrama a la consulta</a></li>
+    <li><a href="#s10">Síntesis</a></li>
+  </ol>
+</nav>
+
+<p class="nota marcador-ayuda">Para marcar lo importante mientras leés: <b>doble clic</b> sobre una palabra la resalta, y para una frase se selecciona y aparece el botón «Resaltar» al costado. La marca se saca con otro doble clic. Todo queda guardado en este navegador.</p>
+
+<!-- ================= 1 ================= -->
+<section id="s1">
+<h2><span class="n">01</span> Modelo de la clase anterior</h2>
+
+<p>El listado del sitio se separó en cinco listas —productos, rubros, marcas, proveedores y usuarios—, cada una recibió una clave primaria sustituta, y la fila de producto pasó a nombrar a las otras tres con un número en lugar de copiar su texto. Ese número es la <strong>clave foránea</strong>.</p>
+
+<figure class="er">
+  <svg viewBox="0 0 720 600" role="img" aria-labelledby="er1-tit er1-desc">
+    <title id="er1-tit">Modelo del sitio con las cinco entidades de la clase anterior</title>
+    <desc id="er1-desc">Rubros, marcas y proveedores se conectan cada uno con productos. Usuarios queda aparte.</desc>
+    <g class="er-entidad">
+      <rect x="20" y="30" width="170" height="120" rx="10"/>
+      <text class="nombre" x="105" y="57" text-anchor="middle">RUBROS</text>
+      <line class="divisor" x1="20" y1="67" x2="190" y2="67"/>
+      <text class="atributo" x="38" y="89">id_rubro <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="38" y="109">nombre</text>
+    </g>
+    <g class="er-entidad">
+      <rect x="530" y="30" width="170" height="120" rx="10"/>
+      <text class="nombre" x="615" y="57" text-anchor="middle">PROVEEDORES</text>
+      <line class="divisor" x1="530" y1="67" x2="700" y2="67"/>
+      <text class="atributo" x="548" y="89">id_proveedor <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="548" y="109">nombre</text>
+      <text class="atributo" x="548" y="129">contacto</text>
+    </g>
+    <g class="er-entidad">
+      <rect x="255" y="210" width="210" height="190" rx="10"/>
+      <text class="nombre" x="360" y="237" text-anchor="middle">PRODUCTOS</text>
+      <line class="divisor" x1="255" y1="247" x2="465" y2="247"/>
+      <text class="atributo" x="273" y="269">id_producto <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="273" y="289">nombre</text>
+      <text class="atributo" x="273" y="309">descripcion</text>
+      <text class="atributo" x="273" y="329">precio</text>
+      <text class="atributo" x="273" y="349">id_rubro <tspan class="er-fk">(foránea)</tspan></text>
+      <text class="atributo" x="273" y="369">id_marca <tspan class="er-fk">(foránea)</tspan></text>
+      <text class="atributo" x="273" y="389">id_proveedor <tspan class="er-fk">(foránea)</tspan></text>
+    </g>
+    <g class="er-entidad">
+      <rect x="20" y="440" width="170" height="120" rx="10"/>
+      <text class="nombre" x="105" y="467" text-anchor="middle">MARCAS</text>
+      <line class="divisor" x1="20" y1="477" x2="190" y2="477"/>
+      <text class="atributo" x="38" y="499">id_marca <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="38" y="519">nombre</text>
+    </g>
+    <g class="er-entidad er-sueltas">
+      <rect x="530" y="440" width="170" height="120" rx="10"/>
+      <text class="nombre" x="615" y="467" text-anchor="middle">USUARIOS</text>
+      <line class="divisor" x1="530" y1="477" x2="700" y2="477"/>
+      <text class="atributo" x="548" y="499">id_usuario <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="548" y="519">usuario</text>
+      <text class="atributo" x="548" y="539">contrasena</text>
+    </g>
+    <line class="er-linea" x1="190" y1="105" x2="270" y2="210"/>
+    <text class="er-card" x="200" y="98">1</text>
+    <text class="er-card" x="258" y="207">N</text>
+    <text class="er-verbo" x="215" y="165">agrupa</text>
+    <line class="er-linea" x1="530" y1="105" x2="450" y2="210"/>
+    <text class="er-card" x="512" y="98">1</text>
+    <text class="er-card" x="455" y="207">N</text>
+    <text class="er-verbo" x="465" y="165">provee</text>
+    <line class="er-linea" x1="190" y1="500" x2="270" y2="400"/>
+    <text class="er-card" x="200" y="512">1</text>
+    <text class="er-card" x="258" y="406">N</text>
+    <text class="er-verbo" x="215" y="455">fabrica</text>
+  </svg>
+  <figcaption>Un rubro agrupa muchos productos; una marca fabrica muchos productos; un proveedor provee muchos productos.</figcaption>
+  <div class="er-lista">
+    <p><b>RUBROS</b> — id_rubro (clave) · nombre</p>
+    <p><b>MARCAS</b> — id_marca (clave) · nombre</p>
+    <p><b>PROVEEDORES</b> — id_proveedor (clave) · nombre · contacto</p>
+    <p><b>PRODUCTOS</b> — id_producto (clave) · nombre · descripcion · precio · id_rubro (foránea) · id_marca (foránea) · id_proveedor (foránea)</p>
+    <p><b>USUARIOS</b> — id_usuario (clave) · usuario · contrasena</p>
+    <p>Las tres relaciones: rubro <i>agrupa</i> productos (1 a N), marca <i>fabrica</i> productos (1 a N), proveedor <i>provee</i> productos (1 a N).</p>
+  </div>
+  <div class="er-leyenda">
+    <span><b class="pk">(clave)</b> identifica la fila</span>
+    <span><b class="fk">(foránea)</b> apunta a otra entidad</span>
+  </div>
+</figure>
+
+<p>El diagrama se lee en voz alta, y esa lectura es la prueba de que está bien dibujado: «un rubro agrupa muchos productos y cada producto pertenece a un solo rubro». Si la oración se puede decir sin trabarse y describe lo que pasa en el sitio, el dibujo dice lo que tiene que decir.</p>
+
+<h3>Chequeo del modelo anterior</h3>
+<div class="quiz" data-correcta="b">
+  <p class="pregunta">La columna <code>id_rubro</code> aparece en la tabla <code>producto</code>. ¿Qué es ahí?</p>
+  <label><input type="radio" name="q1"> La clave primaria de producto <span class="por-que">La clave primaria de producto es <code>id_producto</code>: el dato que distingue una fila de producto de todas las demás. <code>id_rubro</code> no distingue productos, porque muchos productos comparten rubro.</span></label>
+  <label><input type="radio" name="q1"> Una clave foránea: el dato con el que producto nombra a un rubro <span class="por-que">Exacto. Es la clave primaria de otra tabla, guardada acá para apuntar a una fila de esa tabla.</span></label>
+  <label><input type="radio" name="q1"> Un atributo común, como el precio <span class="por-que">El precio describe al producto y no apunta a ninguna otra fila. <code>id_rubro</code> vale por lo que señala: la fila de rubro que tiene ese id.</span></label>
+  <div class="feedback">La clave foránea es la clave primaria de otra tabla, escrita en esta para apuntar a una de sus filas. El nombre del rubro queda escrito una sola vez, en la tabla rubro.</div>
+</div>
+</section>
+
+<!-- ================= 2 ================= -->
+<section id="s2">
+<h2><span class="n">02</span> Relaciones y verbos del enunciado</h2>
+
+<p>Las entidades salen de los sustantivos del enunciado. Las relaciones salen de los <strong>verbos</strong> que los unen. En la consigna del sitio esos verbos están escritos: la vista de administrador «carga artículos, rubros y marcas»; el listado muestra cada producto con «rubro, descripción, marca, precio»; el registro guarda usuarios «con contraseña».</p>
+
+<div class="tabla-wrap">
+<table>
+  <thead><tr><th scope="col">Frase del enunciado</th><th scope="col">Relación que aparece</th><th scope="col">Cómo se nombra</th></tr></thead>
+  <tbody>
+    <tr><td>«listado de productos (rubro, descripción, marca, precio)»</td><td>producto — rubro<br>producto — marca</td><td>un rubro <em>agrupa</em> productos; una marca <em>fabrica</em> productos</td></tr>
+    <tr><td>cada producto viene de un proveedor</td><td>producto — proveedor</td><td>un proveedor <em>provee</em> productos</td></tr>
+    <tr><td>«registro de usuario con contraseña»</td><td>usuario, sola</td><td>todavía no participa de ninguna relación</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Una relación se escribe con un verbo en presente y se lee en los dos sentidos. «Agrupa» leído al revés es «pertenece a»: un rubro agrupa muchos productos, cada producto pertenece a un rubro. Esas dos lecturas son las que después deciden la cardinalidad.</p>
+
+<div class="idea">
+  <p>Tres entidades del sitio conectan con producto y ninguna conecta con otra. Rubro, marca y proveedor no se tocan entre sí porque en este dominio no hay ningún hecho que las una: no existe «el rubro de una marca».</p>
+</div>
+</section>
+
+<!-- ================= 3 ================= -->
+<section id="s3">
+<h2><span class="n">03</span> Cardinalidad y las dos preguntas</h2>
+
+<p>La <span class="redondeo">cardinalidad</span> dice cuántas filas de una entidad pueden corresponder a una fila de la otra. Se escribe en cada extremo de la línea del diagrama y se averigua siempre igual: dos preguntas, una por sentido, respondidas con «una» o «muchas» y con los datos a la vista.</p>
+
+<ol class="flujo resultado">
+  <li><span class="et">Pregunta de ida</span><b>Una fila de A, ¿con cuántas de B?</b><span class="d">Se contesta «una» o «muchas»</span></li>
+  <li><span class="et">Pregunta de vuelta</span><b>Una fila de B, ¿con cuántas de A?</b><span class="d">La misma pregunta, dada vuelta</span></li>
+  <li><span class="et">Resultado</span><b>El par de respuestas da el tipo</b><span class="d">1:N, N:M o 1:1</span></li>
+</ol>
+
+<div class="check">
+  <span class="et">Advertencia del procedimiento</span>
+  <p>Las dos preguntas se responden por lo que el dominio <em>permite</em>, no por lo que hoy pasa. Que el rubro Vidrios tenga un solo producto cargado no lo vuelve un rubro de un producto: mañana puede tener cinco.</p>
+</div>
+
+<div class="tabla-wrap">
+<table>
+  <thead><tr><th scope="col">Ida</th><th scope="col">Vuelta</th><th scope="col">Tipo</th><th scope="col">Cómo se implementa</th></tr></thead>
+  <tbody>
+    <tr><td>muchas</td><td>una</td><td><strong>1:N</strong>, uno a muchos</td><td>una clave foránea del lado «muchos»</td></tr>
+    <tr><td>muchas</td><td>muchas</td><td><strong>N:M</strong>, muchos a muchos</td><td>una tabla intermedia con las dos claves</td></tr>
+    <tr><td>una</td><td>una</td><td><strong>1:1</strong>, uno a uno</td><td>una clave foránea en cualquiera de las dos, marcada como única</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Con el sitio delante, las tres relaciones del diagrama se resuelven en un minuto:</p>
+
+<div class="tabla-wrap">
+<table>
+  <thead><tr><th scope="col">Pregunta de ida</th><th scope="col">Pregunta de vuelta</th><th scope="col">Resultado</th></tr></thead>
+  <tbody>
+    <tr><td>¿Un rubro puede tener muchos productos? Sí: «Limpieza de pisos» tiene seis</td><td>¿Un producto puede estar en muchos rubros? No: en el listado cada producto se muestra en uno</td><td>1:N de rubro a producto</td></tr>
+    <tr><td>¿Una marca puede tener muchos productos? Sí: Brillex tiene seis</td><td>¿Un producto puede ser de varias marcas? No</td><td>1:N de marca a producto</td></tr>
+    <tr><td>¿Un proveedor puede proveer muchos productos? Sí</td><td>¿Un producto puede venir de varios proveedores? En este sitio, no</td><td>1:N de proveedor a producto</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p class="nota">La última respuesta es una <strong>decisión de diseño</strong>, y conviene registrarla como tal en el informe. Si la empresa compra la misma lavandina a dos distribuidoras, la respuesta pasa a ser «muchas» y la relación cambia de forma. El modelo describe cómo funciona la organización, así que cuando la organización funciona distinto, el modelo cambia.</p>
+
+<h3>Chequeo de las dos preguntas</h3>
+<div class="quiz" data-correcta="c">
+  <p class="pregunta">Un usuario del sitio hace pedidos. Un pedido lo hace una sola persona, y una persona puede hacer varios pedidos a lo largo del tiempo. ¿Qué cardinalidad tiene la relación entre usuario y pedido?</p>
+  <label><input type="radio" name="q2"> Muchos a muchos <span class="por-que">Para que fuera muchos a muchos, las dos respuestas tendrían que ser «muchas». Acá la vuelta es «una»: un pedido lo hizo una sola persona.</span></label>
+  <label><input type="radio" name="q2"> Uno a uno <span class="por-que">Uno a uno exigiría que cada usuario tuviera un único pedido en toda su vida en el sitio, y el enunciado dice lo contrario.</span></label>
+  <label><input type="radio" name="q2"> Uno a muchos, con la clave foránea en pedido <span class="por-que">Correcto. Ida: un usuario, muchos pedidos. Vuelta: un pedido, un usuario. La clave foránea <code>id_usuario</code> va en la tabla pedido, que es el lado «muchos».</span></label>
+  <div class="feedback">Una respuesta «muchas» y una respuesta «una» dan una relación uno a muchos. La clave foránea vive siempre del lado que responde «muchas».</div>
+</div>
+</section>
+
+<!-- ================= 4 ================= -->
+<section id="s4">
+<h2><span class="n">04</span> Uno a muchos: dónde va la clave foránea</h2>
+
+<p>Es la relación más frecuente y la que hay que reconocer sin dudar. La regla de implementación es una sola: <span class="sub-lapiz">la clave foránea va en la tabla del lado «muchos»</span>.</p>
+
+<p>El motivo se ve intentando lo contrario. Si la clave foránea de la relación rubro–producto viviera en <code>rubro</code>, cada fila de rubro tendría que guardar los productos que agrupa:</p>
+
+<div class="diagrama">
+<pre>rubro (mal resuelto)
++----------+-------------------+-------------+-------------+-------------+
+| id_rubro | nombre            | producto_1  | producto_2  | producto_3  |
++----------+-------------------+-------------+-------------+-------------+
+|        1 | Limpieza de pisos |           1 |           4 |           5 |
+|        2 | Cocina            |           2 |           6 |             |
++----------+-------------------+-------------+-------------+-------------+
+        el sexto producto de «Limpieza de pisos» no tiene columna</pre>
+</div>
+
+<p>Tres cosas se rompen a la vez. La tabla necesita tantas columnas como productos pueda llegar a tener el rubro más cargado, y ese número no se conoce. Las columnas vacías ocupan lugar en todas las filas que no las usan. Y la pregunta «¿de qué rubro es la lavandina?» obliga a buscar el número 1 en todas las columnas de todas las filas, en lugar de leerlo de un solo lugar.</p>
+
+<p>Del otro lado, en cambio, entra sin esfuerzo: cada producto tiene un rubro y uno solo, así que le alcanza con una columna, <code>id_rubro</code>, que siempre tiene exactamente un valor.</p>
+
+<div class="diagrama">
+<pre>  producto  (lado N)                      rubro  (lado 1)
+ +----+---------------+----------+       +----------+-------------------+
+ | id | nombre        | id_rubro |       | id_rubro | nombre            |
+ +----+---------------+----------+       +----------+-------------------+
+ |  1 | Lavandina 1 L |     1 ---------> |        1 | Limpieza de pisos |
+ |  2 | Detergente    |     2 ---------> |        2 | Cocina            |
+ |  4 | Lavandina 5 L |     1 ------+    |        3 | Ropa              |
+ +----+---------------+----------+  |    +----------+-------------------+
+                                    +--> vuelve a la fila 1
+
+     clave foranea: se repite            clave primaria: nunca se repite</pre>
+</div>
+
+<p>Las tres flechas salen de la columna que se repite y llegan siempre a una fila única. Esa es la forma de toda relación uno a muchos: muchos apuntan a uno, y el nombre del rubro queda escrito una sola vez.</p>
+
+<div class="idea">
+  <p>Una celda guarda un dato. Cuando la respuesta a «¿cuántos van acá?» es «muchos», el dato no entra en la celda: entra en otras filas de la otra tabla, que apuntan a esta.</p>
+</div>
+
+<h3>Chequeo de la regla</h3>
+<div class="quiz" data-correcta="a">
+  <p class="pregunta">Un equipo dibujó la relación proveedor–producto y puso la columna <code>id_producto</code> dentro de la tabla <code>proveedor</code>. ¿Qué pasa con ese esquema?</p>
+  <label><input type="radio" name="q3"> Cada proveedor puede quedar asociado a un solo producto <span class="por-que">Correcto. La columna guarda un valor, así que el proveedor solo puede apuntar a un producto, y la relación quedó dada vuelta: pasó a ser «un producto tiene muchos proveedores».</span></label>
+  <label><input type="radio" name="q3"> Funciona igual, porque la relación se lee en los dos sentidos <span class="por-que">La relación se lee en los dos sentidos, y la clave foránea entra en uno solo: el del lado «muchos». Puesta del otro lado, la tabla solo puede guardar un id.</span></label>
+  <label><input type="radio" name="q3"> Hace falta una tabla intermedia para arreglarlo <span class="por-que">La tabla intermedia resuelve el caso muchos a muchos. Acá alcanza con mover la columna: <code>id_proveedor</code> dentro de producto.</span></label>
+  <div class="feedback">La columna se mueve a producto. Una clave foránea del lado «uno» convierte la relación en otra distinta de la que el dominio tiene.</div>
+</div>
+</section>
+
+<!-- ================= 5 ================= -->
+<section id="s5">
+<h2><span class="n">05</span> Muchos a muchos: tabla intermedia</h2>
+
+<p>El sitio de la consigna vende. Cuando alguien compra, aparece una entidad que el listado no tenía: el <strong>pedido</strong>. Y con ella, la relación que rompe más esquemas.</p>
+
+<p>Las dos preguntas, sobre pedido y producto:</p>
+
+<ul class="pasos">
+  <li><strong>Ida.</strong> ¿Un pedido puede tener muchos productos? Sí: el pedido 2 lleva una lavandina de 5 L, dos detergentes y cuatro rejillas.</li>
+  <li><strong>Vuelta.</strong> ¿Un producto puede estar en muchos pedidos? Sí: la lavandina de 1 L aparece en tres pedidos distintos.</li>
+</ul>
+
+<p>Las dos respuestas son «muchas», y ahí la clave foránea no tiene dónde ir. En <code>pedido</code> haría falta una columna por cada producto comprado; en <code>producto</code>, una columna por cada pedido que lo incluya. Es el mismo problema del apartado anterior, ahora de los dos lados.</p>
+
+<p>La salida cambia de pieza: <span class="sub-lapiz">la relación deja de ser una línea y pasa a ser una tabla</span>. Se la llama <span class="redondeo">tabla intermedia</span>, tabla de cruce o tabla asociativa, y cada una de sus filas es un cruce concreto entre una fila de cada lado.</p>
+
+<div class="diagrama">
+<pre>ANTES · la linea sola no se puede implementar
+
+     pedido  N ------------------------- M  producto
+                 ¿donde va la clave foranea?
+                 en pedido no entra   -> un pedido lleva muchos productos
+                 en producto tampoco  -> un producto entra en muchos pedidos
+
+DESPUES · la linea se convierte en tabla
+
+     pedido  1 -----> N  detalle  N <----- 1  producto
+                         +-----------------------------+
+                         | id_pedido      (clave, F)   |
+                         | id_producto    (clave, F)   |
+                         | cantidad                    |
+                         | precio_unitario             |
+                         +-----------------------------+
+                          una fila = un producto dentro
+                          de un pedido</pre>
+</div>
+
+<figure class="er">
+  <svg viewBox="0 0 720 470" role="img" aria-labelledby="er2-tit er2-desc">
+    <title id="er2-tit">La relación muchos a muchos resuelta con la tabla detalle</title>
+    <desc id="er2-desc">Usuario realiza pedidos; el pedido se detalla en filas de detalle, y cada fila de detalle corresponde a un producto.</desc>
+    <g class="er-entidad">
+      <rect x="40" y="20" width="190" height="140" rx="10"/>
+      <text class="nombre" x="135" y="47" text-anchor="middle">USUARIO</text>
+      <line class="divisor" x1="40" y1="57" x2="230" y2="57"/>
+      <text class="atributo" x="58" y="79">id_usuario <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="58" y="99">usuario</text>
+      <text class="atributo" x="58" y="119">email</text>
+      <text class="atributo" x="58" y="139">fecha_alta</text>
+    </g>
+    <g class="er-entidad">
+      <rect x="470" y="20" width="200" height="120" rx="10"/>
+      <text class="nombre" x="570" y="47" text-anchor="middle">PEDIDO</text>
+      <line class="divisor" x1="470" y1="57" x2="670" y2="57"/>
+      <text class="atributo" x="488" y="79">id_pedido <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="488" y="99">fecha</text>
+      <text class="atributo" x="488" y="119">id_usuario <tspan class="er-fk">(foránea)</tspan></text>
+    </g>
+    <g class="er-entidad">
+      <rect x="470" y="290" width="200" height="130" rx="10"/>
+      <text class="nombre" x="570" y="317" text-anchor="middle">DETALLE</text>
+      <line class="divisor" x1="470" y1="327" x2="670" y2="327"/>
+      <text class="atributo" x="488" y="349">id_pedido <tspan class="er-pk">(clave)</tspan> <tspan class="er-fk">(foránea)</tspan></text>
+      <text class="atributo" x="488" y="369">id_producto <tspan class="er-pk">(clave)</tspan> <tspan class="er-fk">(foránea)</tspan></text>
+      <text class="atributo" x="488" y="389">cantidad</text>
+      <text class="atributo" x="488" y="409">precio_unitario</text>
+    </g>
+    <g class="er-entidad">
+      <rect x="40" y="240" width="210" height="210" rx="10"/>
+      <text class="nombre" x="145" y="267" text-anchor="middle">PRODUCTO</text>
+      <line class="divisor" x1="40" y1="277" x2="250" y2="277"/>
+      <text class="atributo" x="58" y="299">id_producto <tspan class="er-pk">(clave)</tspan></text>
+      <text class="atributo" x="58" y="319">nombre</text>
+      <text class="atributo" x="58" y="339">descripcion</text>
+      <text class="atributo" x="58" y="359">precio</text>
+      <text class="atributo" x="58" y="379">stock</text>
+      <text class="atributo" x="58" y="399">id_rubro <tspan class="er-fk">(foránea)</tspan></text>
+      <text class="atributo" x="58" y="419">id_marca <tspan class="er-fk">(foránea)</tspan></text>
+      <text class="atributo" x="58" y="439">id_proveedor <tspan class="er-fk">(foránea)</tspan></text>
+    </g>
+    <line class="er-linea" x1="230" y1="85" x2="470" y2="85"/>
+    <text class="er-verbo" x="350" y="76" text-anchor="middle">realiza</text>
+    <text class="er-card" x="240" y="103">1</text>
+    <text class="er-card" x="452" y="103">N</text>
+    <line class="er-linea" x1="570" y1="140" x2="570" y2="290"/>
+    <text class="er-verbo" x="582" y="220">se detalla en</text>
+    <text class="er-card" x="551" y="162">1</text>
+    <text class="er-card" x="551" y="284">N</text>
+    <line class="er-linea" x1="250" y1="355" x2="470" y2="355"/>
+    <text class="er-verbo" x="360" y="346" text-anchor="middle">aparece en</text>
+    <text class="er-card" x="258" y="373">1</text>
+    <text class="er-card" x="452" y="373">N</text>
+  </svg>
+  <figcaption>Pedido y producto están en muchos a muchos, y detalle resuelve el cruce: dos relaciones 1:N en lugar de una N:M.</figcaption>
+  <div class="er-lista">
+    <p><b>USUARIO</b> — id_usuario (clave) · usuario · email · fecha_alta</p>
+    <p><b>PEDIDO</b> — id_pedido (clave) · fecha · id_usuario (foránea)</p>
+    <p><b>DETALLE</b> — id_pedido (clave y foránea) · id_producto (clave y foránea) · cantidad · precio_unitario</p>
+    <p><b>PRODUCTO</b> — id_producto (clave) · nombre · descripcion · precio · stock · id_rubro (foránea) · id_marca (foránea) · id_proveedor (foránea)</p>
+    <p>Relaciones: usuario <i>realiza</i> pedidos (1 a N); un pedido <i>se detalla en</i> muchas filas de detalle (1 a N); un producto <i>aparece en</i> muchas filas de detalle (1 a N). Entre pedido y producto, muchos a muchos.</p>
+  </div>
+</figure>
+
+<h3>Tres propiedades de la tabla intermedia</h3>
+
+<p><strong>Sus columnas empiezan siendo dos claves foráneas.</strong> Una apunta a cada lado: <code>id_pedido</code> apunta a la tabla pedido, <code>id_producto</code> a la tabla producto. Cada fila dice «este producto está en este pedido».</p>
+
+<p><strong>Su clave primaria es la de las dos juntas.</strong> Se llama <span class="redondeo">clave compuesta</span> o clave concatenada, y se escribe <code>PRIMARY KEY (id_pedido, id_producto)</code>. Con eso el mismo producto entra una sola vez dentro del mismo pedido, que es lo que la realidad pide: si se compran seis lavandinas, va una fila con cantidad 6.</p>
+
+<p><strong>Guarda los datos que solo existen en el cruce.</strong> La cantidad no es un dato del producto (no existe «la cantidad de la lavandina») ni del pedido: existe recién cuando ese producto entra en ese pedido. Lo mismo pasa con <code>precio_unitario</code>, y ese caso merece atención.</p>
+
+<div class="check">
+  <span class="et">Precio copiado en detalle</span>
+  <p>La tabla producto ya tiene una columna <code>precio</code>. Copiarlo en detalle parece la redundancia que la clase 1 vino a eliminar, y hace lo contrario: guarda un dato distinto. El precio del producto es <em>el de hoy</em>; el de detalle es <em>el del día de la compra</em>. Cuando la lavandina aumente de 900 a 1100, el pedido de agosto tiene que seguir mostrando 900, porque eso fue lo que se pagó.</p>
+  <p>La prueba para distinguir los dos casos: si al cambiar el valor original el dato copiado también tiene que cambiar, es redundancia. Si tiene que quedarse quieto, es un dato propio.</p>
+</div>
+
+<h3>Chequeo del muchos a muchos</h3>
+<div class="quiz" data-correcta="b">
+  <p class="pregunta">En la tabla <code>detalle</code>, ¿por qué la clave primaria es <code>(id_pedido, id_producto)</code> y no solamente <code>id_pedido</code>?</p>
+  <label><input type="radio" name="q4"> Porque una clave primaria siempre tiene que tener dos columnas <span class="por-que">La mayoría de las tablas del sitio tiene clave de una sola columna. La clave compuesta aparece cuando hace falta más de un dato para distinguir la fila.</span></label>
+  <label><input type="radio" name="q4"> Porque un pedido tiene varias filas de detalle, y <code>id_pedido</code> solo no distingue una de otra <span class="por-que">Correcto. El pedido 2 tiene tres filas de detalle: con el número de pedido solo, las tres serían la misma. Hace falta el producto para distinguirlas.</span></label>
+  <label><input type="radio" name="q4"> Porque <code>id_producto</code> es clave foránea y toda clave foránea forma parte de la clave primaria <span class="por-que">Las tres claves foráneas de producto no forman parte de su clave primaria. En detalle coinciden las dos cosas porque cada fila se identifica justamente por el cruce que representa.</span></label>
+  <div class="feedback">La clave primaria tiene que distinguir cada fila de todas las demás. En una tabla de cruce, lo que distingue una fila es el par completo.</div>
+</div>
+</section>
+
+<!-- ================= 6 ================= -->
+<section id="s6">
+<h2><span class="n">06</span> Uno a uno: dos casos que lo justifican</h2>
+
+<p>Las dos respuestas son «una»: una fila de acá se corresponde con una fila de allá, y con ninguna más. Es la relación menos frecuente, y la primera pregunta que se le hace es si las dos entidades son en realidad una sola.</p>
+
+<p>La mayoría de las veces lo son. «Usuario» y «datos del usuario» en tablas separadas, con una fila de cada lado, describen la misma cosa y se guardan juntas.</p>
+
+<p>La separación se justifica en dos situaciones. Una, cuando la mitad de los datos existe solo para algunas filas: en el sitio, los usuarios que piden factura tienen CUIT, razón social y domicilio fiscal, y el resto no. Dejarlos en la tabla usuario llenaría de vacíos casi todas las filas. La otra, cuando una parte de los datos tiene un cuidado distinto —acceso restringido, copia separada—, y conviene poder darle permisos propios.</p>
+
+<div class="diagrama">
+<pre>usuario                         datos_facturacion
++------------+-----------+      +------------+---------------+
+| id_usuario | usuario   |      | id_usuario | cuit          |
++------------+-----------+      +------------+---------------+
+|          1 | mrojas    | 1——1 |          1 | 20-30111222-5 |
+|          2 | lgomez    |      +------------+---------------+
++------------+-----------+       id_usuario es clave primaria
+                                 y clave foranea a la vez</pre>
+</div>
+
+<p>Se implementa con una clave foránea en cualquiera de las dos tablas, marcada como <strong>única</strong>: eso es lo que impide que dos filas de un lado apunten a la misma del otro. Cuando la tabla del lado opcional usa como clave primaria la clave foránea, la unicidad ya queda garantizada.</p>
+</section>
+
+<!-- ================= 7 ================= -->
+<section id="s7">
+<h2><span class="n">07</span> Participación obligatoria y opcional</h2>
+
+<p>La cardinalidad responde «cuántas». Falta una segunda pregunta, que el diagrama también registra: <strong>¿puede haber ninguna?</strong> La respuesta se llama <span class="redondeo">participación</span>, y es obligatoria cuando la fila no puede existir sin la otra, opcional cuando sí.</p>
+
+<div class="tabla-wrap">
+<table>
+  <thead><tr><th scope="col">Pregunta</th><th scope="col">Respuesta en el sitio</th><th scope="col">Nombre</th><th scope="col">En la tabla</th></tr></thead>
+  <tbody>
+    <tr><td>¿Puede existir un producto sin rubro?</td><td>No: el listado lo muestra por rubro</td><td>participación obligatoria de producto</td><td><code>id_rubro NOT NULL</code></td></tr>
+    <tr><td>¿Puede existir un rubro sin productos?</td><td>Sí: «Baño» existe y todavía no tiene ninguno</td><td>participación opcional de rubro</td><td>nada especial: simplemente no hay filas que lo nombren</td></tr>
+    <tr><td>¿Puede existir una fila de detalle sin pedido?</td><td>No: es parte de un pedido</td><td>dependencia de existencia</td><td>clave foránea obligatoria</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Esa columna de la derecha vuelve a aparecer en las dos clases siguientes, cuando el diagrama se convierta en tablas. Por ahora alcanza con anotar cada respuesta al lado de la línea del diagrama.</p>
+
+<h3>Dependencia de existencia y entidad débil</h3>
+
+<p>Una entidad es <span class="redondeo">débil</span> cuando no puede existir sin otra. La fila «tres lavandinas a 900» no significa nada por fuera del pedido 1: si el pedido desaparece, esa fila no describe ningún hecho. La entidad de la que depende se llama fuerte o propietaria.</p>
+
+<p>Cuando además necesita la clave de la otra para identificarse, la dependencia es <strong>de identificación</strong>, y es exactamente lo que pasa en detalle: su clave primaria incluye <code>id_pedido</code>. La entidad débil se dibuja con el rectángulo de doble borde en la notación clásica; en la notación mínima de la materia alcanza con anotar la clave compuesta, que ya lo dice.</p>
+
+<div class="idea">
+  <p>La consecuencia práctica llega en la clase de integridad: al borrar un pedido, sus filas de detalle se borran con él. Un producto, en cambio, no se puede borrar si aparece en algún pedido, porque el pedido dejaría de decir qué se compró.</p>
+</div>
+</section>
+
+<!-- ================= 8 ================= -->
+<section id="s8">
+<h2><span class="n">08</span> Errores frecuentes en el diagrama</h2>
+
+<p>Seis, en el orden en que aparecen al corregir. Conviene revisarlos sobre el propio diagrama antes de darlo por terminado.</p>
+
+<details>
+<summary>Los seis errores, con su corrección</summary>
+<div class="tabla-wrap">
+<table>
+  <thead><tr><th scope="col">Lo que aparece en el papel</th><th scope="col">Por qué está mal</th><th scope="col">Cómo se corrige</th></tr></thead>
+  <tbody>
+    <tr><td>Rubro conectado con marca</td><td>Ningún hecho del sitio une un rubro con una marca; se conectan por producto, que es quien nombra a los dos</td><td>Se borra la línea. Solo se dibuja la relación que corresponde a un verbo real del dominio</td></tr>
+    <tr><td>La clave foránea del lado «uno»</td><td>Esa celda guarda un valor, así que la relación queda dada vuelta</td><td>La columna se mueve al lado «muchos»</td></tr>
+    <tr><td>Una línea N:M sin tabla intermedia</td><td>No hay dónde escribir la clave foránea, y los datos del cruce quedan sin lugar</td><td>Se agrega la tabla de cruce con las dos claves y sus atributos propios</td></tr>
+    <tr><td>«Es 6:1 porque hay seis productos de limpieza»</td><td>La cardinalidad describe lo que el dominio permite, no la cantidad de filas cargadas hoy</td><td>Se escribe N, que quiere decir «muchas, sin número fijo»</td></tr>
+    <tr><td>Una relación entre producto y precio</td><td>El precio es un atributo: se guarda adentro del rectángulo, no en otro rectángulo</td><td>Se pregunta si de eso hay que guardar más de un dato. Del precio, no</td></tr>
+    <tr><td>Una línea sin cardinalidad en un extremo</td><td>El diagrama queda sin decir lo que vino a decir</td><td>Se responden las dos preguntas y se escriben las dos respuestas</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+</section>
+
+<!-- ================= 9 ================= -->
+<section id="s9">
+<h2><span class="n">09</span> Del diagrama a la consulta</h2>
+
+<p>El entregable pide que el listado del sitio «surja de base de datos». Ese listado muestra rubro, descripción, marca y precio, y esos cuatro datos están en tres tablas distintas. La consulta es la pregunta escrita en el idioma del gestor, y su forma es siempre la misma.</p>
+
+<h3>Consultas sobre una tabla</h3>
+
+<p>La consulta más simple pide columnas de una tabla y filtra filas. Cada línea responde una pregunta distinta:</p>
+
+<div class="anatomia">
+  <code class="q">SELECT   nombre, precio</code><span class="n">qué columnas se quieren ver</span>
+  <code class="q">FROM     producto</code><span class="n">de qué tabla salen</span>
+  <code class="q">WHERE    precio &gt; 1000</code><span class="n">qué filas entran</span>
+  <code class="q">ORDER BY precio DESC;</code><span class="n">en qué orden se muestran</span>
+</div>
+
+<p><code>SELECT</code> elige las columnas; <code>FROM</code>, la tabla; <code>WHERE</code>, la condición que cada fila tiene que cumplir para aparecer; <code>ORDER BY</code>, el orden, con <code>DESC</code> de mayor a menor y <code>ASC</code> —el que se aplica si no se escribe nada— de menor a mayor. El punto y coma cierra la consulta.</p>
+
+<p>Una columna puede calcularse en el momento, y se le pone nombre con <code>AS</code>:</p>
+
+<pre><code>SELECT nombre, precio, precio * 1.21 AS precio_con_iva
+FROM producto;</code></pre>
+
+<p>El valor con IVA no se guarda en ninguna parte, y esa es la razón por la que se calcula: si el precio cambia, el cálculo cambia solo. Es la distinción entre dato guardado y dato calculado de la clase anterior, ahora del lado de la consulta.</p>
+
+<h3>Funciones de agregación</h3>
+
+<p>Las funciones de agregación toman muchas filas y devuelven un valor: <code>COUNT</code> cuenta, <code>SUM</code> suma, <code>AVG</code> promedia, <code>MIN</code> y <code>MAX</code> buscan el menor y el mayor.</p>
+
+<pre><code>SELECT COUNT(*) AS cuantos, AVG(precio) AS promedio
+FROM producto;</code></pre>
+
+<p>Con <code>GROUP BY</code> el resumen se hace por grupo en lugar de sobre todo:</p>
+
+<pre><code>SELECT id_rubro, COUNT(*) AS cuantos
+FROM producto
+GROUP BY id_rubro;</code></pre>
+
+<p>El resultado tiene una fila por rubro. Y ahí aparece el límite de consultar una sola tabla: la respuesta dice «rubro 1: seis productos», con el número que el sitio no muestra. Para ver el nombre hay que traerlo de la tabla rubro.</p>
+
+<h3>Cruce de dos tablas con INNER JOIN</h3>
+
+<p>El <code>JOIN</code> es la flecha del diagrama, recorrida. La condición <code>ON</code> dice por dónde se cruzan las dos tablas, y es siempre la igualdad entre la clave foránea de una y la clave primaria de la otra.</p>
+
+<pre><code>SELECT r.nombre AS rubro, p.descripcion, m.nombre AS marca, p.precio
+FROM producto p
+INNER JOIN rubro r ON p.id_rubro = r.id_rubro
+INNER JOIN marca m ON p.id_marca = m.id_marca
+ORDER BY r.nombre, p.precio;</code></pre>
+
+<p>Esa es la consulta del listado del entregable, completa. Las letras <code>p</code>, <code>r</code> y <code>m</code> son alias: nombres cortos para no repetir el nombre de la tabla en cada columna. Cuando dos tablas tienen una columna con el mismo nombre —<code>nombre</code> está en producto, en rubro y en marca—, el alias adelante es lo que dice de cuál se habla.</p>
+
+<div class="diagrama">
+<pre>El cruce, fila por fila:   ON p.id_rubro = r.id_rubro
+
+  producto                        rubro
+ +---------------+----------+    +----------+-------------------+
+ | nombre        | id_rubro |    | id_rubro | nombre            |
+ +---------------+----------+    +----------+-------------------+
+ | Lavandina 1 L |    1 -------->|        1 | Limpieza de pisos |
+ | Detergente    |    2 -------->|        2 | Cocina            |
+ +---------------+----------+    +----------+-------------------+
+                     |
+                     v
+  lo que devuelve la consulta
+ +---------------+-------------------+
+ | Lavandina 1 L | Limpieza de pisos |
+ | Detergente    | Cocina            |
+ +---------------+-------------------+</pre>
+</div>
+
+<div class="check">
+  <span class="et">Regla del JOIN</span>
+  <p><span class="sub-lapiz">Cada línea del diagrama que la consulta atraviesa es un <code>JOIN</code></span>. Para mostrar el rubro y la marca de cada producto se cruzan dos líneas, así que van dos <code>JOIN</code>, cada uno con su <code>ON</code>. Un <code>JOIN</code> sin <code>ON</code>, o con un <code>ON</code> que no compara los dos ids, devuelve todas las combinaciones posibles de filas, y el resultado se llena de filas que no existen.</p>
+</div>
+
+<h3>Filas sin pareja y LEFT JOIN</h3>
+
+<p><code>INNER JOIN</code> devuelve las filas que tienen pareja de los dos lados. El rubro «Baño» no tiene productos, así que en la consulta anterior no aparece; la marca «Nova» tampoco. Con <code>LEFT JOIN</code>, en cambio, se conservan todas las filas de la tabla de la izquierda, y las columnas de la derecha quedan en <code>NULL</code> cuando no hay pareja:</p>
+
+<pre><code>SELECT r.nombre AS rubro, COUNT(p.id_producto) AS cuantos
+FROM rubro r
+LEFT JOIN producto p ON p.id_rubro = r.id_rubro
+GROUP BY r.nombre
+ORDER BY cuantos DESC;</code></pre>
+
+<p>Acá «Baño» aparece con cero. La elección entre uno y otro sale del apartado 7: cuando la participación de un lado es opcional, ese lado necesita <code>LEFT JOIN</code> para que sus filas sin pareja se vean.</p>
+
+<h3>Consola de prueba</h3>
+
+<p>Esta consola tiene cargada la base del sitio y ejecuta consultas <code>SELECT</code> con los mismos datos que el script de la clase. Los botones con nombre de tabla la muestran entera.</p>
+
+<div class="consola" data-consola></div>
+
+<div class="esquema" data-esquema></div>
+
+<p class="nota">La consola entiende <code>SELECT</code> con <code>WHERE</code>, <code>ORDER BY</code>, <code>JOIN</code>, <code>GROUP BY</code>, <code>HAVING</code>, funciones de agregación y subconsultas. Las órdenes que modifican la base —<code>INSERT</code>, <code>UPDATE</code>, <code>CREATE</code>— se prueban en phpMyAdmin.</p>
+
+<h3>Chequeo de las consultas</h3>
+<div class="quiz" data-correcta="c">
+  <p class="pregunta">Esta consulta tendría que mostrar cada producto con su rubro, y devuelve 5 filas cuando el sitio tiene 12 productos:<br><code>SELECT r.nombre, p.nombre FROM rubro r INNER JOIN producto p ON r.id_rubro = p.id_producto;</code></p>
+  <label><input type="radio" name="q5"> Falta el <code>ORDER BY</code> <span class="por-que">El orden cambia cómo se ven las filas, no cuáles son. Acá el problema está en cuáles.</span></label>
+  <label><input type="radio" name="q5"> Falta agrupar con <code>GROUP BY</code> <span class="por-que">Agrupar resume filas; la consulta no está pidiendo ningún resumen. El error está antes, en la condición del cruce.</span></label>
+  <label><input type="radio" name="q5"> La condición del <code>ON</code> compara columnas que no se corresponden <span class="por-que">Correcto. Cruza <code>r.id_rubro</code> con <code>p.id_producto</code>, dos identificadores de cosas distintas. La condición correcta es <code>r.id_rubro = p.id_rubro</code>: la clave foránea contra la clave primaria a la que apunta.</span></label>
+  <div class="feedback">El <code>ON</code> siempre iguala la clave foránea de una tabla con la clave primaria de la otra. Cualquier otra igualdad devuelve filas que no representan ningún hecho.</div>
+</div>
+</section>
+
+<!-- ================= 10 ================= -->
+<section id="s10">
+<h2><span class="n">10</span> Síntesis</h2>
+
+<ol class="pasos secuencia">
+  <li>La relación sale del <strong>verbo</strong> que une dos entidades, y se lee en los dos sentidos.</li>
+  <li>La <strong>cardinalidad</strong> se averigua con dos preguntas, una por sentido, respondidas con «una» o «muchas» sobre lo que el dominio permite.</li>
+  <li><strong>1:N</strong> se implementa con una clave foránea del lado «muchos».</li>
+  <li><strong>N:M</strong> se implementa con una <strong>tabla intermedia</strong>, cuya clave primaria es la de las dos entidades juntas y que guarda los datos que solo existen en el cruce.</li>
+  <li><strong>1:1</strong> se implementa con una clave foránea única, y antes conviene preguntarse si las dos entidades son una sola.</li>
+  <li>La <strong>participación</strong> dice si puede haber ninguna, y decide después entre <code>INNER JOIN</code> y <code>LEFT JOIN</code>.</li>
+  <li>La <strong>consulta</strong> recorre las líneas del diagrama: cada línea atravesada es un <code>JOIN</code> con su <code>ON</code>.</li>
+</ol>
+
+<div class="check">
+  <span class="et">Material para el documento del entregable</span>
+  <ol>
+    <li>El diagrama entidad-relación con todas las cardinalidades escritas en los dos extremos de cada línea.</li>
+    <li>La tabla intermedia dibujada, con su clave compuesta y sus atributos propios.</li>
+    <li>Una línea por decisión de diseño discutible, con su razón: por qué un producto tiene un solo proveedor, por qué el precio se copia en detalle.</li>
+    <li>La consulta del listado, escrita y probada, con el resultado que devuelve.</li>
+  </ol>
+</div>
+</section>
+
+<nav class="nav-clase">
+  <a href="../clase-1/clase-01-teoria.html"><svg class="ico"><use href="#i-flecha"/></svg> Teoría de la clase 1</a>
+  <a href="clase-02-actividad.html">Actividad de la clase 2 <svg class="ico"><use href="#i-flecha"/></svg></a>
+</nav>
+
+<footer>
+  <p class="pie-l">Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional</p>
+  <p class="pie-l">Ciclo 2026 · material de clase, de acceso libre · <a href="../index.html">índice de la materia</a></p>
+</footer>
+
+</main>
+
+<script src="../js/mini-sql.js"></script>
+<script src="../js/datos-sitio.js"></script>
+<script src="../js/practica.js"></script>
+<script src="../js/lectura.js"></script>
+<script src="../js/marcador.js"></script>
+</body>
+</html>

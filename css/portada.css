@@ -1,0 +1,55 @@
+/* ============================================================
+   Base de Datos · 7.º año TECIP — portada de la materia
+   Solo lo que usa index.html: las tarjetas del encuadre, el listado
+   de clases y las listas de recursos.
+   ============================================================ */
+
+/* ============================================================
+   Índice de la materia
+   ============================================================ */
+
+.tarjetas { display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); margin: 1.3rem 0; }
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 1rem 1.15rem;
+  box-shadow: var(--sombra-suave);
+  transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+}
+.tarjeta:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--acento) 40%, var(--borde));
+  box-shadow: var(--sombra);
+}
+.tarjeta h3 { margin: 0 0 0.35rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.45rem; }
+.tarjeta h3 .ico { color: var(--acento); }
+.tarjeta p { margin: 0; font-size: 0.9rem; color: var(--texto-suave); }
+
+ul.recursos { list-style: none; padding: 0; margin: 1.2rem 0; }
+ul.recursos li {
+  padding: 0.55rem 0; border-bottom: 1px solid var(--borde);
+  font-size: 0.94rem; display: flex; flex-wrap: wrap; gap: 0.3rem 0.5rem; align-items: baseline;
+}
+ul.recursos li:last-child { border-bottom: none; }
+ul.recursos span { color: var(--texto-suave); font-size: 0.9rem; }
+
+.clases { }
+.clases .fila {
+  display: grid; grid-template-columns: 2.4rem 1fr auto; gap: 0.9rem;
+  align-items: baseline;
+  padding: 0.85rem 0; border-bottom: 1px solid var(--borde);
+}
+.clases .fila:last-child { border-bottom: none; }
+.clases .nro {
+  font-family: var(--mono); font-size: 0.8rem; font-weight: 500;
+  color: var(--texto-tenue); text-align: right;
+}
+.clases .tema { font-size: 0.95rem; }
+.clases .tema .fechas { display: block; font-size: 0.82rem; color: var(--texto-tenue); margin-top: 0.15rem; }
+.clases .links { display: flex; gap: 0.5rem; white-space: nowrap; font-size: 0.86rem; }
+.clases .pendiente { color: var(--texto-tenue); font-size: 0.84rem; font-style: italic; }
+@media (max-width: 560px) {
+  .clases .fila { grid-template-columns: 1.8rem 1fr; }
+  .clases .links { grid-column: 2; }
+}

@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/clase.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/componentes.css">
 </head>
 <body class="esc-t3">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -52,6 +53,7 @@
   <ol>
     <li><a href="#s1">El espacio curricular y el proyecto de la materia</a></li>
     <li><a href="#s2">El dato, el registro y la hoja plana</a></li>
+    <li><a href="#s2b">La planilla de cálculo y la base de datos</a></li>
     <li><a href="#s3">Los cinco problemas en la planilla de tu consigna</a></li>
     <li><a href="#s7">El gestor de bases de datos</a></li>
     <li><a href="#s8">XAMPP, phpMyAdmin y la creación de la base</a></li>
@@ -84,6 +86,8 @@
   <li>El límite que queda</li>
   <li>El gestor</li>
 </ol>
+
+<p class="nota marcador-ayuda">Para marcar lo importante mientras leés: <b>doble clic</b> sobre una palabra la resalta, y para una frase se selecciona y aparece el botón «Resaltar» al costado. La marca se saca con otro doble clic. Todo queda guardado en este navegador.</p>
 
 <!-- ================= 1 ================= -->
 <section id="s1">
@@ -138,6 +142,52 @@
 <p>La hoja plana tiene una virtud que explica por qué se usa tanto: se entiende sin explicación. Cualquiera puede abrir una planilla de cálculo, escribir encabezados y empezar a cargar filas. Durante las primeras semanas el sistema funciona, y funciona porque el volumen es chico y porque hay una sola persona cargando datos, que recuerda cómo escribió cada cosa.</p>
 
 <p>El problema aparece cuando la hoja crece y cuando la carga se reparte. Y no aparece como un error puntual que se pueda corregir: aparece como un conjunto de fallas estructurales, todas derivadas de la misma decisión inicial. Esa decisión es haber puesto en una única fila datos que pertenecen a cosas distintas.</p>
+
+<h3 id="s2b">La planilla de cálculo y la base de datos</h3>
+
+<p>Sí, la hoja plana es la planilla de cálculo de siempre: Excel, LibreOffice Calc o una hoja de Google. Las dos guardan filas y columnas, y ahí termina el parecido. La planilla es una <strong>herramienta de cálculo</strong>: cada celda puede tener lo que se le ponga, y su fuerte son las fórmulas, los totales y los gráficos. La base de datos es el <strong>lugar donde los datos viven</strong> para que varias personas y varios programas los usen a la vez, y por eso el gestor exige antes de guardar.</p>
+
+<h4>La diferencia de fondo</h4>
+
+<p>Una base de datos tiene dos partes: los datos y las <strong>reglas que esos datos tienen que cumplir</strong>, declaradas de antemano. El gestor es el programa que hace cumplir esas reglas y rechaza lo que las viola, aunque quien carga insista. Una planilla guarda la primera parte y deja la segunda en la cabeza de quien la usa. Eso es lo que la separa de una base, y se ve en cuatro puntos concretos.</p>
+
+<ol class="pasos secuencia">
+  <li><strong>La estructura no está declarada.</strong> En una base, antes de cargar la primera fila se dice qué columnas tiene la tabla y de qué tipo es cada una. En la planilla, la estructura es un acuerdo entre las personas que la usan: si alguien inserta una columna en el medio o escribe una fecha donde va el precio, el archivo lo acepta y sigue como si nada.</li>
+  <li><strong>La fila no tiene identidad.</strong> En una base, la clave primaria distingue cada fila y el gestor impide que se repita. En la planilla, dos filas iguales conviven sin que nadie avise, y el mismo producto escrito de dos maneras pasa por dos productos distintos.</li>
+  <li><strong>El vínculo entre listas no está garantizado.</strong> La planilla vincula copiando texto o buscándolo con una fórmula, y ese texto puede señalar algo que no existe. La base declara la clave foránea, y entonces un producto con una marca que no está cargada directamente no entra.</li>
+  <li><strong>Nadie ordena lo que pasa al mismo tiempo.</strong> Con varias personas trabajando, dos cambios simultáneos sobre la misma fila se pisan, y una operación que toca dos filas puede quedar hecha a medias. El gestor ordena los accesos y trata esas dos filas como una sola operación: o se hacen las dos, o no se hace ninguna.</li>
+</ol>
+
+<div class="idea">
+  <p>La planilla obedece: guarda lo que se le escriba. El gestor <span class="sub-lapiz">exige</span>: guarda lo que cumple las reglas declaradas y rechaza el resto. Por eso los cinco problemas de la hoja aparecen en cualquier planilla por más cuidado que se ponga —dependen de la herramienta, no de quien carga— y por eso el enunciado del entregable pide que el listado «surja de base de datos».</p>
+</div>
+
+<p>Mientras hay una sola persona cargando, poco volumen y ninguna lista que dependa de otra, la planilla alcanza y es más rápida de armar. El sitio de la consigna tiene las tres condiciones en contra: varias personas, un catálogo que crece y cuatro listas que se nombran entre sí.</p>
+
+<div class="tabla-wrap">
+<table>
+  <thead><tr><th scope="col">La pregunta</th><th scope="col">Planilla de cálculo</th><th scope="col">Base de datos</th></tr></thead>
+  <tbody>
+    <tr><td>¿Qué se puede escribir en una celda?</td><td>Cualquier cosa: en la columna «precio» entra <code>2500</code>, <code>dos mil</code> o <code>?</code></td><td>Lo que declara la columna. Si es numérica, el gestor rechaza el texto</td></tr>
+    <tr><td>¿Se puede exigir que un dato exista?</td><td>Con un aviso que se puede ignorar</td><td>Con <code>NOT NULL</code>: la fila no entra sin ese dato</td></tr>
+    <tr><td>¿Cómo se vincula una lista con otra?</td><td>Copiando el texto, o con <code>BUSCARV</code> mientras el nombre esté escrito igual</td><td>Con una clave: la fila apunta a un número que identifica a la otra</td></tr>
+    <tr><td>¿Y si tres personas cargan al mismo tiempo?</td><td>Se pisan, o hay que turnarse</td><td>El gestor ordena los accesos y ninguno pierde su cambio</td></tr>
+    <tr><td>¿Cómo se busca en 200.000 filas?</td><td>Recorriendo la hoja; con ese volumen ya se arrastra</td><td>Con una consulta y un índice, en milésimas</td></tr>
+    <tr><td>¿Quién puede ver o cambiar qué?</td><td>Quien tenga el archivo tiene todo</td><td>Usuarios y permisos por tabla y por operación</td></tr>
+    <tr><td>¿Cómo se vuelve atrás de un error?</td><td>Deshacer, mientras el archivo esté abierto</td><td>Copia de seguridad, restauración probada y transacciones que se cancelan enteras</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>La planilla sigue siendo la herramienta correcta para hacer cuentas y armar un gráfico con los datos ya sacados de la base. Lo que cambia es dónde viven esos datos mientras se cargan, se corrigen y se consultan.</p>
+
+<div class="quiz" data-correcta="b">
+  <p class="pregunta">Una empresa carga sus ventas en una hoja de cálculo compartida entre cuatro personas. ¿Cuál de estos problemas se resuelve pasando a una base de datos?</p>
+  <label><input type="radio" name="qxls"> Sacar el total del mes <span class="por-que">Ese total la planilla lo calcula perfecto, y la base también. No es el problema que decide el cambio.</span></label>
+  <label><input type="radio" name="qxls"> Que dos personas carguen a la vez sin pisarse, y que el rubro se escriba siempre igual <span class="por-que">Correcto. Los dos son problemas de la herramienta, no del que carga: el acceso simultáneo y la validación de lo que entra en cada columna los resuelve el gestor.</span></label>
+  <label><input type="radio" name="qxls"> Hacer un gráfico de barras <span class="por-que">El gráfico se arma igual de bien con los datos que la base devuelve. Conviene dejarle esa tarea a la planilla.</span></label>
+  <div class="feedback">La planilla calcula y grafica; el gestor garantiza qué se guarda, quién lo cambia y qué pasa cuando varios trabajan a la vez.</div>
+</div>
 
 
 <h3>Chequeo de las tres palabras</h3>
@@ -1807,7 +1857,8 @@ La cardinalidad entre dos de mis listas: _____</pre>
 </nav>
 
 <footer>
-  Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional · Mar del Plata · Ciclo 2026
+  <p class="pie-l">Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional</p>
+  <p class="pie-l">Ciclo 2026 · material de clase, de acceso libre · <a href="../index.html">índice de la materia</a></p>
 </footer>
 
 </main>
@@ -1916,7 +1967,8 @@ La cardinalidad entre dos de mis listas: _____</pre>
   ap(g==="t5" ? "t5" : "t3");
 })();
 </script>
-<script src="../js/estudiantes.js"></script>
+<script src="../js/lectura.js"></script>
+<script src="../js/marcador.js"></script>
 
 <script>
 (function () {

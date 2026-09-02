@@ -1,5 +1,10 @@
-/* Controles de lectura de las páginas de clase: tamaño de texto, tema e ir arriba.
-   El estado se guarda por navegador. */
+/* ============================================================
+   Base de Datos · 7.º año TECIP — controles de lectura
+   Tamaño del texto, tema claro u oscuro, volver arriba, el apartado
+   activo en el índice, las tablas que se apilan en pantallas
+   angostas y la aparición suave de cada apartado.
+   El estado se guarda por navegador. Vale para cualquier página.
+   ============================================================ */
 (function () {
   "use strict";
   var K = "bd-lectura";

@@ -1,0 +1,207 @@
+/* ============================================================
+   Base de Datos · 7.º año TECIP — práctica dentro de la página
+   El editor de consultas, la devolución, la consola libre, el
+   candado del código de la clase y el armado de columnas. Usa las
+   variables de base.css, así que acompaña el tema claro y el oscuro.
+   Se carga solo en las páginas que tienen ejercicios.
+   ============================================================ */
+
+/* ---------- el ejercicio ---------- */
+.ejercicio {
+  border: 1px solid var(--borde);
+  border-left: 3px solid var(--borde-fuerte);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  padding: 1rem 1.2rem 1.1rem;
+  margin: 1.1rem 0;
+}
+.ejercicio > h3 { margin: 0 0 0.4rem; font-size: 1rem; }
+.ejercicio .enunciado { margin: 0 0 0.7rem; }
+.ejercicio.resuelto { border-left-color: var(--ok); }
+.ejercicio .solucion {
+  margin: 0.8rem 0 0; font-size: 0.86rem;
+  border: 1px solid var(--borde); border-radius: var(--radio-s);
+  background: var(--superficie-2);
+}
+
+/* ---------- editor ---------- */
+.sql-caja { margin: 0.2rem 0 0; }
+.sql-editor {
+  width: 100%; display: block;
+  font-family: var(--mono); font-size: 0.9rem; line-height: 1.55;
+  color: var(--texto); background: var(--fondo);
+  border: 1px solid var(--borde-fuerte); border-radius: var(--radio-s);
+  padding: 0.6rem 0.7rem; resize: vertical;
+}
+.sql-editor:focus { outline: 2px solid var(--acento); outline-offset: 1px; border-color: var(--acento); }
+
+.sql-botones { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0 0; }
+.sql-botones button {
+  font: inherit; font-size: 0.82rem; line-height: 1.2;
+  padding: 0.38rem 0.72rem; cursor: pointer;
+  color: var(--texto-suave); background: transparent;
+  border: 1px solid var(--borde-fuerte); border-radius: var(--radio-s);
+}
+.sql-botones button:hover { border-color: var(--acento); color: var(--acento); }
+.sql-botones button:disabled { opacity: 0.45; cursor: default; }
+.sql-botones button:disabled:hover { border-color: var(--borde-fuerte); color: var(--texto-suave); }
+.sql-botones .b-run { color: var(--acento); border-color: var(--acento); font-weight: 600; }
+.sql-botones .b-run:hover { background: var(--acento-tenue); }
+.sql-botones .b-tabla { font-family: var(--mono); font-size: 0.76rem; }
+
+/* ---------- devolución ---------- */
+.sql-salida { margin-top: 0.75rem; }
+.sql-salida:empty { display: none; }
+.sql-salida p { margin: 0.55rem 0 0; font-size: 0.92rem; }
+.res-ok {
+  border-left: 3px solid var(--ok); background: var(--ok-tenue);
+  padding: 0.55rem 0.75rem; border-radius: 0 var(--radio-s) var(--radio-s) 0;
+}
+.res-mal {
+  border-left: 3px solid var(--alerta); background: var(--alerta-tenue);
+  padding: 0.55rem 0.75rem; border-radius: 0 var(--radio-s) var(--radio-s) 0;
+}
+.pista {
+  border-left: 3px solid var(--borde-fuerte); background: var(--superficie-2);
+  padding: 0.5rem 0.75rem; border-radius: 0 var(--radio-s) var(--radio-s) 0;
+  color: var(--texto-suave);
+}
+.et-esperado { color: var(--texto-suave); font-size: 0.86rem !important; }
+
+/* ---------- tabla de resultados ---------- */
+.tabla-res-wrap { margin-top: 0.6rem; min-width: 0; overflow-x: auto; }
+table.tabla-res {
+  border-collapse: collapse; width: auto; min-width: 100%;
+  font-size: 0.84rem; background: var(--fondo);
+  border: 1px solid var(--borde);
+}
+table.tabla-res th, table.tabla-res td {
+  border: 1px solid var(--borde); padding: 0.3rem 0.55rem; text-align: left;
+  white-space: nowrap;
+}
+table.tabla-res th {
+  background: var(--superficie-2); font-family: var(--mono);
+  font-size: 0.76rem; font-weight: 600; color: var(--texto-suave);
+}
+table.tabla-res td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.tabla-res td.nulo { color: var(--texto-tenue); font-style: italic; }
+.pie-res { margin: 0.35rem 0 0 !important; font-size: 0.78rem !important; color: var(--texto-tenue); }
+
+/* ---------- progreso ---------- */
+.progreso {
+  display: inline-block; font-size: 0.8rem; font-weight: 600;
+  color: var(--texto-suave); background: var(--superficie-2);
+  border: 1px solid var(--borde); border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+}
+.progreso.completo { color: var(--ok); border-color: var(--ok); background: var(--ok-tenue); }
+
+/* ---------- consola libre y esquema ---------- */
+.consola {
+  border: 1px solid var(--borde); border-radius: var(--radio);
+  background: var(--superficie); padding: 1rem 1.2rem; margin: 1.1rem 0;
+}
+.esquema { display: grid; gap: 0.4rem; margin: 0.9rem 0 0; }
+.tabla-esq {
+  display: flex; flex-wrap: wrap; gap: 0.1rem 0.6rem; align-items: baseline;
+  font-size: 0.83rem; padding: 0.35rem 0.6rem;
+  border: 1px solid var(--borde); border-radius: var(--radio-s);
+  background: var(--fondo);
+}
+.tabla-esq b { font-family: var(--mono); color: var(--acento); }
+.tabla-esq span { font-family: var(--mono); font-size: 0.78rem; color: var(--texto-tenue); }
+
+/* ---------- por qué de cada opción, en las preguntas ---------- */
+.quiz .por-que {
+  display: none; margin-top: 0.3rem; font-size: 0.88rem;
+  color: var(--texto-suave); font-weight: 400;
+}
+.quiz .por-que.visible { display: block; }
+
+@media (max-width: 560px) {
+  .ejercicio { padding: 0.9rem 0.9rem 1rem; }
+  .sql-botones button { padding: 0.42rem 0.6rem; }
+  table.tabla-res { font-size: 0.78rem; }
+}
+
+/* ---------- botón de descarga y teclas ---------- */
+.b-exportar {
+  font: inherit; font-size: 0.82rem; line-height: 1.2;
+  padding: 0.38rem 0.72rem; cursor: pointer; margin-left: 0.4rem;
+  color: var(--texto-suave); background: transparent;
+  border: 1px solid var(--borde-fuerte); border-radius: var(--radio-s);
+}
+.b-exportar:hover { border-color: var(--acento); color: var(--acento); }
+kbd {
+  font-family: var(--mono); font-size: 0.8em; padding: 0.05em 0.35em;
+  border: 1px solid var(--borde-fuerte); border-bottom-width: 2px;
+  border-radius: 4px; background: var(--superficie-2);
+}
+
+/* ---------- aviso mientras la respuesta todavía no se muestra ---------- */
+.quiz .intento {
+  margin: 0.7rem 0 0; font-size: 0.9rem; color: var(--alerta);
+  border-left: 3px solid var(--alerta); background: var(--alerta-tenue);
+  padding: 0.45rem 0.7rem; border-radius: 0 var(--radio-s) var(--radio-s) 0;
+}
+.quiz .intento:empty { display: none; }
+
+/* ---------- candado del código de la clase ---------- */
+.candado {
+  border: 1px dashed var(--borde-fuerte); border-radius: var(--radio);
+  padding: 0.85rem 1.1rem; margin: 1.1rem 0; background: var(--superficie);
+}
+.candado .candado-t { margin: 0 0 0.6rem; font-size: 0.92rem; color: var(--texto-suave); }
+.candado-fila { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+.candado-input {
+  font: inherit; font-size: 0.88rem; font-family: var(--mono);
+  padding: 0.4rem 0.6rem; min-width: 11rem;
+  color: var(--texto); background: var(--fondo);
+  border: 1px solid var(--borde-fuerte); border-radius: var(--radio-s);
+}
+.candado-input:focus { outline: 2px solid var(--acento); outline-offset: 1px; }
+.candado .b-run {
+  font: inherit; font-size: 0.82rem; padding: 0.4rem 0.75rem; cursor: pointer;
+  color: var(--acento); background: transparent; font-weight: 600;
+  border: 1px solid var(--acento); border-radius: var(--radio-s);
+}
+.candado .b-run:hover { background: var(--acento-tenue); }
+.candado .b-run:disabled { opacity: 0.5; cursor: default; }
+.candado-estado { font-size: 0.85rem; color: var(--texto-suave); }
+.candado.abierto { border-style: solid; border-color: var(--ok); }
+.candado.abierto .candado-estado { color: var(--ok); font-weight: 600; }
+.candado.cerrado .candado-estado { color: var(--alerta); }
+
+/* ---------- armado de columnas ---------- */
+.armado {
+  border: 1px solid var(--borde); border-left: 3px solid var(--borde-fuerte);
+  border-radius: var(--radio); background: var(--superficie);
+  padding: 1rem 1.2rem 1.1rem; margin: 1.1rem 0;
+}
+.armado .enunciado { margin: 0 0 0.7rem; font-weight: 600; }
+.armado .opciones { list-style: none; margin: 0; padding: 0; }
+.armado .opciones li {
+  margin: 0; padding: 0.35rem 0.6rem; border-radius: var(--radio-s);
+  border-left: 3px solid transparent; max-width: none;
+}
+.armado .opciones label { display: block; cursor: pointer; }
+.armado .opciones input { margin-right: 0.55rem; }
+.armado .opciones li.bien { background: var(--ok-tenue); border-left-color: var(--ok); }
+.armado .opciones li.mal { background: var(--alerta-tenue); border-left-color: var(--alerta); }
+.armado .por-que {
+  display: none; margin: 0.15rem 0 0 1.7rem; font-size: 0.88rem; color: var(--texto-suave);
+}
+.armado .por-que.visible { display: block; }
+.armado .acciones { margin-top: 0.8rem; }
+.armado .b-run {
+  font: inherit; font-size: 0.85rem; font-weight: 600; padding: 0.4rem 0.8rem; cursor: pointer;
+  color: var(--acento); background: transparent;
+  border: 1px solid var(--acento); border-radius: var(--radio-s);
+}
+.armado .b-run:hover { background: var(--acento-tenue); }
+.armado .b-run:disabled { opacity: 0.5; cursor: default; }
+.armado .salida p { margin: 0.7rem 0 0; font-size: 0.92rem; }
+.armado .intento {
+  border-left: 3px solid var(--alerta); background: var(--alerta-tenue);
+  padding: 0.5rem 0.75rem; border-radius: 0 var(--radio-s) var(--radio-s) 0; color: var(--texto);
+}
