@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad Clase 2 — Base de Datos</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/componentes.css">
+<link rel="stylesheet" href="../css/practica.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></symbol>
+    <symbol id="i-tabla" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/></symbol>
+    <symbol id="i-flecha" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-lapiz" viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol>
+    <symbol id="i-alerta" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-descarga" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></symbol>
+  </defs>
+</svg>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<main id="contenido">
+
+<header class="encabezado">
+  <span class="rotulo"><svg class="ico"><use href="#i-db"/></svg> Base de Datos · Clase 2 · Actividad</span>
+  <h1>Cardinalidades del sitio y primeras consultas</h1>
+  <p class="entrada">
+    Seis puntos, en el orden en que se hacen. Los dos primeros se resuelven acá mismo: las
+    cardinalidades del sitio y el armado de la tabla que sostiene el muchos a muchos. El tercero
+    son veinticuatro consultas que se escriben y se corrigen en la página, con la base del sitio
+    cargada adentro: funciona sin XAMPP y sin internet. El cuarto lleva todo eso al gestor. El
+    quinto aplica lo trabajado al modelo del proyecto y el sexto es el registro que va a la
+    carpeta.
+  </p>
+  <details class="encuadre">
+    <summary>Unidad, contenidos y capacidades</summary>
+    <div><span class="et">Unidad</span><p>2. Modelo entidad-relación y diseño conceptual.</p></div>
+    <div><span class="et">Contenidos</span><p>Cardinalidad. Relación de muchos a muchos y tabla intermedia. Participación. Consultas con <code>SELECT</code>, <code>WHERE</code>, <code>ORDER BY</code>, funciones de agregación y <code>JOIN</code>.</p></div>
+    <div><span class="et">Capacidades</span><p>Determinar cardinalidades preguntando en los dos sentidos. Resolver una relación de muchos a muchos. Escribir consultas que recorran las relaciones del modelo.</p></div>
+    <div><span class="et">Producción</span><p>El diagrama del sitio con la tabla intermedia, las consultas resueltas y las tres consultas del proyecto propio enunciadas.</p></div>
+  </details>
+</header>
+
+<nav class="indice">
+  <h2>Contenido</h2>
+  <ol>
+    <li><a href="#p1">Cardinalidades del sitio</a></li>
+    <li><a href="#p2">Armado de tabla intermedia</a></li>
+    <li><a href="#p3">Consultas en la página</a></li>
+    <li><a href="#p4">Base del sitio en phpMyAdmin</a></li>
+    <li><a href="#p5">Modelo del proyecto</a></li>
+    <li><a href="#p6">Registro y autocomprobación</a></li>
+  </ol>
+</nav>
+
+<p class="nota marcador-ayuda">Para marcar lo importante mientras leés: <b>doble clic</b> sobre una palabra la resalta, y para una frase se selecciona y aparece el botón «Resaltar» al costado. La marca se saca con otro doble clic. Todo queda guardado en este navegador.</p>
+
+<!-- ================= 1 ================= -->
+<section id="p1">
+<h2><span class="n">01</span> Cardinalidades del sitio</h2>
+
+<p>Cada pregunta se responde con el procedimiento de la teoría: la de ida, la de vuelta, y el par de respuestas decide. La explicación aparece cuando acertás o después de tres intentos, así que conviene volver a leer la pregunta antes de probar otra opción.</p>
+
+<div class="quiz" data-correcta="b">
+  <p class="pregunta">1. Producto y marca. ¿Qué cardinalidad tiene la relación?</p>
+  <label><input type="radio" name="c1"> N:M, porque hay muchos productos y muchas marcas <span class="por-que">La cantidad de filas de cada tabla no decide nada. Lo que decide son las dos preguntas: una marca tiene muchos productos, y un producto tiene una sola marca.</span></label>
+  <label><input type="radio" name="c1"> 1:N de marca a producto <span class="por-que">Correcto. Ida: Brillex tiene seis productos. Vuelta: la lavandina de 1 L es de una sola marca. La clave foránea <code>id_marca</code> va en producto.</span></label>
+  <label><input type="radio" name="c1"> 1:1, porque cada producto tiene una marca <span class="por-que">La vuelta da «una», y la ida da «muchas»: para que fuera 1:1, cada marca tendría que tener un único producto en todo el sitio.</span></label>
+  <div class="feedback">Una respuesta «muchas» y una «una» dan 1:N, con la clave foránea del lado «muchos».</div>
+</div>
+
+<div class="quiz" data-correcta="c">
+  <p class="pregunta">2. La empresa empieza a comprarle la misma lavandina a dos distribuidoras distintas. ¿Qué le pasa a la relación producto–proveedor?</p>
+  <label><input type="radio" name="c2"> Sigue igual: se guarda el proveedor principal <span class="por-que">Guardar solo uno sirve mientras nadie pregunte por el otro. La primera consulta de «a quién le compramos esto» ya devuelve una respuesta incompleta.</span></label>
+  <label><input type="radio" name="c2"> Se agrega una segunda columna, <code>id_proveedor_2</code> <span class="por-que">Es el intento que la teoría descarta: con el tercer proveedor hace falta otra columna, y la consulta tiene que buscar en todas.</span></label>
+  <label><input type="radio" name="c2"> Pasa a ser N:M y necesita una tabla intermedia <span class="por-que">Correcto. Las dos preguntas dan «muchas»: un proveedor provee muchos productos y un producto viene de varios proveedores. La tabla de cruce puede guardar además el precio de compra de cada proveedor.</span></label>
+  <div class="feedback">Cuando una respuesta pasa de «una» a «muchas», la relación cambia de forma y el esquema cambia con ella.</div>
+</div>
+
+<div class="quiz" data-correcta="a">
+  <p class="pregunta">3. En la tabla <code>detalle</code>, ¿qué representa una fila?</p>
+  <label><input type="radio" name="c3"> Un producto dentro de un pedido, con la cantidad comprada <span class="por-que">Correcto. Cada fila es un cruce concreto: qué producto, en qué pedido, cuántas unidades y a qué precio.</span></label>
+  <label><input type="radio" name="c3"> Un pedido completo <span class="por-que">El pedido completo es una fila de la tabla pedido. En detalle, un pedido de tres productos ocupa tres filas.</span></label>
+  <label><input type="radio" name="c3"> Un producto del catálogo <span class="por-que">El catálogo es la tabla producto. Un producto que nadie compró no tiene ninguna fila en detalle.</span></label>
+  <div class="feedback">Una fila de la tabla intermedia es un cruce: una fila de cada lado, más lo que solo existe en ese encuentro.</div>
+</div>
+
+<div class="quiz" data-correcta="c">
+  <p class="pregunta">4. El sitio suma reseñas: cada usuario puede escribir una reseña por producto, con puntaje y comentario, y un producto puede tener reseñas de muchos usuarios. ¿Cómo se modela?</p>
+  <label><input type="radio" name="c4"> Una columna <code>resenias</code> en la tabla producto <span class="por-que">Una celda guarda un dato. Con varias reseñas por producto no entran, y el puntaje de cada una tampoco tendría dónde ir.</span></label>
+  <label><input type="radio" name="c4"> Una clave foránea <code>id_usuario</code> en producto <span class="por-que">Eso permitiría una sola reseña por producto, la del usuario apuntado. El enunciado dice que puede haber muchas.</span></label>
+  <label><input type="radio" name="c4"> Una tabla <code>resenia</code> con <code>id_usuario</code> e <code>id_producto</code>, puntaje y comentario <span class="por-que">Correcto. Es una tabla intermedia, con dos datos propios del cruce. Su clave primaria puede ser el par <code>(id_usuario, id_producto)</code>, y eso además garantiza una sola reseña por persona y producto.</span></label>
+  <div class="feedback">Muchos a muchos y datos que solo existen en el cruce: la tabla intermedia resuelve las dos cosas a la vez.</div>
+</div>
+
+<div class="quiz" data-correcta="b">
+  <p class="pregunta">5. ¿Qué relación del sitio tiene participación opcional de un lado?</p>
+  <label><input type="radio" name="c5"> Producto y rubro, del lado de producto <span class="por-que">Del lado de producto la participación es obligatoria: el listado muestra cada producto dentro de un rubro, así que ninguno puede quedarse sin rubro.</span></label>
+  <label><input type="radio" name="c5"> Rubro y producto, del lado de rubro <span class="por-que">Correcto. «Baño» existe sin productos cargados. Por eso, para contar productos por rubro sin que «Baño» desaparezca del resultado, hace falta <code>LEFT JOIN</code>.</span></label>
+  <label><input type="radio" name="c5"> Detalle y pedido, del lado de detalle <span class="por-que">Una fila de detalle sin pedido no describe ningún hecho: ahí la participación es obligatoria, y además hay dependencia de existencia.</span></label>
+  <div class="feedback">La participación opcional del lado «uno» es la que después obliga a elegir <code>LEFT JOIN</code> en la consulta.</div>
+</div>
+</section>
+
+<!-- ================= 2 ================= -->
+<section id="p2">
+<h2><span class="n">02</span> Armado de tabla intermedia</h2>
+
+<p>El sitio pasa a vender, y con la compra aparece el <strong>pedido</strong>: un pedido lleva muchos productos y un producto entra en muchos pedidos. Las dos respuestas son «muchas», así que la clave foránea no tiene dónde ir —ni en pedido ni en producto— y la relación necesita una tabla propia.</p>
+
+<div class="idea">
+  <p><b>Una tabla intermedia es la tabla que guarda los cruces.</b> Cada fila representa un encuentro concreto entre las dos entidades —este producto, dentro de este pedido— y para decirlo lleva la clave de cada lado. Además guarda los datos que existen recién en ese encuentro, como cuántas unidades se compraron.</p>
+</div>
+
+<div class="diagrama">
+<pre>  pedido  1 ------> N  detalle  N <------ 1  producto
+
+  una fila de detalle = un producto dentro de un pedido
+  la relacion N:M se convierte en dos relaciones 1:N</pre>
+</div>
+
+<p>En el sitio esa tabla se llama <code>detalle</code>. Los dos armados que siguen la resuelven columna por columna.</p>
+
+<div class="armado" data-armado>
+  <p class="enunciado">1 · Cada fila de <code>detalle</code> dice qué producto entró en qué pedido. De esta lista, marcá las columnas que van adentro.</p>
+  <ul class="opciones">
+    <li><label><input type="checkbox" data-va="si"> <code>id_pedido</code></label>
+      <span class="por-que">Va. Es la clave foránea que dice a qué pedido pertenece la fila.</span></li>
+    <li><label><input type="checkbox" data-va="si"> <code>id_producto</code></label>
+      <span class="por-que">Va. Es la clave foránea del otro lado del cruce.</span></li>
+    <li><label><input type="checkbox" data-va="si"> <code>cantidad</code></label>
+      <span class="por-que">Va. Cuántas unidades de ese producto entraron en ese pedido: el dato existe recién en el cruce.</span></li>
+    <li><label><input type="checkbox" data-va="si"> <code>precio_unitario</code></label>
+      <span class="por-que">Va. Es el precio del día de la compra, que se queda quieto cuando el producto aumenta.</span></li>
+    <li><label><input type="checkbox" data-va="no"> <code>nombre_producto</code></label>
+      <span class="por-que">No va. El nombre está escrito una vez en la tabla producto y la fila llega a él por <code>id_producto</code>. Copiarlo es la redundancia de la clase 1.</span></li>
+    <li><label><input type="checkbox" data-va="no"> <code>fecha</code></label>
+      <span class="por-que">No va. La fecha es del pedido entero, no de cada renglón: vive en la tabla pedido.</span></li>
+    <li><label><input type="checkbox" data-va="no"> <code>stock</code></label>
+      <span class="por-que">No va. El stock describe al producto en el depósito, no a lo que se compró.</span></li>
+    <li><label><input type="checkbox" data-va="no"> <code>id_usuario</code></label>
+      <span class="por-que">No va. Quién compró está en el pedido, y el pedido ya está nombrado en la fila. Repetirlo permitiría que un renglón dijera un usuario distinto del de su propio pedido.</span></li>
+  </ul>
+  <div class="acciones"><button type="button" class="b-run">Comprobar</button></div>
+  <div class="salida" role="status"></div>
+</div>
+
+<div class="quiz" data-correcta="c">
+  <p class="pregunta">2 · ¿Cuál es la clave primaria de <code>detalle</code>?</p>
+  <label><input type="radio" name="pk"> <code>id_pedido</code> <span class="por-que">Un pedido de tres productos tiene tres filas en detalle: con el número de pedido solo, las tres serían la misma fila.</span></label>
+  <label><input type="radio" name="pk"> <code>id_producto</code> <span class="por-que">La lavandina aparece en tres pedidos distintos, así que el número de producto tampoco distingue una fila de otra.</span></label>
+  <label><input type="radio" name="pk"> Las dos juntas, <code>(id_pedido, id_producto)</code> <span class="por-que">Correcto. Lo que distingue una fila es el cruce completo, y de paso queda garantizado que el mismo producto entre una sola vez en el mismo pedido.</span></label>
+  <label><input type="radio" name="pk"> Una columna nueva, <code>id_detalle</code> <span class="por-que">Identifica la fila y deja pasar algo que la realidad no quiere: el mismo producto cargado dos veces en el mismo pedido, con dos id distintos. La clave compuesta lo impide sola.</span></label>
+  <div class="feedback">En una tabla de cruce, la clave primaria es el par de claves foráneas. Se escribe <code>PRIMARY KEY (id_pedido, id_producto)</code>.</div>
+</div>
+
+<div class="check">
+  <span class="et">Del armado al diagrama</span>
+  <p>Con esas dos respuestas la tabla queda definida, y así entra en el diagrama del sitio. En el punto 5 se hace lo mismo sobre el dominio del equipo: la relación de muchos a muchos que tenga, con su tabla de cruce, sus dos claves foráneas y los datos que solo existen en el cruce.</p>
+</div>
+</section>
+
+<!-- ================= 3 ================= -->
+<section id="p3">
+<h2><span class="n">03</span> Consultas en la página</h2>
+
+<p>Son veinticuatro, en cinco tandas de dificultad creciente. Las once primeras son el recorrido de la clase; de ahí en adelante es para quien va más rápido y para seguir en casa, así que nadie se queda sin qué hacer.</p>
+
+<p>Cada ejercicio se escribe, se ejecuta y se corrige solo. <b>Ejecutar</b> compara el resultado con el que la consigna pide y explica qué falta cuando no coincide; <b>Pista</b> ayuda sin dar la respuesta; <b>Ver el resultado esperado</b> muestra la tabla que tiene que salir; <b>Ver la consulta resuelta</b> necesita el código de la clase. También funciona <kbd>Ctrl</kbd> + <kbd>Enter</kbd> para ejecutar.</p>
+
+<p><span class="progreso" data-progreso>Resueltos 0 de 24</span> <button type="button" class="b-exportar" data-exportar>Descargar mis consultas</button></p>
+
+<div class="candado" data-codigo></div>
+
+<details>
+  <summary>Las tablas de la base, con sus columnas</summary>
+  <div class="esquema" data-esquema></div>
+  <p class="nota">Son las mismas del script <a href="sitio-olimpiada.sql">sitio-olimpiada.sql</a>: lo que se escriba acá corre igual en phpMyAdmin.</p>
+</details>
+
+<h3>Consultas sobre una tabla</h3>
+
+<div class="ejercicio" id="ej-01" data-orden="no">
+  <h3>1 · El catálogo entero</h3>
+  <p class="enunciado">Mostrá todas las columnas de todos los productos.</p>
+  <ul class="pistas">
+    <li>El asterisco significa «todas las columnas».</li>
+  </ul>
+  <p class="nota-ok">Es la consulta con la que conviene empezar siempre que se abre una tabla nueva: muestra qué hay adentro.</p>
+</div>
+
+<div class="ejercicio" id="ej-02">
+  <h3>2 · Nombre y precio, en orden alfabético</h3>
+  <p class="enunciado">Mostrá el nombre y el precio de todos los productos, ordenados por nombre de la A a la Z.</p>
+  <ul class="pistas">
+    <li>Las columnas que se quieren ver van entre <code>SELECT</code> y <code>FROM</code>, separadas por coma.</li>
+    <li>El orden alfabético ascendente es el que se aplica sin escribir nada después de la columna.</li>
+  </ul>
+  <p class="nota-ok">Pedir dos columnas en lugar de todas es lo que hace que el sitio muestre solo lo que necesita.</p>
+</div>
+
+<div class="ejercicio" id="ej-03" data-orden="no">
+  <h3>3 · Los baratos</h3>
+  <p class="enunciado">Mostrá el nombre y el precio de los productos que cuestan menos de 1000.</p>
+  <ul class="pistas">
+    <li>La condición va en <code>WHERE</code>, después de <code>FROM</code>.</li>
+    <li>«Menos de 1000» se escribe <code>precio &lt; 1000</code>, sin comillas: es un número.</li>
+  </ul>
+  <p class="nota-ok">Son cuatro productos. El <code>WHERE</code> es el filtro que decide qué filas entran en la respuesta.</p>
+</div>
+
+<div class="ejercicio" id="ej-04" data-orden="no">
+  <h3>4 · Las lavandinas</h3>
+  <p class="enunciado">Mostrá el nombre de los productos cuyo nombre empieza con «Lavandina».</p>
+  <ul class="pistas">
+    <li>Para comparar textos parecidos se usa <code>LIKE</code> en lugar de <code>=</code>.</li>
+    <li>El signo <code>%</code> vale por «cualquier cosa»: <code>'Lavandina%'</code> es «empieza con Lavandina».</li>
+  </ul>
+  <p class="nota-ok">Es la consulta que está detrás del buscador del sitio. Con <code>%</code> de los dos lados, busca en cualquier parte del nombre.</p>
+</div>
+
+<div class="ejercicio" id="ej-05">
+  <h3>5 · Los tres más caros</h3>
+  <p class="enunciado">Mostrá el nombre y el precio de los tres productos más caros, del más caro al más barato.</p>
+  <ul class="pistas">
+    <li>Ordenar de mayor a menor se escribe <code>ORDER BY precio DESC</code>.</li>
+    <li>Para quedarse solo con las primeras filas está <code>LIMIT</code>.</li>
+  </ul>
+  <p class="nota-ok"><code>ORDER BY</code> y <code>LIMIT</code> juntos son la forma de pedir «el más», «los primeros», «el último».</p>
+</div>
+
+<div class="ejercicio" id="ej-06">
+  <h3>6 · Cuánta plata hay en el depósito</h3>
+  <p class="enunciado">Mostrá el nombre, el precio, el stock y una cuarta columna llamada <code>valor_en_deposito</code> con el precio multiplicado por el stock, de mayor a menor valor.</p>
+  <ul class="pistas">
+    <li>La cuenta se escribe en la lista de columnas: <code>precio * stock</code>.</li>
+    <li>El nombre de la columna calculada se pone con <code>AS</code>.</li>
+  </ul>
+  <p class="nota-ok">El valor inmovilizado no se guarda en ninguna columna: si el stock cambia, el número cambia solo. Eso es un dato calculado.</p>
+</div>
+
+<h3>Consultas de resumen</h3>
+
+<div class="ejercicio" id="ej-07" data-orden="no">
+  <h3>7 · Cuántos productos hay</h3>
+  <p class="enunciado">Mostrá una sola columna con la cantidad de productos cargados.</p>
+  <ul class="pistas">
+    <li><code>COUNT(*)</code> cuenta las filas que quedaron después del <code>WHERE</code>.</li>
+  </ul>
+  <p class="nota-ok">Una función de agregación devuelve una fila con el resumen de muchas.</p>
+</div>
+
+<div class="ejercicio" id="ej-08" data-orden="no">
+  <h3>8 · El precio promedio</h3>
+  <p class="enunciado">Mostrá el precio promedio de los productos, redondeado a dos decimales, en una columna llamada <code>promedio</code>.</p>
+  <ul class="pistas">
+    <li>El promedio es <code>AVG(precio)</code>.</li>
+    <li>Para redondear, <code>ROUND(lo_que_sea, 2)</code>.</li>
+  </ul>
+  <p class="nota-ok">Las funciones se anidan: primero se calcula el promedio y después se redondea el resultado.</p>
+</div>
+
+<div class="ejercicio" id="ej-09">
+  <h3>9 · Cuántos productos tiene cada rubro</h3>
+  <p class="enunciado">Mostrá el <code>id_rubro</code> y la cantidad de productos de cada uno, en una columna llamada <code>cuantos</code>, del rubro con más productos al que tiene menos. Alcanza con la tabla producto.</p>
+  <ul class="pistas">
+    <li>Contar por grupo necesita <code>GROUP BY</code>, con la columna que define los grupos.</li>
+    <li>Se puede ordenar por el nombre que le pusiste a la columna calculada.</li>
+  </ul>
+  <p class="nota-ok">Sin <code>GROUP BY</code>, <code>COUNT</code> resume toda la tabla. Con <code>GROUP BY</code>, resume cada grupo por separado.</p>
+</div>
+
+<h3>Consultas que cruzan tablas</h3>
+
+<div class="ejercicio" id="ej-10">
+  <h3>10 · Cada producto con el nombre de su rubro</h3>
+  <p class="enunciado">Mostrá el nombre del producto y el nombre de su rubro, ordenados por nombre de rubro y, dentro de cada rubro, por nombre de producto.</p>
+  <ul class="pistas">
+    <li>Dos tablas se cruzan con <code>INNER JOIN ... ON</code>, y la condición iguala la clave foránea con la clave primaria: <code>p.id_rubro = r.id_rubro</code>.</li>
+    <li>Las dos tablas tienen una columna <code>nombre</code>, así que hay que escribir el alias adelante: <code>p.nombre</code> y <code>r.nombre</code>.</li>
+  </ul>
+  <p class="nota-ok">El <code>JOIN</code> recorre la flecha del diagrama. Es lo que convierte el número de la clave foránea en el texto que el sitio muestra.</p>
+</div>
+
+<div class="ejercicio" id="ej-11">
+  <h3>11 · El listado del entregable</h3>
+  <p class="enunciado">Armá la consulta que el sitio necesita: rubro, descripción, marca y precio de cada producto, en ese orden de columnas, ordenado por nombre de rubro y, dentro de cada rubro, por precio de menor a mayor.</p>
+  <ul class="pistas">
+    <li>Los cuatro datos están en tres tablas: producto, rubro y marca. Cada línea del diagrama que se atraviesa es un <code>JOIN</code>.</li>
+    <li>Los dos <code>JOIN</code> se escriben uno debajo del otro, cada uno con su <code>ON</code>.</li>
+  </ul>
+  <p class="nota-ok">Esta es la consulta que el entregable 6 pide cuando dice que el listado «debe surgir de base de datos». Conviene guardarla: va al documento.</p>
+</div>
+
+<div class="ejercicio" id="ej-12" data-orden="no">
+  <h3>12 · Los productos de una marca</h3>
+  <p class="enunciado">Mostrá el nombre y el precio de los productos de la marca «Brillex» que cuestan más de 1000. El nombre de la marca tiene que aparecer en la condición, no su número.</p>
+  <ul class="pistas">
+    <li>Hace falta cruzar producto con marca para poder preguntar por el nombre de la marca.</li>
+    <li>Las dos condiciones se unen con <code>AND</code>, y el texto va entre comillas simples.</li>
+  </ul>
+  <p class="nota-ok">Filtrar por el nombre en lugar de por el id es lo que hace que la consulta se entienda sin tener la tabla marca a la vista.</p>
+</div>
+
+<div class="ejercicio" id="ej-13">
+  <h3>13 · Todos los rubros, incluso los vacíos</h3>
+  <p class="enunciado">Mostrá el nombre de cada rubro y cuántos productos tiene, en una columna llamada <code>cuantos</code>. Los rubros sin productos tienen que aparecer con cero. Ordená de más a menos productos y, a igualdad, por nombre de rubro.</p>
+  <ul class="pistas">
+    <li>Con <code>INNER JOIN</code>, el rubro sin productos desaparece. Empezá la consulta por la tabla rubro y usá <code>LEFT JOIN</code>.</li>
+    <li><code>COUNT(*)</code> contaría también la fila sin pareja: hay que contar una columna de producto, <code>COUNT(p.id_producto)</code>, que en esa fila vale <code>NULL</code> y no se cuenta.</li>
+  </ul>
+  <p class="nota-ok">Acá se ve para qué sirve la participación opcional del apartado 7 de la teoría: «Baño» aparece con cero porque el <code>LEFT JOIN</code> conserva las filas sin pareja.</p>
+</div>
+
+<h3>Consultas sobre pedidos</h3>
+
+<div class="ejercicio" id="ej-14">
+  <h3>14 · Cuánto salió cada pedido</h3>
+  <p class="enunciado">Mostrá el número de pedido y el total gastado en él, en una columna llamada <code>total</code>, del pedido más caro al más barato. El total de un pedido es la suma de cantidad por precio unitario de todas sus filas de detalle.</p>
+  <ul class="pistas">
+    <li>La cuenta de cada fila es <code>cantidad * precio_unitario</code>; sumarlas todas es <code>SUM(cantidad * precio_unitario)</code>.</li>
+    <li>Se agrupa por el número de pedido. Con la tabla detalle sola alcanza.</li>
+  </ul>
+  <p class="nota-ok">El total no se guarda en ninguna columna: se calcula sumando el detalle. Guardarlo obligaría a recalcularlo cada vez que se corrige una cantidad.</p>
+</div>
+
+<div class="ejercicio" id="ej-15">
+  <h3>15 · Los tres más vendidos</h3>
+  <p class="enunciado">Mostrá el nombre del producto y la cantidad total de unidades vendidas, en una columna llamada <code>vendidas</code>, para los tres productos más vendidos. A igual cantidad, ordená por nombre alfabético.</p>
+  <ul class="pistas">
+    <li>El nombre está en producto y las cantidades en detalle: hay que cruzarlas por <code>id_producto</code>.</li>
+    <li>Se agrupa por el nombre del producto y se suma la cantidad.</li>
+    <li>Después de ordenar de mayor a menor, <code>LIMIT 3</code>.</li>
+  </ul>
+  <p class="nota-ok">Es la consulta que alimenta la sección «lo más vendido» de cualquier sitio de ventas, y sale entera del cruce con la tabla intermedia.</p>
+</div>
+
+<h3>Consultas para seguir</h3>
+
+<p>Las nueve que siguen son para quien terminó la tanda anterior, y son las que más se parecen a lo que el sistema del proyecto va a necesitar. Ninguna hace falta para cerrar la clase: las que queden entran en el portfolio de consultas del equipo.</p>
+
+<div class="ejercicio" id="ej-16">
+  <h3>16 · Los que nadie compró</h3>
+  <p class="enunciado">Mostrá el nombre de los productos que no aparecen en ningún pedido, en orden alfabético.</p>
+  <ul class="pistas">
+    <li>Empezá por producto y traé el detalle con <code>LEFT JOIN</code>: los que nunca se vendieron quedan con las columnas de detalle en <code>NULL</code>.</li>
+    <li>Esa condición se escribe <code>WHERE d.id_producto IS NULL</code>, con <code>IS</code>, no con <code>=</code>.</li>
+  </ul>
+  <p class="nota-ok">Son dos. La combinación de <code>LEFT JOIN</code> con <code>IS NULL</code> es la forma estándar de preguntar «cuáles no tienen».</p>
+</div>
+
+<div class="ejercicio" id="ej-17">
+  <h3>17 · Cuánto gastó cada usuario</h3>
+  <p class="enunciado">Mostrá el nombre de usuario y el total que gastó, en una columna llamada <code>gastado</code>, de mayor a menor. Quien todavía no compró tiene que aparecer igual, con el total vacío.</p>
+  <ul class="pistas">
+    <li>Hay que atravesar tres tablas: usuario, pedido y detalle.</li>
+    <li>Para que aparezca quien no compró, los dos cruces van con <code>LEFT JOIN</code>.</li>
+  </ul>
+  <p class="nota-ok">La suma de un conjunto vacío es <code>NULL</code>, y por eso la usuaria sin pedidos aparece con el total en blanco en lugar de con un cero.</p>
+</div>
+
+<div class="ejercicio" id="ej-18">
+  <h3>18 · El rubro más caro</h3>
+  <p class="enunciado">Mostrá el nombre del rubro cuyo promedio de precios es el más alto, con ese promedio redondeado a dos decimales en una columna llamada <code>promedio</code>. Una sola fila.</p>
+  <ul class="pistas">
+    <li>Se agrupa por nombre de rubro y se promedia el precio de sus productos.</li>
+    <li>El más alto sale ordenando de mayor a menor y quedándose con la primera fila.</li>
+  </ul>
+  <p class="nota-ok">Ropa gana con dos productos caros: el promedio no mira cuántos son, y por eso conviene leerlo junto con el <code>COUNT</code>.</p>
+</div>
+
+<div class="ejercicio" id="ej-19">
+  <h3>19 · Más caros que el promedio</h3>
+  <p class="enunciado">Mostrá el nombre y el precio de los productos que cuestan más que el precio promedio del sitio, del más caro al más barato.</p>
+  <ul class="pistas">
+    <li>El promedio se calcula con una consulta propia: <code>SELECT AVG(precio) FROM producto</code>.</li>
+    <li>Esa consulta va entre paréntesis dentro del <code>WHERE</code>, como si fuera un número.</li>
+  </ul>
+  <p class="nota-ok">Se llama subconsulta. Sirve cuando la condición depende de un valor que hay que calcular antes y que cambia con los datos.</p>
+</div>
+
+<div class="ejercicio" id="ej-20" data-orden="no">
+  <h3>20 · Marcas sin productos</h3>
+  <p class="enunciado">Mostrá el nombre de las marcas que no tienen ningún producto cargado.</p>
+  <ul class="pistas">
+    <li>Es el mismo patrón del ejercicio 16, con marca en lugar de producto.</li>
+  </ul>
+  <p class="nota-ok">Es la consulta que el panel de administración necesita para avisar qué marcas se cargaron y todavía no se usan.</p>
+</div>
+
+<div class="ejercicio" id="ej-21">
+  <h3>21 · Productos por proveedor</h3>
+  <p class="enunciado">Mostrá el nombre de cada proveedor y cuántos productos provee, en una columna llamada <code>cuantos</code>, ordenados por nombre de proveedor.</p>
+  <ul class="pistas">
+    <li>Se cruza proveedor con producto y se agrupa por el nombre del proveedor.</li>
+  </ul>
+  <p class="nota-ok">Los dos aportan la misma cantidad. Cuando dos filas empatan, el orden entre ellas lo decide la columna que se agregue al <code>ORDER BY</code>, y por eso la consigna pide ordenar por nombre.</p>
+</div>
+
+<div class="ejercicio" id="ej-22">
+  <h3>22 · El pedido más caro, con su dueño</h3>
+  <p class="enunciado">Mostrá el nombre de usuario, el número de pedido y el total gastado en él, en una columna llamada <code>total</code>, solo del pedido más caro.</p>
+  <ul class="pistas">
+    <li>Tres tablas: usuario, pedido y detalle.</li>
+    <li>Se agrupa por usuario y número de pedido, y se ordena por el total de mayor a menor.</li>
+  </ul>
+  <p class="nota-ok">Agrupar por dos columnas es lo que permite mostrar el usuario al lado del total sin que el gestor tenga que decidir de qué fila lo saca.</p>
+</div>
+
+<div class="ejercicio" id="ej-23">
+  <h3>23 · Qué compró una persona</h3>
+  <p class="enunciado">Mostrá qué productos compró la usuaria <code>mrojas</code> y en qué cantidad, ordenado por nombre de producto y, a igual nombre, por cantidad.</p>
+  <ul class="pistas">
+    <li>El camino es usuario → pedido → detalle → producto: tres <code>JOIN</code>.</li>
+    <li>La condición se escribe sobre el nombre de usuario, no sobre su id.</li>
+  </ul>
+  <p class="nota-ok">La lavandina aparece dos veces porque la compró en dos pedidos distintos. Para verla sumada habría que agrupar por producto.</p>
+</div>
+
+<div class="ejercicio" id="ej-24">
+  <h3>24 · Plata inmovilizada por rubro</h3>
+  <p class="enunciado">Mostrá el nombre de cada rubro y cuánta plata tiene parada en depósito —precio por stock, sumado—, en una columna llamada <code>valor</code>, de mayor a menor.</p>
+  <ul class="pistas">
+    <li>Es el cálculo del ejercicio 6, ahora sumado por grupo.</li>
+    <li>Se cruza rubro con producto y se agrupa por el nombre del rubro.</li>
+  </ul>
+  <p class="nota-ok">La consulta junta las tres cosas de la clase: un cruce, un cálculo por fila y un resumen por grupo. Es el tipo de respuesta que un sistema de gestión da todos los días.</p>
+</div>
+
+<h3>Consola libre</h3>
+<p>Esta consola ejecuta cualquier consulta <code>SELECT</code> sobre la misma base, sin corrección. Sirve para mirar las tablas mientras se resuelven los ejercicios y para probar ideas.</p>
+<div class="consola" data-consola></div>
+</section>
+
+<!-- ================= 4 ================= -->
+<section id="p4">
+<h2><span class="n">04</span> Base del sitio en phpMyAdmin</h2>
+
+<p>Lo de arriba corre en el navegador. Lo que se entrega corre en el gestor, que es donde vive la base del proyecto.</p>
+
+<div class="rama">
+<h3>Armado</h3>
+<ol class="pasos">
+  <li>Arrancá Apache y MySQL en el panel de XAMPP y abrí <code>localhost/phpmyadmin</code>.</li>
+  <li>Descargá el script <a href="sitio-olimpiada.sql">sitio-olimpiada.sql</a>.</li>
+  <li>En phpMyAdmin, pestaña <b>Importar</b>, elegí el archivo y confirmá. Se crea la base <code>sitio_practica</code> con las siete tablas cargadas.</li>
+  <li>Abrí la tabla <code>detalle</code> y mirá la estructura: las dos columnas que forman la clave primaria aparecen marcadas juntas.</li>
+  <li>Probá a insertar una fila que rompa la integridad, para ver qué contesta el gestor:
+    <br><code>INSERT INTO producto (nombre, precio, stock, id_rubro, id_marca, id_proveedor) VALUES ('Prueba', 100, 1, 99, 1, 1);</code>
+    <br>El rubro 99 no existe, así que la clave foránea rechaza la fila. Anotá el número y el texto del error.</li>
+</ol>
+</div>
+
+<div class="rama">
+<h3>Consultas en el gestor</h3>
+<ol class="pasos">
+  <li>Entrá a la pestaña <b>SQL</b> de la base <code>sitio_practica</code>.</li>
+  <li>Ejecutá ahí las consultas <b>11</b>, <b>13</b>, <b>14</b> y <b>15</b> del punto 3, y comprobá que devuelven lo mismo.</li>
+  <li>Elegí dos de la tanda «Consultas para seguir» —el 16 y el 17 son buenos candidatos— y ejecutalas también en el gestor.</li>
+  <li>Usá el botón <b>Descargar mis consultas</b> del punto 3 para llevarte el archivo <code>.sql</code>, y agregale las dos últimas.</li>
+</ol>
+</div>
+
+<div class="check">
+  <span class="et">Si la máquina no arranca</span>
+  <p>La consola del punto 3 resuelve la parte de consultas sin XAMPP, y el script queda para ejecutarlo en cualquier máquina. En ese caso se entrega el archivo <code>.sql</code> con las consultas escritas y el resultado que devolvió la consola.</p>
+</div>
+</section>
+
+<!-- ================= 5 ================= -->
+<section id="p5">
+<h2><span class="n">05</span> Modelo del proyecto</h2>
+
+<p>Todo lo anterior es el sitio de la consigna. Este punto es sobre el modelo del equipo, y es el que va al documento.</p>
+
+<div class="rama">
+<h3>Consigna del equipo</h3>
+<ol class="pasos">
+  <li><b>Todas las cardinalidades.</b> Recorré una por una las relaciones de su diagrama y escribí, al lado de cada línea, las dos preguntas con su respuesta y la cardinalidad que sale.</li>
+  <li><b>La relación de muchos a muchos.</b> Encontrá al menos una en su dominio —casi todos la tienen— y resolvela con una tabla intermedia: nombre de la tabla, sus dos claves foráneas, su clave primaria compuesta y los atributos que solo existen en el cruce.</li>
+  <li><b>La participación.</b> Marcá en qué relaciones un lado puede quedarse sin pareja, y anotá cuál de las consultas del proyecto va a necesitar <code>LEFT JOIN</code> por eso.</li>
+  <li><b>Tres consultas.</b> Escribí en castellano tres preguntas que el sistema tenga que poder responder, y al lado, de qué tablas sale cada una y por qué columnas se cruzan. Una de las tres tiene que atravesar la tabla intermedia.</li>
+  <li><b>Las decisiones discutibles.</b> Una línea por cada una, con su razón. Van al informe del entregable.</li>
+</ol>
+</div>
+
+<p class="nota">Si el equipo no encuentra ninguna relación de muchos a muchos, conviene revisar el dominio con la docente antes de darlo por cerrado: suele estar escondida en un verbo que se leyó como 1:N sin hacer la pregunta de vuelta.</p>
+</section>
+
+<!-- ================= 6 ================= -->
+<section id="p6">
+<h2><span class="n">06</span> Registro y autocomprobación</h2>
+
+<div class="registro">
+  <h3><svg class="ico"><use href="#i-lapiz"/></svg> Para escribir a mano en la carpeta</h3>
+  <ol>
+    <li>Las tres cardinalidades posibles, con un ejemplo del sitio para cada una.</li>
+    <li>Dónde va la clave foránea en una relación 1:N, y por qué del otro lado no entra.</li>
+    <li>Qué es una tabla intermedia, cuál es su clave primaria y qué guarda además de las dos claves.</li>
+    <li>La consulta del listado del entregable, copiada completa.</li>
+    <li>La diferencia entre <code>INNER JOIN</code> y <code>LEFT JOIN</code>, en una oración con el ejemplo del rubro «Baño».</li>
+  </ol>
+</div>
+
+<h3>Autocomprobación</h3>
+
+<div class="quiz" data-correcta="b">
+  <p class="pregunta">Una consulta con <code>INNER JOIN</code> entre pedido y detalle devuelve más filas que las que tiene la tabla pedido. ¿Qué pasó?</p>
+  <label><input type="radio" name="a1"> El <code>JOIN</code> está mal escrito y hay que agregar <code>DISTINCT</code> <span class="por-que"><code>DISTINCT</code> taparía el resultado sin explicarlo. Las filas repetidas de pedido son correctas: aparece una por cada producto que el pedido incluye.</span></label>
+  <label><input type="radio" name="a1"> Cada pedido aparece una vez por cada fila de detalle que tiene <span class="por-que">Correcto. El cruce devuelve una fila por combinación, y un pedido de tres productos tiene tres filas de detalle. Para volver a una fila por pedido se agrupa con <code>GROUP BY</code>.</span></label>
+  <label><input type="radio" name="a1"> Faltan claves foráneas en la tabla detalle <span class="por-que">Las claves foráneas están: son las que permitieron el cruce. Lo que multiplica las filas es la cardinalidad 1:N de la relación.</span></label>
+  <div class="feedback">Un <code>JOIN</code> por el lado «muchos» repite las filas del lado «uno». Es el comportamiento esperado, y <code>GROUP BY</code> es lo que devuelve una fila por pedido.</div>
+</div>
+
+<div class="quiz" data-correcta="a">
+  <p class="pregunta">Un equipo tiene un sistema de préstamo de equipamiento: cada préstamo lo hace un alumno y puede incluir varios equipos, y un equipo se presta muchas veces. ¿Cuántas tablas necesita como mínimo?</p>
+  <label><input type="radio" name="a2"> Cuatro: alumno, equipo, préstamo y la tabla que cruza préstamo con equipo <span class="por-que">Correcto. Alumno–préstamo es 1:N, y préstamo–equipo es N:M, así que necesita su tabla de cruce, donde además vive la fecha de devolución de cada equipo.</span></label>
+  <label><input type="radio" name="a2"> Tres: alumno, equipo y préstamo <span class="por-que">Con tres tablas, el préstamo puede apuntar a un solo equipo. El enunciado dice que un préstamo puede incluir varios.</span></label>
+  <label><input type="radio" name="a2"> Dos: alumno y equipo, con la fecha en equipo <span class="por-que">La fecha del préstamo no es un dato del equipo: el mismo equipo se presta muchas veces y tendría una sola celda de fecha.</span></label>
+  <div class="feedback">El «puede incluir varios» de un lado y el «se presta muchas veces» del otro son las dos respuestas «muchas» que piden tabla intermedia.</div>
+</div>
+
+<div class="quiz" data-correcta="c">
+  <p class="pregunta">¿Por qué la tabla <code>detalle</code> guarda <code>precio_unitario</code> si el precio ya está en <code>producto</code>?</p>
+  <label><input type="radio" name="a3"> Para no tener que hacer el <code>JOIN</code> cada vez <span class="por-que">Ahorrar el cruce sería una razón de rendimiento, y no es esta: aunque el cruce fuera gratis, el dato haría falta igual.</span></label>
+  <label><input type="radio" name="a3"> Por costumbre; en realidad es redundancia y habría que sacarlo <span class="por-que">Sería redundancia si tuviera que cambiar cuando cambia el precio del producto. Justamente no tiene que cambiar.</span></label>
+  <label><input type="radio" name="a3"> Porque guarda el precio del día de la compra, que no cambia cuando el producto aumenta <span class="por-que">Correcto. Son dos datos distintos con el mismo nombre: el precio de hoy y el precio que se pagó. Un pedido viejo tiene que seguir mostrando lo que se cobró.</span></label>
+  <div class="feedback">La prueba: si al cambiar el original el copiado también tiene que cambiar, es redundancia; si tiene que quedarse quieto, es un dato propio del cruce.</div>
+</div>
+</section>
+
+<nav class="nav-clase">
+  <a href="clase-02-teoria.html"><svg class="ico"><use href="#i-flecha"/></svg> Teoría de la clase 2</a>
+  <a href="../index.html">Índice de la materia <svg class="ico"><use href="#i-flecha"/></svg></a>
+</nav>
+
+<footer>
+  <p class="pie-l">Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional</p>
+  <p class="pie-l">Ciclo 2026 · material de clase, de acceso libre · <a href="../index.html">índice de la materia</a></p>
+</footer>
+
+</main>
+
+<script src="../js/mini-sql.js"></script>
+<script src="../js/datos-sitio.js"></script>
+<script src="../js/soluciones-clase-2.js"></script>
+<script src="../js/practica.js"></script>
+<script src="../js/lectura.js"></script>
+<script src="../js/marcador.js"></script>
+</body>
+</html>

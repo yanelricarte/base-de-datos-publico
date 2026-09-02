@@ -8,7 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/clase.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/componentes.css">
+<link rel="stylesheet" href="css/portada.css">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -36,7 +38,7 @@
 </header>
 
 <section>
-  <h2><span class="n">01</span> Cómo se cursa</h2>
+  <h2><span class="n">01</span> Cursado</h2>
   <p>El cursado 2026 va de <strong>agosto a diciembre</strong>, con un bloque de 3 horas por semana. Cada encuentro tiene dos momentos: uno de trabajo conceptual, con lápiz y papel, y otro de laboratorio sobre la base del proyecto.</p>
 
   <div class="tarjetas">
@@ -45,8 +47,8 @@
       <p>Equipos estables sobre un dominio propio. Todo lo que se ve en clase se aplica ese mismo día sobre esa base.</p>
     </div>
     <div class="tarjeta">
-      <h3><svg class="ico"><use href="#i-entrega"/></svg> Tres entregas</h3>
-      <p>Modelo completo, base implementada, integridad y seguridad. Cada una admite una reentrega.</p>
+      <h3><svg class="ico"><use href="#i-entrega"/></svg> Producción de cada clase</h3>
+      <p>De cada encuentro sale algo terminado sobre el proyecto: un diagrama, un esquema, un conjunto de consultas que funciona.</p>
     </div>
     <div class="tarjeta">
       <h3><svg class="ico"><use href="#i-lista"/></svg> Portfolio individual</h3>
@@ -60,23 +62,18 @@
 </section>
 
 <section>
-  <h2><span class="n">02</span> Entregas</h2>
+  <h2><span class="n">02</span> Producción de cada clase</h2>
+  <p>Cada encuentro produce una pieza del proyecto. Se guardan todas: son el material con el que después se arma la documentación del sistema.</p>
   <div class="tabla-wrap">
     <table>
       <thead>
-        <tr><th>Entrega</th><th>Qué se presenta</th><th class="num">7.º 12</th><th class="num">7.º 11</th></tr>
+        <tr><th class="num">Clase</th><th>Lo que sale del aula</th></tr>
       </thead>
       <tbody>
-        <tr><td><strong>E1</strong><br>Modelo completo</td><td>Diagrama de qué cosas existen y cómo se relacionan, pasaje a tablas sin datos repetidos, diccionario de datos e informe de decisiones</td><td class="num">19/10</td><td class="num">7/10</td></tr>
-        <tr><td><strong>E2</strong><br>Base implementada</td><td>Scripts que crean y cargan la base, y el conjunto de consultas del equipo</td><td class="num">23/11</td><td class="num">18/11</td></tr>
-        <tr><td><strong>E3</strong><br>Integridad y seguridad</td><td>Restricciones, una vista, un disparador, usuarios por rol y una copia de seguridad restaurada</td><td class="num">7/12</td><td class="num">2/12</td></tr>
-        <tr><td><strong>Defensa final</strong></td><td>Presentación oral del proyecto y documentación integrada</td><td class="num">14/12</td><td class="num">9/12</td></tr>
+        <tr><td class="num">01</td><td>El listado del proyecto separado en listas, con la clave primaria de cada una y la razón de esa elección</td></tr>
+        <tr><td class="num">02</td><td>El diagrama con las cardinalidades resueltas y la tabla intermedia del muchos a muchos, y las consultas del listado escritas y probadas</td></tr>
       </tbody>
     </table>
-  </div>
-  <div class="destacado">
-    <span class="titulo"><svg class="ico"><use href="#i-entrega"/></svg> Revisión sin nota en septiembre</span>
-    <p>Antes de la primera entrega hay una instancia de revisión del modelo entre equipos y con la docente, que no lleva calificación. Sirve para corregir el modelo mientras todavía se puede.</p>
   </div>
 </section>
 
@@ -87,7 +84,6 @@
       <span class="nro">01</span>
       <span class="tema">
         Los cinco problemas de guardar todo en una sola hoja, la separación en tablas, las claves que identifican cada fila y el vínculo entre listas del modelo entidad-relación
-        <span class="fechas">7.º 12 · 24/8 — 7.º 11 · 26/8</span>
       </span>
       <span class="links">
         <a href="clase-1/clase-01-teoria.html">Teoría</a>
@@ -98,10 +94,13 @@
     <div class="fila">
       <span class="nro">02</span>
       <span class="tema">
-        Relaciones y cardinalidad: uno a muchos, muchos a muchos, y la tabla que resuelve el segundo caso
-        <span class="fechas">7.º 12 · 7/9 — 7.º 11 · 9/9</span>
+        Relaciones y cardinalidad: uno a muchos, muchos a muchos y la tabla que resuelve el segundo caso, y las primeras consultas sobre el modelo
       </span>
-      <span class="pendiente">en preparación</span>
+      <span class="links">
+        <a href="clase-2/clase-02-teoria.html">Teoría</a>
+        <a href="clase-2/clase-02-actividad.html">Actividad</a>
+        <a href="clase-2/sitio-olimpiada.sql">Script de la base</a>
+      </span>
     </div>
   </div>
 </section>
@@ -155,9 +154,12 @@
 </section>
 
 <footer>
-  Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional · EEST N.º 3, Mar del Plata · Ciclo 2026
+  <p class="pie-l">Base de Datos · 7.º año · Tecnicatura en Informática Personal y Profesional</p>
+  <p class="pie-l">Ciclo 2026 · material de clase, de acceso libre</p>
 </footer>
 
 </main>
+
+<script src="js/lectura.js"></script>
 </body>
 </html>
